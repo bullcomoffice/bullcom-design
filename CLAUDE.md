@@ -18,8 +18,12 @@
 ## 技術構成（既存シリーズと同じ）
 
 - Next.js 16 + React 19 + Tailwind v4 + TypeScript（`output: "export"` 静的エクスポート）
-- ホスティング: Cloudflare Pages 想定 / CMS: microCMS（未セットアップ）
-- フォーム: FormSubmit 予定 / SNS自動投稿: microCMS Webhook → GitHub Actions 予定
+- ホスティング: Cloudflare Workers 静的アセット（`npx wrangler deploy`、wrangler.toml）
+  - 公開URL: https://bullcom-design.bullcom-office.workers.dev（bullcom.website切替はwrangler.tomlのroutesコメント解除）
+- GitHub: https://github.com/bullcomoffice/bullcom-design → push で自動デプロイ（.github/workflows/deploy.yml）
+- CMS: microCMS（コードは実装済み・サービス未作成。env: MICROCMS_SERVICE_DOMAIN/MICROCMS_API_KEY。未設定でもビルド可）
+- フォーム: FormSubmit 稼働中（components/ui/ContactForm.tsx、エイリアス化・有効化済み）
+- SNS自動投稿: microCMS Webhook → GitHub Actions 予定（未実装）
 - 参考: 既存プロジェクト `D:\Data\Projects\Next\bullcom\`
 
 ## 開発メモ
