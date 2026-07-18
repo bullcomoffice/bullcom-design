@@ -1,0 +1,12 @@
+name = "bullcom-design"
+compatibility_date = "2026-07-01"
+
+# 静的エクスポートの出力フォルダを指定
+[assets]
+directory = "./out"
+
+# 本番ドメイン（bullcom.website）への切り替え時に有効化する:
+# ユーザー確認後、以下のコメントを外して `npx wrangler deploy`
+# [[routes]]
+# pattern = "bullcom.website"
+# custom_domain = true

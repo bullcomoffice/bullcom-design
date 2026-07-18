@@ -1,0 +1,282 @@
+@import "tailwindcss";
+
+/* ========================================
+   BULLCOM design - Design System
+   ダーク × カラフルグラデーション × 高級感
+   ======================================== */
+
+:root {
+  /* base */
+  --bg: #08080f;
+  --bg-soft: #0d0d18;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --text: #f5f5fa;
+  --text-soft: #c2c5d6;
+  --text-muted: #8f93ab;
+
+  /* spectrum */
+  --pink: #f0509e;
+  --magenta: #e2477a;
+  --purple: #a06bff;
+  --blue: #4f8dff;
+  --cyan: #38d4f5;
+  --orange: #ffab4a;
+  --lime: #b8e34d;
+  --line-green: #06c755;
+
+  /* fonts */
+  --font-jp: var(--loaded-noto), "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    "Yu Gothic", system-ui, sans-serif;
+  --font-head: var(--loaded-zen), var(--font-jp);
+  --font-en: var(--loaded-inter), var(--font-jp);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-jp);
+  font-feature-settings: "palt";
+  letter-spacing: 0.02em;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--pink);
+  color: #fff;
+}
+
+/* ---- typography helpers ---- */
+
+.font-head {
+  font-family: var(--font-head);
+}
+
+.font-en {
+  font-family: var(--font-en);
+}
+
+.grad-text {
+  background: linear-gradient(
+    100deg,
+    var(--pink) 0%,
+    var(--purple) 35%,
+    var(--blue) 65%,
+    var(--cyan) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grad-text-warm {
+  background: linear-gradient(100deg, var(--orange), var(--pink) 60%, var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- surfaces ---- */
+
+.glass {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--border);
+}
+
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s,
+    box-shadow 0.35s;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-strong);
+  box-shadow: 0 20px 50px -20px rgba(240, 80, 158, 0.35);
+}
+
+/* gradient border card */
+.grad-border {
+  position: relative;
+  background: var(--bg-soft);
+  border-radius: 1.25rem;
+}
+
+.grad-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--pink),
+    var(--purple) 30%,
+    var(--blue) 60%,
+    var(--cyan) 90%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---- buttons ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-grad {
+  color: #fff;
+  background: linear-gradient(115deg, var(--pink), var(--purple) 40%, var(--blue) 80%);
+  background-size: 150% 150%;
+  box-shadow: 0 10px 30px -10px rgba(240, 80, 158, 0.6);
+}
+
+.btn-grad:hover {
+  box-shadow: 0 14px 36px -10px rgba(160, 107, 255, 0.7);
+  background-position: 90% 50%;
+}
+
+.btn-line {
+  color: #fff;
+  background: var(--line-green);
+  box-shadow: 0 10px 30px -12px rgba(6, 199, 85, 0.6);
+}
+
+.btn-ghost {
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-strong);
+}
+
+/* ---- aurora background ---- */
+
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.5;
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+.grid-overlay {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* ---- animations ---- */
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-24px) scale(1.05);
+    }
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(20px, -30px);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .anim-float {
+    animation: float 7s ease-in-out infinite;
+  }
+
+  .anim-float-slow {
+    animation: float-slow 12s ease-in-out infinite;
+  }
+
+  .anim-fade-up {
+    animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .delay-1 {
+    animation-delay: 0.12s;
+  }
+  .delay-2 {
+    animation-delay: 0.24s;
+  }
+  .delay-3 {
+    animation-delay: 0.36s;
+  }
+  .delay-4 {
+    animation-delay: 0.48s;
+  }
+}
+
+/* ---- floating LINE button ---- */
+
+.floating-line {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 9999px;
+  background: var(--line-green);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 12px 30px -8px rgba(6, 199, 85, 0.55);
+  transition: transform 0.25s;
+}
+
+.floating-line:hover {
+  transform: translateY(-3px) scale(1.03);
+}
