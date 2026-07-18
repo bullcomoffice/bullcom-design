@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ContactForm from "@/components/ui/ContactForm";
 
 /* ============ データ定義 ============ */
 
@@ -598,7 +599,7 @@ export default function Home() {
             </a>
 
             <a
-              href="mailto:bullcom.office@gmail.com"
+              href="#contact-form"
               className="glass card-hover flex flex-col items-center gap-3 rounded-2xl p-8 text-center"
             >
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--blue)] to-[var(--cyan)] text-white">
@@ -607,12 +608,14 @@ export default function Home() {
                   <path d="m22 7-10 6L2 7" />
                 </svg>
               </span>
-              <p className="font-head font-bold">メール</p>
-              <p className="text-sm text-[var(--text-soft)]">メールでのご相談はこちら</p>
-              <p className="text-xs text-[var(--text-muted)]">
-                専用フォームは近日公開予定です
-              </p>
+              <p className="font-head font-bold">メールフォーム</p>
+              <p className="text-sm text-[var(--text-soft)]">下のフォームから24時間受付</p>
+              <p className="text-xs text-[var(--text-muted)]">参考画像の添付もできます</p>
             </a>
+          </div>
+
+          <div className="mt-14">
+            <ContactForm />
           </div>
         </div>
       </section>

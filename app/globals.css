@@ -257,6 +257,92 @@ body {
   }
 }
 
+/* ---- blog article (microCMS リッチテキスト用) ---- */
+
+.prose-blog {
+  color: var(--text-soft);
+  line-height: 1.9;
+  font-size: 0.95rem;
+}
+
+.prose-blog h2 {
+  font-family: var(--font-head);
+  color: var(--text);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 2.2em 0 0.8em;
+  padding-left: 0.75em;
+  border-left: 4px solid var(--pink);
+}
+
+.prose-blog h3 {
+  font-family: var(--font-head);
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.8em 0 0.6em;
+}
+
+.prose-blog p {
+  margin: 1em 0;
+}
+
+.prose-blog a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-blog strong {
+  color: var(--text);
+}
+
+.prose-blog ul,
+.prose-blog ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+
+.prose-blog ul {
+  list-style: disc;
+}
+
+.prose-blog ol {
+  list-style: decimal;
+}
+
+.prose-blog li {
+  margin: 0.35em 0;
+}
+
+.prose-blog img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5em 0;
+}
+
+.prose-blog blockquote {
+  margin: 1.5em 0;
+  padding: 0.5em 1.25em;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+.prose-blog pre {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+.prose-blog code {
+  font-family: var(--font-en), monospace;
+  font-size: 0.85em;
+}
+
 /* ---- floating LINE button ---- */
 
 .floating-line {

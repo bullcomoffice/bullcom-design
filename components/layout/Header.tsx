@@ -5,11 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const NAV_ITEMS = [
-  { href: "#works", label: "制作実績" },
-  { href: "#price", label: "料金" },
-  { href: "#services", label: "サービス" },
-  { href: "#strength", label: "選ばれる理由" },
-  { href: "#contact", label: "お問い合わせ" },
+  { href: "/#works", label: "制作実績" },
+  { href: "/#price", label: "料金" },
+  { href: "/#services", label: "サービス" },
+  { href: "/#strength", label: "選ばれる理由" },
+  { href: "/blog", label: "ブログ" },
+  { href: "/#contact", label: "お問い合わせ" },
 ];
 
 export default function Header() {
@@ -33,13 +34,13 @@ export default function Header() {
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV_ITEMS.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="text-sm font-medium text-[var(--text-soft)] transition hover:text-white"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -53,9 +54,9 @@ export default function Header() {
             </svg>
             078-912-2656
           </a>
-          <a href="#contact" className="btn btn-grad px-5 py-2.5 text-sm">
+          <Link href="/#contact" className="btn btn-grad px-5 py-2.5 text-sm">
             無料相談する
-          </a>
+          </Link>
         </div>
 
         <button
@@ -79,26 +80,26 @@ export default function Header() {
           <ul className="flex flex-col gap-1">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
-                <a
+                <Link
                   href={item.href}
                   className="block rounded-lg px-3 py-3 text-sm font-medium text-[var(--text-soft)] transition hover:bg-[var(--surface)] hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li className="mt-2 flex gap-3">
               <a href="tel:078-912-2656" className="btn btn-ghost flex-1 px-4 py-3 text-sm">
                 電話する
               </a>
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 className="btn btn-grad flex-1 px-4 py-3 text-sm"
                 onClick={() => setOpen(false)}
               >
                 無料相談する
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

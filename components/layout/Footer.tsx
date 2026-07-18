@@ -33,21 +33,24 @@ export default function Footer() {
         </div>
 
         <nav className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-[var(--border)] pt-8 text-sm text-[var(--text-soft)]">
-          <a href="#works" className="transition hover:text-white">
+          <Link href="/#works" className="transition hover:text-white">
             制作実績
-          </a>
-          <a href="#price" className="transition hover:text-white">
+          </Link>
+          <Link href="/#price" className="transition hover:text-white">
             料金
-          </a>
-          <a href="#services" className="transition hover:text-white">
+          </Link>
+          <Link href="/#services" className="transition hover:text-white">
             サービス
-          </a>
-          <a href="#strength" className="transition hover:text-white">
+          </Link>
+          <Link href="/#strength" className="transition hover:text-white">
             選ばれる理由
-          </a>
-          <a href="#contact" className="transition hover:text-white">
+          </Link>
+          <Link href="/blog" className="transition hover:text-white">
+            ブログ
+          </Link>
+          <Link href="/#contact" className="transition hover:text-white">
             お問い合わせ
-          </a>
+          </Link>
         </nav>
 
         <div className="mt-8 flex flex-col justify-between gap-2 text-xs text-[var(--text-muted)] sm:flex-row">
