@@ -3,8 +3,12 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] **microCMSサービス作成**（下記手順）→ 完了したらAPIキーをClaudeに共有 or 自分でSecrets設定
 - [ ] **bullcom.website 本番ドメイン切替の判断**（現在workers.devで公開中。切替は wrangler.toml のコメント解除+deploy。現在bullcom.websiteで動いてる物は置き換わるので要確認）
+- [ ] **microCMS Webhook設定**（記事公開→自動デプロイ。PATが要るので下記手順で。bullcom本家の設定コピーが早い）
+  - microCMS: bullcom-design → API設定 → Webhook → カスタム通知
+  - URL: `https://api.github.com/repos/bullcomoffice/bullcom-design/dispatches`
+  - ヘッダー: `Authorization: Bearer <GitHub PAT>` / `Accept: application/vnd.github+json`
+  - ボディ: `{"event_type": "microcms-publish"}`（デフォルトボディ送信をOFFにしてカスタムボディで）
 - [ ] トップページのデザインレビュー / 実績カード3件（PC修理/トラック/ボート）の内容確認
 - [ ] LINE: design専用アカウントを作るか（現在は既存BULLCOMの lin.ee/vX5z2Xf を仮設定）
 - [ ] GA4 プロパティ作成 → 測定ID共有（layout.tsx にTODOコメントあり）
@@ -17,17 +21,12 @@
 - [ ] OG画像作成（現在未設定）
 - [ ] TBD解消: 税表記統一（現在「税別」と仮表記） / 撮影・動画の料金 / お客様の声収集
 
-### microCMSサービス作成手順（ユーザー用）
-1. https://microcms.io にログイン → サービス作成（サービスID例: `bullcom-design`）
-2. API作成①「ブログ」: エンドポイント `blogs`（リスト形式）
-   - フィールド: `title`(テキスト) / `content`(リッチエディタ) / `eyecatch`(画像) / `category`(コンテンツ参照→categories)
-3. API作成②「カテゴリ」: エンドポイント `categories`(リスト形式)
-   - フィールド: `name`(テキスト)
-4. APIキー（デフォルト作成される）をコピー
-5. GitHub Secrets に登録（https://github.com/bullcomoffice/bullcom-design/settings/secrets/actions）:
-   - `MICROCMS_SERVICE_DOMAIN` = サービスID（例: bullcom-design）
-   - `MICROCMS_API_KEY` = APIキー
-6. ローカル開発用に `.env.local` にも同じ2つを書く（.env.example参照）
+### microCMS情報（2026-07-18 セットアップ完了）
+- サービス: BULLCOM design / `bullcom-design.microcms.io`（ブログテンプレートから作成）
+- API: `blogs`（title/content/eyecatch/category）+ `categories`（name）— bullcom本家と同一構造
+- APIキー: GET専用キーを GitHub Secrets（MICROCMS_SERVICE_DOMAIN / MICROCMS_API_KEY）とローカル `.env.local` に設定済み
+- サンプル記事1件が本番 /blog に表示されるのを確認済み。記事の削除・追加はmicroCMS管理画面から
+- カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
 
