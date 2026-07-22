@@ -30,6 +30,15 @@
 
 ## セッション記録
 
+### 2026-07-23: トップページをブライト・カラフルにリニューアル
+
+- `app/page.tsx` のファーストビューを、ロゴ単体から「制作物が並ぶデザインボード」風のビジュアルへ刷新。既存のキャッチコピー・説明・料金・電話番号・CV導線は維持
+- 制作実績カードに、PC修理／トラック／ボートの各テーマを表現するブラウザ風イラストを追加。画像素材が未整備の段階でも、実績の方向性が直感的に伝わる構成に変更
+- `app/globals.css` のデザインシステムを、白〜アイボリーを基調にした明るいガラスカード・多色グラデーションへ拡張。固定ヘッダー、フッター、フォームの配色も新背景での可読性を確保
+- `ContactForm.tsx` は表示用クラスのみ調整し、FormSubmitの送信ロジック・hiddenフィールド・画像圧縮処理には未変更
+- 検証: `npm run lint` / `npm run build` 成功。headless Chromeで 1440px・390px を確認し、`scrollWidth` は各ビューポート幅と一致（横スクロールなし）
+- スクリーンショット: `screenshots-renewal-desktop.png` / `screenshots-renewal-mobile.png`
+
 ### 2026-07-18 (3): デプロイ・microCMS基盤・FormSubmit完了
 
 - **①Cloudflareデプロイ完了**: Workers静的アセット方式（bullcom本家と同じ）

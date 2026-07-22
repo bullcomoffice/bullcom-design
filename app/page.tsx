@@ -220,13 +220,66 @@ function SectionHead({
   );
 }
 
+function PortfolioVisual({ kind, label }: { kind: "pc" | "truck" | "boat"; label: string }) {
+  const styles = {
+    pc: "from-[#78b9ff] via-[#d8f5ff] to-[#f8fbff]",
+    truck: "from-[#ffd1a7] via-[#fff0e1] to-[#fff9f4]",
+    boat: "from-[#a7e9f4] via-[#e2f6ff] to-[#f4edff]",
+  };
+
+  return (
+    <div className={`relative h-52 overflow-hidden bg-gradient-to-br ${styles[kind]}`}>
+      <div className="absolute inset-5 overflow-hidden rounded-[1.1rem] border border-white/80 bg-white/80 shadow-[0_18px_32px_rgba(49,62,112,0.16)] backdrop-blur">
+        <div className="flex h-7 items-center gap-1.5 border-b border-slate-200/80 px-3">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#ff7a8e]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#ffcb63]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#68d79b]" />
+          <span className="ml-auto h-1.5 w-12 rounded-full bg-slate-200" />
+        </div>
+        {kind === "pc" && (
+          <>
+            <div className="absolute left-4 top-11 h-20 w-[58%] rounded-xl bg-gradient-to-br from-[#2869df] to-[#7dc7ff]" />
+            <div className="absolute left-7 top-[3.8rem] h-1.5 w-16 rounded-full bg-white/75" />
+            <div className="absolute left-7 top-[5.3rem] h-1.5 w-10 rounded-full bg-white/50" />
+            <div className="absolute bottom-4 left-4 right-4 flex gap-2">
+              {["bg-[#dfeeff]", "bg-[#e9f9ff]", "bg-[#ecf0ff]"].map((color) => <span key={color} className={`h-7 flex-1 rounded-lg ${color}`} />)}
+            </div>
+            <div className="absolute right-5 top-[3.4rem] h-16 w-[27%] rounded-full border-[7px] border-[#ff7ba9] bg-white/70" />
+          </>
+        )}
+        {kind === "truck" && (
+          <>
+            <div className="absolute left-5 top-11 h-20 w-[62%] rounded-xl bg-gradient-to-br from-[#ff7044] to-[#ffbb54]" />
+            <div className="absolute left-7 top-[3.7rem] h-8 w-16 rounded-md bg-white/80" />
+            <div className="absolute left-[4.9rem] top-[4.2rem] h-6 w-16 rounded-sm bg-[#703957]/80" />
+            <span className="absolute left-9 top-[6.7rem] h-5 w-5 rounded-full border-[4px] border-[#3e3853] bg-white" />
+            <span className="absolute left-[7.8rem] top-[6.7rem] h-5 w-5 rounded-full border-[4px] border-[#3e3853] bg-white" />
+            <div className="absolute bottom-4 left-5 right-5 h-5 rounded-full bg-[#ffe4c4]" />
+          </>
+        )}
+        {kind === "boat" && (
+          <>
+            <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-b from-[#76d8eb] to-[#478fdb]" />
+            <div className="absolute left-[18%] top-12 h-11 w-[60%] -skew-x-[20deg] rounded-b-[2rem] rounded-t-md bg-white shadow-md" />
+            <div className="absolute left-[39%] top-9 h-8 w-14 -skew-x-[20deg] rounded-t-full bg-[#5b55b9]" />
+            <div className="absolute left-[12%] top-6 h-10 w-10 rounded-full bg-[#ffe28d] opacity-90" />
+            <div className="absolute bottom-6 left-5 h-1.5 w-12 rounded-full bg-white/60" />
+            <div className="absolute bottom-10 right-5 h-1.5 w-9 rounded-full bg-white/45" />
+          </>
+        )}
+      </div>
+      <span className="font-en absolute bottom-3 right-4 rounded-full bg-white/80 px-3 py-1 text-[10px] font-extrabold tracking-[0.18em] text-slate-700 shadow-sm">{label}</span>
+    </div>
+  );
+}
+
 /* ============ ページ本体 ============ */
 
 export default function Home() {
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="relative flex min-h-svh items-center overflow-hidden pt-16">
+      <section className="hero-canvas relative flex min-h-svh items-center overflow-hidden pt-16">
         {/* aurora background */}
         <div className="aurora h-[420px] w-[420px] bg-[#f0509e] opacity-35 -left-32 top-10" />
         <div className="aurora h-[380px] w-[380px] bg-[#a06bff] opacity-35 right-[-100px] top-[-60px]" />
@@ -282,16 +335,35 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="anim-fade-up delay-2 relative mx-auto hidden max-w-xs lg:block lg:max-w-sm">
-            <div className="aurora h-[280px] w-[280px] bg-[#f0509e] opacity-40 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-            <Image
-              src="/logo-mark.png"
-              alt="BULLCOM design シンボルマーク"
-              width={487}
-              height={471}
-              priority
-              className="anim-float relative drop-shadow-[0_20px_60px_rgba(240,80,158,0.45)]"
-            />
+          <div className="anim-fade-up delay-2 relative mx-auto hidden w-full max-w-md lg:block">
+            <div className="hero-board anim-float relative aspect-[1.06] rounded-[2rem] p-5 shadow-[0_35px_80px_rgba(92,80,151,0.2)]">
+              <div className="absolute -left-7 top-12 h-24 w-24 rounded-[2rem] bg-gradient-to-br from-[#ffb6d4] to-[#ff6eaa] opacity-80 shadow-xl" />
+              <div className="absolute -right-5 bottom-14 h-28 w-28 rounded-full border-[14px] border-[#8f78ff] opacity-80" />
+              <div className="relative grid h-full grid-cols-[1.15fr_0.85fr] gap-3">
+                <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#322c74] via-[#5954b8] to-[#75caff] p-5 text-white shadow-lg">
+                  <p className="font-en text-[10px] font-bold tracking-[0.25em] text-white/65">MAKE IT YOURS</p>
+                  <p className="font-head mt-4 text-2xl font-black leading-snug">アイデアを<br />カタチに。</p>
+                  <div className="mt-5 h-16 rounded-xl bg-white/15 p-3 backdrop-blur-sm">
+                    <div className="h-1.5 w-16 rounded-full bg-white/85" />
+                    <div className="mt-2 h-1.5 w-10 rounded-full bg-white/45" />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="relative flex-1 overflow-hidden rounded-2xl bg-[#fff6ed] p-3 shadow-lg">
+                    <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-[#ffab4a]" />
+                    <p className="font-en relative text-[10px] font-extrabold tracking-widest text-[#d66085]">BRANDING</p>
+                    <div className="absolute bottom-3 left-3 right-3 h-12 rounded-xl bg-gradient-to-r from-[#f0509e] to-[#a06bff]" />
+                  </div>
+                  <div className="relative flex-1 overflow-hidden rounded-2xl bg-[#e5fbff] p-3 shadow-lg">
+                    <Image src="/logo-mark.png" alt="BULLCOM design" width={72} height={70} priority className="absolute bottom-1 right-2 w-14 rotate-[-10deg] drop-shadow-lg" />
+                    <p className="font-en text-[10px] font-extrabold tracking-widest text-[#2478bd]">WEB DESIGN</p>
+                    <div className="mt-4 h-1.5 w-12 rounded-full bg-[#5dbfd6]" />
+                    <div className="mt-2 h-1.5 w-8 rounded-full bg-[#9cdae7]" />
+                  </div>
+                </div>
+              </div>
+              <p className="font-en absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-extrabold tracking-[0.28em] text-[#6c6990]">BULLCOM DESIGN STUDIO</p>
+            </div>
           </div>
         </div>
       </section>
@@ -307,19 +379,7 @@ export default function Home() {
           <div className="grid gap-6 md:grid-cols-3">
             {WORKS.map((work) => (
               <article key={work.title} className="glass card-hover overflow-hidden rounded-2xl">
-                <div
-                  className="relative flex h-44 items-center justify-center overflow-hidden"
-                  style={{ background: work.gradient }}
-                >
-                  <div className="absolute left-4 top-4 flex gap-1.5">
-                    {[0, 1, 2].map((i) => (
-                      <span key={i} className="h-2.5 w-2.5 rounded-full bg-white/40" />
-                    ))}
-                  </div>
-                  <p className="font-en text-3xl font-extrabold tracking-[0.2em] text-white/85">
-                    {work.label}
-                  </p>
-                </div>
+                <PortfolioVisual kind={work.label === "PC REPAIR" ? "pc" : work.label === "TRUCK" ? "truck" : "boat"} label={work.label} />
                 <div className="p-6">
                   <span className="font-en inline-block rounded-full border border-[var(--border-strong)] px-3 py-1 text-xs font-semibold text-[var(--text-soft)]">
                     {work.category}
@@ -424,7 +484,7 @@ export default function Home() {
             </div>
             <p className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-4 text-center text-sm text-[var(--text-soft)]">
               基本費用：ドメイン維持・レンタルサーバー費{" "}
-              <span className="font-en font-bold text-white">年間15,000円＋税</span>
+              <span className="font-en font-bold text-[var(--text)]">年間15,000円＋税</span>
             </p>
           </div>
 
@@ -442,7 +502,7 @@ export default function Home() {
                   className="flex items-baseline justify-between gap-4 border-b border-dashed border-[var(--border)] py-3.5 text-sm"
                 >
                   <span className="text-[var(--text-soft)]">{item.name}</span>
-                  <span className="font-en shrink-0 font-bold text-white">{item.price}</span>
+                  <span className="font-en shrink-0 font-bold text-[var(--text)]">{item.price}</span>
                 </div>
               ))}
             </div>
@@ -506,7 +566,7 @@ export default function Home() {
           <div className="grid gap-6 md:grid-cols-3">
             {STRENGTHS.map((item) => (
               <div key={item.no} className="glass card-hover relative rounded-2xl p-7">
-                <p className="font-en absolute right-6 top-5 text-5xl font-extrabold text-white/8">
+                <p className="font-en absolute right-6 top-5 text-5xl font-extrabold text-[#6a5eb5]/10">
                   {item.no}
                 </p>
                 <span

@@ -138,7 +138,7 @@ export default function ContactForm() {
   }
 
   const inputCls =
-    "w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-4 py-3 text-sm text-white outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--pink)]";
+    "w-full rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--pink)]";
   const labelCls = "mb-1.5 block text-xs font-bold text-[var(--text-soft)]";
 
   if (sent) {
@@ -269,7 +269,7 @@ export default function ContactForm() {
           name="添付"
           accept="image/*"
           multiple
-          className="block w-full cursor-pointer text-sm text-[var(--text-soft)] file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--surface-strong)] file:px-4 file:py-2 file:text-xs file:font-bold file:text-white"
+          className="block w-full cursor-pointer text-sm text-[var(--text-soft)] file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-[var(--surface-strong)] file:px-4 file:py-2 file:text-xs file:font-bold file:text-[var(--text)]"
         />
         <p className="mt-1.5 text-xs text-[var(--text-muted)]">
           画像は送信前に自動で圧縮されます（現在のサイトのスクショなど歓迎です）

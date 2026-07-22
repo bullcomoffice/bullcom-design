@@ -2,20 +2,20 @@
 
 /* ========================================
    BULLCOM design - Design System
-   ダーク × カラフルグラデーション × 高級感
+   ブライト × カラフルグラデーション × 高級感
    ======================================== */
 
 :root {
   /* base */
-  --bg: #08080f;
-  --bg-soft: #0d0d18;
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: rgba(255, 255, 255, 0.08);
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
-  --text: #f5f5fa;
-  --text-soft: #c2c5d6;
-  --text-muted: #8f93ab;
+  --bg: #fffdfb;
+  --bg-soft: #f7f5ff;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(245, 242, 255, 0.9);
+  --border: rgba(91, 82, 145, 0.14);
+  --border-strong: rgba(91, 82, 145, 0.26);
+  --text: #24223a;
+  --text-soft: #5f5c78;
+  --text-muted: #8a86a0;
 
   /* spectrum */
   --pink: #f0509e;
@@ -92,8 +92,10 @@ body {
 /* ---- surfaces ---- */
 
 .glass {
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--surface);
   border: 1px solid var(--border);
+  box-shadow: 0 14px 42px -30px rgba(57, 39, 127, 0.32);
+  backdrop-filter: blur(14px);
 }
 
 .card-hover {
@@ -104,13 +106,13 @@ body {
 .card-hover:hover {
   transform: translateY(-6px);
   border-color: var(--border-strong);
-  box-shadow: 0 20px 50px -20px rgba(240, 80, 158, 0.35);
+  box-shadow: 0 22px 50px -22px rgba(129, 91, 205, 0.3);
 }
 
 /* gradient border card */
 .grad-border {
   position: relative;
-  background: var(--bg-soft);
+  background: rgba(255, 255, 255, 0.84);
   border-radius: 1.25rem;
 }
 
@@ -191,10 +193,25 @@ body {
 }
 
 .grid-overlay {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(119, 101, 183, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(119, 101, 183, 0.08) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* ---- bright creative canvas ---- */
+
+.hero-canvas {
+  background:
+    radial-gradient(circle at 86% 15%, rgba(171, 224, 255, 0.8), transparent 24rem),
+    radial-gradient(circle at 9% 77%, rgba(255, 205, 226, 0.72), transparent 25rem),
+    linear-gradient(135deg, #fffdfc 0%, #f8f5ff 52%, #f5fbff 100%);
+}
+
+.hero-board {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
 }
 
 /* ---- animations ---- */
