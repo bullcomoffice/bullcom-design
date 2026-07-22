@@ -8,22 +8,22 @@ const WORKS = [
     category: "コーポレート",
     title: "パソコン修理・設定 BULLCOM",
     description: "神戸・明石のパソコン修理店。地域SEOで問い合わせを継続獲得する店舗サイト。",
-    gradient: "linear-gradient(135deg, #4f8dff, #38d4f5)",
     label: "PC REPAIR",
+    image: "/work-pc-repair.png",
   },
   {
     category: "買取・販売",
     title: "トラック買取・販売サイト",
     description: "在庫掲載からSNS自動投稿・広告動画まで、集客の仕組みごと構築した事例。",
-    gradient: "linear-gradient(135deg, #ffab4a, #f0509e)",
     label: "TRUCK",
+    image: "/work-truck.png",
   },
   {
     category: "買取サービス",
     title: "ボート買取サイト",
     description: "広告×SEOのCV計測を設計し、データで改善を回せるようにした買取サイト。",
-    gradient: "linear-gradient(135deg, #38d4f5, #a06bff)",
     label: "BOAT",
+    image: "/work-boat.png",
   },
 ];
 
@@ -220,59 +220,6 @@ function SectionHead({
   );
 }
 
-function PortfolioVisual({ kind, label }: { kind: "pc" | "truck" | "boat"; label: string }) {
-  const styles = {
-    pc: "from-[#78b9ff] via-[#d8f5ff] to-[#f8fbff]",
-    truck: "from-[#ffd1a7] via-[#fff0e1] to-[#fff9f4]",
-    boat: "from-[#a7e9f4] via-[#e2f6ff] to-[#f4edff]",
-  };
-
-  return (
-    <div className={`relative h-52 overflow-hidden bg-gradient-to-br ${styles[kind]}`}>
-      <div className="absolute inset-5 overflow-hidden rounded-[1.1rem] border border-white/80 bg-white/80 shadow-[0_18px_32px_rgba(49,62,112,0.16)] backdrop-blur">
-        <div className="flex h-7 items-center gap-1.5 border-b border-slate-200/80 px-3">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ff7a8e]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ffcb63]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-[#68d79b]" />
-          <span className="ml-auto h-1.5 w-12 rounded-full bg-slate-200" />
-        </div>
-        {kind === "pc" && (
-          <>
-            <div className="absolute left-4 top-11 h-20 w-[58%] rounded-xl bg-gradient-to-br from-[#2869df] to-[#7dc7ff]" />
-            <div className="absolute left-7 top-[3.8rem] h-1.5 w-16 rounded-full bg-white/75" />
-            <div className="absolute left-7 top-[5.3rem] h-1.5 w-10 rounded-full bg-white/50" />
-            <div className="absolute bottom-4 left-4 right-4 flex gap-2">
-              {["bg-[#dfeeff]", "bg-[#e9f9ff]", "bg-[#ecf0ff]"].map((color) => <span key={color} className={`h-7 flex-1 rounded-lg ${color}`} />)}
-            </div>
-            <div className="absolute right-5 top-[3.4rem] h-16 w-[27%] rounded-full border-[7px] border-[#ff7ba9] bg-white/70" />
-          </>
-        )}
-        {kind === "truck" && (
-          <>
-            <div className="absolute left-5 top-11 h-20 w-[62%] rounded-xl bg-gradient-to-br from-[#ff7044] to-[#ffbb54]" />
-            <div className="absolute left-7 top-[3.7rem] h-8 w-16 rounded-md bg-white/80" />
-            <div className="absolute left-[4.9rem] top-[4.2rem] h-6 w-16 rounded-sm bg-[#703957]/80" />
-            <span className="absolute left-9 top-[6.7rem] h-5 w-5 rounded-full border-[4px] border-[#3e3853] bg-white" />
-            <span className="absolute left-[7.8rem] top-[6.7rem] h-5 w-5 rounded-full border-[4px] border-[#3e3853] bg-white" />
-            <div className="absolute bottom-4 left-5 right-5 h-5 rounded-full bg-[#ffe4c4]" />
-          </>
-        )}
-        {kind === "boat" && (
-          <>
-            <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-b from-[#76d8eb] to-[#478fdb]" />
-            <div className="absolute left-[18%] top-12 h-11 w-[60%] -skew-x-[20deg] rounded-b-[2rem] rounded-t-md bg-white shadow-md" />
-            <div className="absolute left-[39%] top-9 h-8 w-14 -skew-x-[20deg] rounded-t-full bg-[#5b55b9]" />
-            <div className="absolute left-[12%] top-6 h-10 w-10 rounded-full bg-[#ffe28d] opacity-90" />
-            <div className="absolute bottom-6 left-5 h-1.5 w-12 rounded-full bg-white/60" />
-            <div className="absolute bottom-10 right-5 h-1.5 w-9 rounded-full bg-white/45" />
-          </>
-        )}
-      </div>
-      <span className="font-en absolute bottom-3 right-4 rounded-full bg-white/80 px-3 py-1 text-[10px] font-extrabold tracking-[0.18em] text-slate-700 shadow-sm">{label}</span>
-    </div>
-  );
-}
-
 /* ============ ページ本体 ============ */
 
 export default function Home() {
@@ -378,8 +325,20 @@ export default function Home() {
           />
           <div className="grid gap-6 md:grid-cols-3">
             {WORKS.map((work) => (
-              <article key={work.title} className="glass card-hover overflow-hidden rounded-2xl">
-                <PortfolioVisual kind={work.label === "PC REPAIR" ? "pc" : work.label === "TRUCK" ? "truck" : "boat"} label={work.label} />
+              <article key={work.title} className="glass card-hover group overflow-hidden rounded-2xl">
+                <div className="relative h-52 overflow-hidden">
+                  <Image
+                    src={work.image}
+                    alt={`${work.title}のイメージ`}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#272442]/35 via-transparent to-white/5" />
+                  <span className="font-en absolute bottom-3 right-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-extrabold tracking-[0.18em] text-slate-700 shadow-sm">
+                    {work.label}
+                  </span>
+                </div>
                 <div className="p-6">
                   <span className="font-en inline-block rounded-full border border-[var(--border-strong)] px-3 py-1 text-xs font-semibold text-[var(--text-soft)]">
                     {work.category}
