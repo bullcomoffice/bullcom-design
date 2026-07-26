@@ -143,7 +143,7 @@ export default async function BlogPostPage({ params }: Props) {
             <a href="tel:078-912-2656" className="btn btn-grad px-6 py-3 text-sm">
               078-912-2656
             </a>
-            <Link href="/#contact" className="btn btn-ghost px-6 py-3 text-sm">
+            <Link href="/contact" className="btn btn-ghost px-6 py-3 text-sm">
               お問い合わせへ
             </Link>
           </div>

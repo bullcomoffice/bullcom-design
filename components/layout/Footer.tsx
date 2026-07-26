@@ -1,5 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PHONE, PHONE_TEL } from "@/lib/site-data";
+
+const FOOTER_LINKS = [
+  { href: "/services", label: "サービス" },
+  { href: "/price", label: "料金" },
+  { href: "/works", label: "制作実績" },
+  { href: "/blog", label: "ブログ" },
+  { href: "/faq", label: "よくある質問" },
+  { href: "/about", label: "会社概要" },
+  { href: "/contact", label: "お問い合わせ" },
+];
 
 export default function Footer() {
   return (
@@ -20,37 +31,28 @@ export default function Footer() {
 
           <div className="flex flex-col gap-3">
             <a
-              href="tel:078-912-2656"
+              href={PHONE_TEL}
               className="font-en flex items-center gap-2 text-2xl font-bold tracking-wide"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--cyan)">
                 <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z" />
               </svg>
-              078-912-2656
+              {PHONE}
             </a>
             <p className="text-xs text-[var(--text-muted)]">お電話・LINEでお気軽にご相談ください</p>
           </div>
         </div>
 
         <nav className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-[var(--border)] pt-8 text-sm text-[var(--text-soft)]">
-          <Link href="/#works" className="transition hover:text-[var(--text)]">
-            制作実績
-          </Link>
-          <Link href="/#price" className="transition hover:text-[var(--text)]">
-            料金
-          </Link>
-          <Link href="/#services" className="transition hover:text-[var(--text)]">
-            サービス
-          </Link>
-          <Link href="/#strength" className="transition hover:text-[var(--text)]">
-            選ばれる理由
-          </Link>
-          <Link href="/blog" className="transition hover:text-[var(--text)]">
-            ブログ
-          </Link>
-          <Link href="/#contact" className="transition hover:text-[var(--text)]">
-            お問い合わせ
-          </Link>
+          {FOOTER_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="transition hover:text-[var(--text)]"
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="mt-8 flex flex-col justify-between gap-2 text-xs text-[var(--text-muted)] sm:flex-row">

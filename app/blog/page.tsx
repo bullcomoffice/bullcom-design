@@ -37,7 +37,7 @@ export default async function BlogPage() {
             <p className="font-head text-lg font-bold">記事を準備中です</p>
             <p className="mt-3 text-sm leading-relaxed text-[var(--text-soft)]">
               もうしばらくお待ちください。ご相談は
-              <Link href="/#contact" className="grad-text font-bold">
+              <Link href="/contact" className="grad-text font-bold">
                 お問い合わせ
               </Link>
               からどうぞ。
