@@ -29,7 +29,6 @@ export default function Home() {
           className="hero-sky-image object-cover"
         />
         <div className="hero-sky-overlay absolute inset-0" />
-        <div className="grid-overlay absolute inset-0" />
 
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="min-w-0">
