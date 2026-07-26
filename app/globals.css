@@ -234,6 +234,31 @@ body {
   aspect-ratio: 4 / 3;
 }
 
+.subpage-hero-visual {
+  height: 15rem;
+}
+
+.subpage-hero-shine {
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 44%, rgba(111, 77, 214, 0.12));
+}
+
+.cta-illustration {
+  height: 12rem;
+}
+
+.cta-illustration-float {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  width: 12rem;
+  transform: translateY(-50%) rotate(3deg);
+}
+
+.subpage-contact-visual {
+  height: 12rem;
+}
+
 @media (min-width: 640px) {
   .section-visual {
     height: 14rem;
@@ -241,6 +266,14 @@ body {
 
   .section-visual-services {
     height: 16rem;
+  }
+
+  .subpage-hero-visual {
+    height: 20rem;
+  }
+
+  .subpage-contact-visual {
+    height: 18rem;
   }
 }
 

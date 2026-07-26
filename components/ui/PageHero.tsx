@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 type Crumb = { href: string; label: string };
 
@@ -7,11 +8,15 @@ export default function PageHero({
   ja,
   description,
   crumbs = [],
+  image,
+  imageAlt = "",
 }: {
   en: string;
   ja: string;
   description?: string;
   crumbs?: Crumb[];
+  image?: string;
+  imageAlt?: string;
 }) {
   return (
     <section className="hero-canvas relative overflow-hidden pt-16">
@@ -20,8 +25,13 @@ export default function PageHero({
       <div className="aurora h-[240px] w-[240px] bg-[#38d4f5] opacity-20 left-[45%] top-20" />
       <div className="grid-overlay absolute inset-0" />
 
-      <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
-        {crumbs.length > 0 && (
+      <div
+        className={`relative mx-auto max-w-6xl gap-8 px-4 py-14 sm:px-6 sm:py-20 ${
+          image ? "grid items-center lg:grid-cols-[0.95fr_0.8fr]" : ""
+        }`}
+      >
+        <div className="min-w-0">
+          {crumbs.length > 0 && (
           <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
             <Link href="/" className="transition hover:text-[var(--text)]">
               ホーム
@@ -35,14 +45,28 @@ export default function PageHero({
               </span>
             ))}
           </nav>
-        )}
+          )}
 
-        <p className="font-en grad-text text-sm font-bold tracking-[0.35em]">{en}</p>
-        <h1 className="font-head mt-3 text-3xl font-black tracking-wide sm:text-5xl">{ja}</h1>
-        {description && (
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[var(--text-soft)] sm:text-base">
-            {description}
-          </p>
+          <p className="font-en grad-text text-sm font-bold tracking-[0.35em]">{en}</p>
+          <h1 className="font-head mt-3 text-3xl font-black tracking-wide sm:text-5xl">{ja}</h1>
+          {description && (
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[var(--text-soft)] sm:text-base">
+              {description}
+            </p>
+          )}
+        </div>
+
+        {image && (
+          <div className="subpage-hero-visual card-hover relative overflow-hidden rounded-[1.75rem] border border-white/70 shadow-[0_26px_70px_rgba(88,67,166,0.16)]">
+            <Image
+              src={image}
+              alt={imageAlt}
+              fill
+              sizes="(min-width: 1024px) 480px, 100vw"
+              className="object-cover"
+            />
+            <div className="subpage-hero-shine absolute inset-0" />
+          </div>
         )}
       </div>
     </section>

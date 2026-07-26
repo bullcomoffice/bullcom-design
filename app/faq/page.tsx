@@ -110,6 +110,8 @@ export default function FaqPage() {
     <>
       <PageHero
         en="FAQ"
+        image="/scene-support-security.png"
+        imageAlt="ホームページ運用を支えるサポートのイメージ"
         ja="よくある質問"
         description="ご相談前によくいただく質問をまとめました。ここにない疑問も、お気軽にお問い合わせください。"
         crumbs={[{ href: "/faq", label: "よくある質問" }]}

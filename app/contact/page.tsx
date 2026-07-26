@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageHero from "@/components/ui/PageHero";
 import ContactForm from "@/components/ui/ContactForm";
 import { LINE_URL, PHONE, PHONE_TEL } from "@/lib/site-data";
@@ -15,6 +16,8 @@ export default function ContactPage() {
     <>
       <PageHero
         en="CONTACT"
+        image="/scene-price-consultation.png"
+        imageAlt="ホームページ制作の相談をするイメージ"
         ja="お問い合わせ"
         description="ご相談・お見積りは無料です。「まだ何も決まってない」段階でも大歓迎。お気軽にどうぞ。"
         crumbs={[{ href: "/contact", label: "お問い合わせ" }]}
@@ -69,6 +72,17 @@ export default function ContactPage() {
               <p className="text-sm text-[var(--text-soft)]">下のフォームから24時間受付</p>
               <p className="text-xs text-[var(--text-muted)]">参考画像の添付もできます</p>
             </a>
+          </div>
+
+          <div className="subpage-contact-visual relative mt-12 overflow-hidden rounded-[1.75rem] border border-white/70 shadow-[0_20px_55px_rgba(88,67,166,0.14)]">
+            <Image
+              src="/sub-services-studio.png"
+              alt="制作の相談からはじまるクリエイティブな時間のイメージ"
+              fill
+              sizes="(min-width: 1024px) 900px, 100vw"
+              className="object-cover"
+            />
+            <div className="subpage-hero-shine absolute inset-0" />
           </div>
 
           <div className="mt-14">

@@ -17,6 +17,8 @@ export default function PricePage() {
     <>
       <PageHero
         en="PRICE"
+        image="/scene-price-consultation.png"
+        imageAlt="ホームページ制作の相談をするイメージ"
         ja="料金プラン"
         description="必要なものだけを、わかりやすい価格で。制作費を抑えて、公開後の保守までしっかり伴走します。ご相談・お見積りは無料です。"
         crumbs={[{ href: "/price", label: "料金" }]}

@@ -20,6 +20,8 @@ export default function WorksPage() {
     <>
       <PageHero
         en="WORKS"
+        image="/work-truck.png"
+        imageAlt="事業の魅力をWebサイトで伝える制作実績のイメージ"
         ja="制作実績"
         description="BULLCOMシリーズをはじめ、集客の仕組みまで含めたサイトづくりをしています。実績は順次追加していきます。"
         crumbs={[{ href: "/works", label: "制作実績" }]}

@@ -44,6 +44,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         en="SERVICES"
+        image="/sub-services-studio.png"
+        imageAlt="Web制作からブランディングまでを支えるデザインスタジオのイメージ"
         ja="サービス内容"
         description="Webからグラフィック、ブランディングまで。「会社の顔」をまるごとデザインします。制作して終わりではなく、公開後に育てていくところまでが私たちの仕事です。"
         crumbs={[{ href: "/services", label: "サービス" }]}

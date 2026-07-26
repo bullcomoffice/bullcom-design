@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { LINE_URL, PHONE, PHONE_TEL } from "@/lib/site-data";
 
 // 全ページ共通のCV導線。電話 → フォーム → LINE の優先順で配置する
@@ -13,9 +14,19 @@ export default function CtaBand({
     <section className="relative overflow-hidden py-20">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <div className="grad-border overflow-hidden">
-          <div className="relative flex flex-col items-center gap-6 px-6 py-12 text-center md:px-12">
+          <div className="relative flex flex-col items-center gap-6 overflow-hidden px-6 py-12 text-center md:px-12 md:pr-56">
             <div className="aurora h-[220px] w-[220px] bg-[#f0509e] opacity-25 -left-20 -top-20" />
             <div className="aurora h-[220px] w-[220px] bg-[#4f8dff] opacity-25 -bottom-20 -right-20" />
+            <div className="cta-illustration cta-illustration-float relative hidden overflow-hidden rounded-[1.5rem] border border-white/70 shadow-[0_18px_45px_rgba(79,141,255,0.2)] md:block">
+              <Image
+                src="/scene-support-security.png"
+                alt="ウェブサイトを安全に運用するサポートのイメージ"
+                fill
+                sizes="192px"
+                className="object-cover"
+              />
+              <div className="subpage-hero-shine absolute inset-0" />
+            </div>
 
             <h2 className="font-head relative text-2xl font-black tracking-wide sm:text-3xl">
               {title}

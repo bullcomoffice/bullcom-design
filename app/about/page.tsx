@@ -30,6 +30,8 @@ export default function AboutPage() {
     <>
       <PageHero
         en="ABOUT"
+        image="/sub-about-partnership.png"
+        imageAlt="お客様とデザインの方向性を考えるチームのイメージ"
         ja="会社概要"
         description="BULLCOM designについて。ホームページを「作って終わり」にしないパートナーでありたいと考えています。"
         crumbs={[{ href: "/about", label: "会社概要" }]}

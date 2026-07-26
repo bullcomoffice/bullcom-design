@@ -97,3 +97,11 @@
   - サービスメニュー＆料金決定（LP3万〜、HP20万〜、ロゴ3万〜など。詳細は要件定義書 §8）
   - 保守サブスク3プラン（ライト5千/スタンダード1万/プレミアム2万）+ 年間費用1.5万＋税
   - 他社制作HPの保守受託もやる（無料サイト診断→プラン提案）
+
+### 2026-07-26: 下層ページのビジュアルリニューアル
+
+- `/services` `/price` `/works` `/faq` `/about` `/contact` の共通ヒーローを、明るい多色グラデーションとページ固有のイラスト付き構成へ刷新。
+- 共通 `PageHero` に画像表示オプションを追加。サービス・会社案内用に新規イラスト `public/sub-services-studio.png`、`public/sub-about-partnership.png` を追加し、料金・実績・FAQ・お問い合わせには既存のテーマ別イラストを活用。
+- 共通 `CtaBand` にサイト保守・セキュリティ支援のイラストを追加。お問い合わせページはフォーム前にも制作相談のイメージバナーを配置し、`ContactForm.tsx` の送信ロジックは変更していない。
+- `npm run lint` と `npm run build` は成功。ヘッドレスChromeで全6ページを 1440px / 390px 幅で確認し、全組み合わせで `scrollWidth === clientWidth` を確認。
+- 検証スクリーンショット: `screenshots-sub-*-desktop.png` / `screenshots-sub-*-mobile.png`（共通CTA: `screenshots-sub-services-cta-*.png`）。
