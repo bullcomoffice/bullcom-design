@@ -208,6 +208,30 @@ body {
     linear-gradient(135deg, #fffdfc 0%, #f8f5ff 52%, #f5fbff 100%);
 }
 
+.hero-sky {
+  background: #89c8f5;
+}
+
+.hero-sky-image {
+  object-position: 58% center;
+}
+
+.hero-sky-overlay {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.93) 0%, rgba(255, 255, 255, 0.83) 36%, rgba(255, 255, 255, 0.34) 58%, rgba(255, 255, 255, 0.04) 80%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+}
+
+@media (max-width: 1023px) {
+  .hero-sky-image {
+    object-position: 62% center;
+  }
+
+  .hero-sky-overlay {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.38) 60%, rgba(255, 255, 255, 0.2) 100%);
+  }
+}
+
 .hero-board {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.9);

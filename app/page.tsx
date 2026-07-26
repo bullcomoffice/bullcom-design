@@ -19,13 +19,16 @@ export default function Home() {
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="hero-canvas relative flex min-h-svh items-center overflow-hidden pt-16">
-        {/* aurora background */}
-        <div className="aurora h-[420px] w-[420px] bg-[#f0509e] opacity-35 -left-32 top-10" />
-        <div className="aurora h-[380px] w-[380px] bg-[#a06bff] opacity-35 right-[-100px] top-[-60px]" />
-        <div className="aurora h-[360px] w-[360px] bg-[#4f8dff] opacity-30 bottom-[-120px] left-[30%]" />
-        <div className="aurora h-[280px] w-[280px] bg-[#38d4f5] opacity-25 right-[15%] bottom-[-40px]" />
-        <div className="aurora h-[240px] w-[240px] bg-[#ffab4a] opacity-20 left-[45%] top-[5%]" />
+      <section className="hero-canvas hero-sky relative flex min-h-svh items-center overflow-hidden pt-16">
+        <Image
+          src="/hero-colorful-sky.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="hero-sky-image object-cover"
+        />
+        <div className="hero-sky-overlay absolute inset-0" />
         <div className="grid-overlay absolute inset-0" />
 
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.2fr_0.8fr]">

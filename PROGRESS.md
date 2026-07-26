@@ -116,3 +116,9 @@
 - 共通 `CtaBand` にサイト保守・セキュリティ支援のイラストを追加。お問い合わせページはフォーム前にも制作相談のイメージバナーを配置し、`ContactForm.tsx` の送信ロジックは変更していない。
 - `npm run lint` と `npm run build` は成功。ヘッドレスChromeで全6ページを 1440px / 390px 幅で確認し、全組み合わせで `scrollWidth === clientWidth` を確認。
 - 検証スクリーンショット: `screenshots-sub-*-desktop.png` / `screenshots-sub-*-mobile.png`（共通CTA: `screenshots-sub-services-cta-*.png`）。
+
+### 2026-07-27: TOPヒーローをカラフルな空へ変更
+
+- 淡いオーロラ背景を、雲とピンク・紫・青・シアンがはっきり見えるカラフルな空のビジュアルへ置き換え。
+- `public/hero-colorful-sky.png` を追加。コピー・料金・電話番号・CV導線・右側のデザインボードは維持し、テキスト周辺だけ白のグラデーションで可読性を確保。
+- 検証: `npm run lint` / `npm run build` 成功。ヘッドレスChrome 1440px・390pxで `scrollWidth === clientWidth` を確認。スクリーンショットは `screenshots-hero-sky-desktop.png` / `screenshots-hero-sky-mobile.png`。
