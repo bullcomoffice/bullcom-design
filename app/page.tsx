@@ -254,7 +254,11 @@ export default function Home() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {SERVICES.map((service) => (
-              <div key={service.title} className="glass card-hover rounded-2xl p-7">
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="glass card-hover group rounded-2xl p-7"
+              >
                 <div className="flex items-center gap-4">
                   <span
                     className="flex h-12 w-12 items-center justify-center rounded-xl"
@@ -279,12 +283,15 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-              </div>
+                <span className="font-en mt-5 inline-block text-xs font-bold text-[var(--text-muted)] transition group-hover:text-[var(--text)]">
+                  詳しく見る →
+                </span>
+              </Link>
             ))}
           </div>
           <div className="mt-10 text-center">
             <Link href="/services" className="btn btn-ghost px-7 py-3.5 text-sm">
-              サービスの詳細を見る
+              サービス一覧を見る
             </Link>
           </div>
         </div>

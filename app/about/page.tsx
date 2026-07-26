@@ -3,7 +3,7 @@ import Image from "next/image";
 import PageHero from "@/components/ui/PageHero";
 import CtaBand from "@/components/ui/CtaBand";
 import SectionHead from "@/components/ui/SectionHead";
-import { PHONE, PHONE_TEL, STRENGTHS } from "@/lib/site-data";
+import { COMPANY, PHONE, PHONE_TEL, STRENGTHS } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "会社概要",
@@ -12,17 +12,22 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-// TODO: 以下はユーザー確認が必要な項目。確定情報が入るまで「—」表記のままにすること（事実の創作は禁止）
+// 事業者情報は bullcom.jp/about（同一事業者）を参照して記載
 const PROFILE: { label: string; value: string }[] = [
-  { label: "屋号・事業名", value: "BULLCOM design（ブルコムデザイン）" },
-  { label: "事業内容", value: "ホームページ制作・デザイン制作・ブランディング・保守運用" },
+  { label: "事業名", value: COMPANY.brand },
+  { label: "運営", value: COMPANY.operator },
+  { label: "代表者", value: COMPANY.owner },
+  { label: "所在地", value: `${COMPANY.zip} ${COMPANY.address}` },
   { label: "電話番号", value: PHONE },
-  { label: "メール", value: "bullcom.office@gmail.com" },
-  { label: "対応エリア", value: "日本全国" },
-  { label: "所在地", value: "—" },
-  { label: "代表者", value: "—" },
-  { label: "設立", value: "—" },
-  { label: "営業時間", value: "—" },
+  { label: "FAX", value: COMPANY.fax },
+  { label: "メール", value: COMPANY.email },
+  { label: "創業", value: COMPANY.founded },
+  { label: "事業内容", value: "ホームページ制作・デザイン制作・ブランディング・保守運用" },
+  { label: "対応エリア", value: COMPANY.area },
+  { label: "事務所営業時間", value: COMPANY.businessHours },
+  { label: "連絡受付時間", value: COMPANY.contactHours },
+  { label: "定休日", value: COMPANY.holiday },
+  { label: "お支払い方法", value: COMPANY.payment },
 ];
 
 export default function AboutPage() {
@@ -134,8 +139,17 @@ export default function AboutPage() {
               </div>
             ))}
           </dl>
-          <p className="mt-4 text-center text-xs text-[var(--text-muted)]">
-            「—」の項目は準備中です。詳細はお問い合わせください。
+          <p className="mt-4 text-center text-xs leading-relaxed text-[var(--text-muted)]">
+            BULLCOM designは、パソコン修理・設定の
+            <a
+              href="https://bullcom.jp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 transition hover:text-[var(--text)]"
+            >
+              BULLCOM
+            </a>
+            が運営するデザイン事業ブランドです。
           </p>
         </div>
       </section>

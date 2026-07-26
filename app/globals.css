@@ -423,6 +423,32 @@ body {
   font-size: 0.85em;
 }
 
+/* ---- privacy policy 本文 ---- */
+
+.prose-privacy {
+  color: var(--text-soft);
+  font-size: 0.875rem;
+  line-height: 1.9;
+}
+
+.prose-privacy p + p {
+  margin-top: 1em;
+}
+
+.prose-privacy ul {
+  margin: 1em 0 0;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.prose-privacy li {
+  margin: 0.35em 0;
+}
+
+.prose-privacy ul + p {
+  margin-top: 1em;
+}
+
 /* ---- floating LINE button ---- */
 
 .floating-line {

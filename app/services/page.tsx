@@ -51,67 +51,67 @@ export default function ServicesPage() {
         crumbs={[{ href: "/services", label: "サービス" }]}
       />
 
-      {/* 4カテゴリ詳細 */}
+      {/* 4カテゴリ → 各詳細ページへ */}
       <section className="relative py-8">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex flex-col gap-6">
+          <div className="grid gap-6 md:grid-cols-2">
             {SERVICES.map((service) => (
-              <div key={service.title} className="glass card-hover rounded-2xl p-7 sm:p-9">
-                <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="glass card-hover group relative flex flex-col overflow-hidden rounded-2xl p-7 sm:p-8"
+              >
+                <span
+                  className="absolute inset-x-0 top-0 h-1"
+                  style={{ background: service.color }}
+                />
+                <div className="flex items-center gap-4">
+                  <span
+                    className="flex h-12 w-12 items-center justify-center rounded-xl"
+                    style={{
+                      color: service.color,
+                      background: "var(--surface-strong)",
+                      border: "1px solid var(--border)",
+                    }}
+                  >
+                    {service.icon}
+                  </span>
                   <div>
-                    <div className="flex items-center gap-4">
-                      <span
-                        className="flex h-12 w-12 items-center justify-center rounded-xl"
-                        style={{
-                          color: service.color,
-                          background: "var(--surface-strong)",
-                          border: "1px solid var(--border)",
-                        }}
-                      >
-                        {service.icon}
-                      </span>
-                      <h2 className="font-head text-xl font-bold sm:text-2xl">{service.title}</h2>
-                    </div>
-                    <p className="mt-5 text-sm leading-relaxed text-[var(--text-soft)]">
-                      {service.description}
-                    </p>
-                    <ul className="mt-5 flex flex-col gap-2.5 text-sm text-[var(--text-soft)]">
-                      {service.items.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5">
-                          <span
-                            className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
-                            style={{ background: service.color }}
-                          />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-soft)] p-6">
-                    <p className="font-en text-xs font-bold tracking-[0.25em] text-[var(--text-muted)]">
-                      PRICE
-                    </p>
-                    <div className="mt-4 flex flex-col">
-                      {service.prices.map((p) => (
-                        <div
-                          key={p.label}
-                          className="flex items-baseline justify-between gap-4 border-b border-dashed border-[var(--border)] py-3 text-sm last:border-b-0"
-                        >
-                          <span className="text-[var(--text-soft)]">{p.label}</span>
-                          <span className="font-en shrink-0 font-bold text-[var(--text)]">{p.price}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <Link
-                      href="/price"
-                      className="btn btn-ghost mt-5 w-full px-5 py-3 text-sm"
+                    <p
+                      className="font-en text-[10px] font-bold tracking-[0.2em]"
+                      style={{ color: service.color }}
                     >
-                      料金の詳細を見る
-                    </Link>
+                      {service.title}
+                    </p>
+                    <h2 className="font-head text-lg font-bold sm:text-xl">{service.pageTitle}</h2>
                   </div>
                 </div>
-              </div>
+
+                <p className="mt-5 text-sm leading-relaxed text-[var(--text-soft)]">
+                  {service.description}
+                </p>
+
+                <ul className="mt-5 flex flex-col gap-2.5 text-sm text-[var(--text-soft)]">
+                  {service.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <span
+                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: service.color }}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-6 flex items-center justify-between border-t border-[var(--border)] pt-5">
+                  <span className="font-en text-sm font-bold text-[var(--text)]">
+                    {service.prices[0].price.replace("〜", "")}〜
+                  </span>
+                  <span className="font-en text-xs font-bold text-[var(--text-muted)] transition group-hover:text-[var(--text)]">
+                    詳しく見る →
+                  </span>
+                </div>
+              </Link>
             ))}
           </div>
           <p className="mt-6 text-center text-xs text-[var(--text-muted)]">

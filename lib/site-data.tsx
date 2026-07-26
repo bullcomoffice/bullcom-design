@@ -8,6 +8,24 @@ export const PHONE_TEL = "tel:078-912-2656";
 export const LINE_URL = "https://lin.ee/vX5z2Xf";
 export const SITE_URL = "https://bullcom.website";
 
+/* 事業者情報。BULLCOM（bullcom.jp）と同一事業者のデザイン事業ブランド。
+   出典: https://bullcom.jp/about/ （2026-07-26 参照） */
+export const COMPANY = {
+  brand: "BULLCOM design（ブルコムデザイン）",
+  operator: "BULLCOM（ブルコム）",
+  owner: "芦原 陽右",
+  zip: "〒651-2113",
+  address: "兵庫県神戸市西区伊川谷町有瀬846-10 ギャラリエ1F",
+  fax: "078-939-6660",
+  email: "bullcom.office@gmail.com",
+  founded: "2002年7月",
+  businessHours: "9:30〜15:30（事務所）",
+  contactHours: "9:00〜19:00",
+  holiday: "不定休",
+  area: "日本全国",
+  payment: "現金・銀行振込・クレジット・代金引換",
+} as const;
+
 /* ============ 制作実績 ============ */
 
 export type Work = {
@@ -117,18 +135,45 @@ export const SUBSC_PLANS = [
 
 /* ============ サービス ============ */
 
+export type ServiceDetail = {
+  name: string;
+  summary: string;
+  points: string[];
+  price?: string;
+};
+
 export type Service = {
+  slug: string;
   title: string;
+  /** 詳細ページの見出し（H1）に使う。カテゴリ名より具体的に */
+  pageTitle: string;
+  /** 詳細ページ用のリード文 */
+  lead: string;
+  metaDescription: string;
   color: string;
+  /** 一覧・トップ用の短い説明 */
   description: string;
+  /** 一覧・トップ用の箇条書き */
   items: string[];
   prices: { label: string; price: string }[];
+  /** 詳細ページに並べるサービス個票 */
+  details: ServiceDetail[];
+  /** こんな方におすすめ */
+  recommended: string[];
+  heroImage: string;
+  heroAlt: string;
   icon: ReactNode;
 };
 
 export const SERVICES: Service[] = [
   {
+    slug: "web",
     title: "Web系",
+    pageTitle: "ホームページ制作・運用",
+    lead:
+      "コーポレートサイトからLP、ECサイトまで。Next.jsで「速くて、強くて、育てられる」サイトをつくり、公開後の運用までお引き受けします。",
+    metaDescription:
+      "BULLCOM designのホームページ制作。コーポレートサイト20万円〜、LP3万円〜、リニューアル15万円〜、EC構築30万円〜。Next.jsによる高速・高セキュリティなサイトを、保守運用までまとめてお任せいただけます。",
     color: "var(--blue)",
     description:
       "設計から開発、公開後の運用まで一貫対応。Next.js製の高速で安全なサイトを、集客の仕組みごと構築します。",
@@ -145,6 +190,72 @@ export const SERVICES: Service[] = [
       { label: "EC構築", price: "30万円〜" },
       { label: "保守・運用", price: "月5,000円〜" },
     ],
+    details: [
+      {
+        name: "HP・コーポレートサイト制作",
+        summary:
+          "会社の顔となるサイトを、構成の設計からご一緒します。スマートフォン表示は標準対応。ブログを自分で更新できる管理画面もお付けできます。",
+        points: [
+          "構成・ワイヤーフレームの設計からご提案",
+          "スマホ・タブレット対応（レスポンシブ）標準",
+          "ブログ更新用の管理画面（CMS）に対応",
+          "Googleアナリティクス設置・SEOの基本設定込み",
+        ],
+        price: "20万円〜（〜10ページ）",
+      },
+      {
+        name: "LP制作",
+        summary:
+          "広告やキャンペーンの受け皿になる1ページ完結型のサイト。問い合わせや申し込みへ迷わず進める導線に絞って構成します。",
+        points: [
+          "問い合わせ・申し込みへの導線に特化した構成",
+          "広告出稿に合わせた短納期のご相談も可能",
+          "フォーム設置・計測タグの設定に対応",
+        ],
+        price: "3万円〜",
+      },
+      {
+        name: "HPリニューアル",
+        summary:
+          "古くなったサイトを、高速で安全なNext.js製に作り替えます。今の原稿や写真を活かしながら、足りない部分を補って再構成します。",
+        points: [
+          "既存の原稿・画像を活かした作り替えが可能",
+          "表示速度・スマホ対応・SSLをまとめて改善",
+          "現状の課題を無料サイト診断で整理してからご提案",
+        ],
+        price: "15万円〜",
+      },
+      {
+        name: "ECサイト構築",
+        summary:
+          "ネットショップの開設をお手伝いします。商品登録や受注の流れなど、公開後に運用しやすい形を優先して設計します。",
+        points: [
+          "商品登録・在庫管理のしやすさを重視した設計",
+          "決済・配送まわりのご相談にも対応",
+        ],
+        price: "30万円〜",
+      },
+      {
+        name: "保守・運用",
+        summary:
+          "公開後のサーバー管理、セキュリティ監視、更新代行まで。他社で制作されたサイトの保守だけでもお引き受けします。",
+        points: [
+          "サーバー・ドメイン管理、定期バックアップ",
+          "セキュリティ監視で改ざん・乗っ取りを予防",
+          "テキストや画像の差し替え、ブログ入稿の代行",
+          "他社制作サイトの引き継ぎもOK（まずは無料診断）",
+        ],
+        price: "月5,000円〜",
+      },
+    ],
+    recommended: [
+      "ホームページが古くなっていて、何年も更新できていない",
+      "作った業者と連絡が取れず、直したいところが直せない",
+      "問い合わせにつながるサイトに作り替えたい",
+      "セキュリティや表示速度に不安がある",
+    ],
+    heroImage: "/sub-services-studio.png",
+    heroAlt: "ホームページを制作しているデザイナーのイメージ",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="16 18 22 12 16 6" />
@@ -153,7 +264,13 @@ export const SERVICES: Service[] = [
     ),
   },
   {
+    slug: "graphic",
     title: "グラフィック系",
+    pageTitle: "ロゴ・印刷物のデザイン",
+    lead:
+      "ロゴから名刺、チラシ、看板、パッケージまで。Webと同じトーンで紙まわりも整えて、会社の見え方に統一感をつくります。",
+    metaDescription:
+      "BULLCOM designのグラフィックデザイン。ロゴ・CI 3万円〜、名刺2万円〜、チラシ2万円〜、パンフレット3万円〜、看板3万円〜、パッケージ10万円〜。Webと同じトーンで紙媒体まで一貫してデザインします。",
     color: "var(--pink)",
     description:
       "Webと同じトーンで紙まわりもデザイン。名刺からパッケージまで、会社の顔を統一感のあるビジュアルに整えます。",
@@ -170,6 +287,58 @@ export const SERVICES: Service[] = [
       { label: "看板デザイン", price: "3万円〜" },
       { label: "パッケージ", price: "10万円〜" },
     ],
+    details: [
+      {
+        name: "ロゴ・CIデザイン",
+        summary:
+          "会社やお店の顔になるロゴをおつくりします。名刺・看板・Webなど使う場面を想定して、小さくしても読みやすい形に整えます。",
+        points: [
+          "複数案からご検討いただけます",
+          "縮小時・モノクロでの見え方まで確認",
+          "各種データ形式でお渡し（印刷・Web両対応）",
+        ],
+        price: "3万円〜",
+      },
+      {
+        name: "名刺デザイン",
+        summary:
+          "渡した相手に伝わる名刺に。ロゴやサイトのトーンに合わせて、情報の優先順位を整理してレイアウトします。",
+        points: ["ロゴ・Webとトーンを統一", "印刷用データでお渡し"],
+        price: "2万円〜",
+      },
+      {
+        name: "チラシ・パンフレット",
+        summary:
+          "配布して読まれる紙面をつくります。載せたい情報が多いときも、優先順位を整理して読みやすくまとめます。",
+        points: [
+          "掲載内容の整理からご相談可能",
+          "写真撮影・原稿づくりもあわせて対応",
+        ],
+        price: "チラシ 2万円〜 / パンフレット 3万円〜",
+      },
+      {
+        name: "看板デザイン",
+        summary:
+          "遠くからでも伝わる看板に。掲出する場所や見られる距離を踏まえて、視認性優先でデザインします。",
+        points: ["設置場所・視認距離を踏まえた設計", "施工業者への入稿データに対応"],
+        price: "3万円〜",
+      },
+      {
+        name: "パッケージデザイン",
+        summary:
+          "商品の魅力が伝わるパッケージをデザインします。素材や形状のご相談も含めて一緒に考えます。",
+        points: ["商品の見せ方・訴求内容から整理", "印刷仕様に合わせたデータ作成"],
+        price: "10万円〜",
+      },
+    ],
+    recommended: [
+      "ロゴがなく、会社の見え方がバラバラになっている",
+      "名刺やチラシを、サイトと同じ雰囲気で揃えたい",
+      "自分で作った資料に、どうも素人っぽさが残る",
+      "Webと紙をまとめて相談できる相手がほしい",
+    ],
+    heroImage: "/scene-services-creation.png",
+    heroAlt: "名刺やチラシなど印刷物をデザインしている様子",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 19l7-7 3 3-7 7-3-3z" />
@@ -179,7 +348,13 @@ export const SERVICES: Service[] = [
     ),
   },
   {
+    slug: "branding",
     title: "ブランディング系",
+    pageTitle: "ブランディング・コンセプト設計",
+    lead:
+      "「何を、誰に、どう伝えるか」から一緒に考えます。色・フォント・言葉のルールを決めて、どの媒体でもブレない見え方をつくります。",
+    metaDescription:
+      "BULLCOM designのブランディング。コンセプト設計からブランドガイドライン策定まで一式20万円〜。色・フォント・言葉づかいのルールを整え、Webから印刷物まで一貫したブランドイメージをつくります。",
     color: "var(--purple)",
     description:
       "「何を、誰に、どう伝えるか」から一緒に設計。色・フォント・言葉のルールを整えて、ブレないブランドをつくります。",
@@ -188,6 +363,36 @@ export const SERVICES: Service[] = [
       "ブランドガイドライン策定（色・フォント・使い方のルール集）",
     ],
     prices: [{ label: "ブランディング一式", price: "20万円〜" }],
+    details: [
+      {
+        name: "コンセプト設計・ブランド戦略",
+        summary:
+          "強みやお客様像を一緒に整理して、伝えるべきメッセージを言葉にします。デザインの前に、方向性を決めるところからご一緒します。",
+        points: [
+          "ヒアリングで強み・お客様像・競合を整理",
+          "伝えたいことをキャッチコピー・メッセージに落とし込み",
+          "サイトや紙媒体での見せ方まで見据えて設計",
+        ],
+      },
+      {
+        name: "ブランドガイドライン策定",
+        summary:
+          "使う色、フォント、ロゴの余白、写真の選び方などをルール集にまとめます。誰が作っても同じ雰囲気を保てるようになります。",
+        points: [
+          "カラーパレット・フォントの指定",
+          "ロゴの使い方（余白・最小サイズ・NG例）",
+          "写真やトーンの選び方の基準",
+        ],
+      },
+    ],
+    recommended: [
+      "何を打ち出せばいいのか、自社の強みが整理できていない",
+      "担当者や制作物ごとに、デザインの雰囲気がバラバラ",
+      "新しく事業やお店を始めるので、最初から世界観を固めたい",
+      "外注先に渡せるデザインのルールがほしい",
+    ],
+    heroImage: "/sub-about-partnership.png",
+    heroAlt: "ブランドの方向性を一緒に考える打ち合わせのイメージ",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 3h12l4 6-10 13L2 9z" />
@@ -197,7 +402,13 @@ export const SERVICES: Service[] = [
     ),
   },
   {
+    slug: "contents",
     title: "コンテンツ・運用系",
+    pageTitle: "撮影・動画・コピーライティング",
+    lead:
+      "サイトに載せる素材づくりもおまかせください。伝わる写真・動画・文章を用意して、コンテンツの質から集客を底上げします。",
+    metaDescription:
+      "BULLCOM designの撮影・動画制作・コピーライティング。写真素材や原稿がなくても大丈夫。コピーライティング3万円〜、撮影・動画制作はお見積り。ホームページ制作とあわせてご依頼いただけます。",
     color: "var(--orange)",
     description:
       "サイトに載せる素材づくりもおまかせ。伝わる写真・動画・文章で、コンテンツの質を底上げします。",
@@ -206,6 +417,44 @@ export const SERVICES: Service[] = [
       { label: "コピーライティング", price: "3万円〜" },
       { label: "写真撮影・動画制作", price: "お見積り" },
     ],
+    details: [
+      {
+        name: "写真撮影",
+        summary:
+          "サイトやチラシに使う写真を撮影します。スタッフや店内、商品など、実際の様子が伝わるカットをご用意します。",
+        points: [
+          "サイトの構成に合わせて必要なカットをご提案",
+          "撮影した写真はサイト・印刷物どちらにも使用可能",
+        ],
+        price: "お見積り",
+      },
+      {
+        name: "動画制作",
+        summary:
+          "サービス紹介や広告用の動画をおつくりします。SNS向けの縦型など、使う場所に合わせた形式で仕上げます。",
+        points: ["用途に合わせた尺・形式でご提案", "字幕・テロップ入れに対応"],
+        price: "お見積り",
+      },
+      {
+        name: "コピーライティング",
+        summary:
+          "キャッチコピーやサービス説明文を書きます。「文章を用意するのが一番大変」という方は、ヒアリングをもとにこちらでまとめます。",
+        points: [
+          "ヒアリング内容から原稿を作成",
+          "検索されるキーワードを踏まえた文章に",
+          "サイト制作とセットのご依頼も歓迎",
+        ],
+        price: "3万円〜",
+      },
+    ],
+    recommended: [
+      "ホームページに載せる写真がなく、用意する余裕もない",
+      "文章を考えるのが苦手で、制作がそこで止まってしまう",
+      "SNSや広告に使う動画をつくりたい",
+      "サイト制作と素材づくりをまとめて頼みたい",
+    ],
+    heroImage: "/scene-price-consultation.png",
+    heroAlt: "取材や打ち合わせを通してコンテンツをつくるイメージ",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />

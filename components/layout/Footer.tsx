@@ -10,6 +10,7 @@ const FOOTER_LINKS = [
   { href: "/faq", label: "よくある質問" },
   { href: "/about", label: "会社概要" },
   { href: "/contact", label: "お問い合わせ" },
+  { href: "/privacy", label: "プライバシーポリシー" },
 ];
 
 export default function Footer() {
