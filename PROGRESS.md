@@ -30,6 +30,15 @@
 
 ## セッション記録
 
+### 2026-07-26: セクションごとの具体的なイラストを追加
+
+- `public/scene-price-consultation.png` を料金プランに追加。制作前の相談・見積もりの安心感を伝えるビジュアルとして使用。
+- `public/scene-services-creation.png` をサービス内容に追加。Web・グラフィック・ブランディングを横断する制作風景を表現。
+- `public/scene-support-security.png` を無料診断バナーに追加。公開後の保守・セキュリティ対応を具体化。
+- `app/page.tsx` で実績カードも含めてイラスト枠を整備し、ヒーローのモバイル幅を調整。料金・電話番号・フォーム送信ロジックは変更していない。
+- `app/globals.css` にイラスト枠の専用スタイルを追加。Tailwindの高さユーティリティに依存せず、画像エリアの高さを安定化。
+- 確認用画像: `screenshots-sections-desktop.png` / `screenshots-sections-mobile.png` / `screenshots-price-desktop.png`（Git管理対象外）。
+
 ### 2026-07-23: トップページをブライト・カラフルにリニューアル
 
 - 実績カードを生成イラストで具体化: PC修理・設定の相談風景、トラック買取・販売の展示とデジタル運用、ボート買取サービスとマリーナの3点を `public/work-*.png` として追加

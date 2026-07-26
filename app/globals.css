@@ -214,6 +214,36 @@ body {
   backdrop-filter: blur(14px);
 }
 
+/* ---- editorial illustration frames ---- */
+
+.work-visual {
+  height: 13rem;
+}
+
+.section-visual {
+  height: 12rem;
+}
+
+.section-visual-services {
+  height: 13rem;
+}
+
+.diagnosis-visual {
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 640px) {
+  .section-visual {
+    height: 14rem;
+  }
+
+  .section-visual-services {
+    height: 16rem;
+  }
+}
+
 /* ---- animations ---- */
 
 @media (prefers-reduced-motion: no-preference) {

@@ -236,8 +236,8 @@ export default function Home() {
         <div className="grid-overlay absolute inset-0" />
 
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div>
-            <p className="anim-fade-up font-en flex items-center gap-3 text-xs font-bold tracking-[0.3em] text-[var(--text-soft)]">
+          <div className="min-w-0">
+            <p className="anim-fade-up font-en flex max-w-full flex-wrap items-center gap-3 break-words text-[10px] font-bold tracking-[0.2em] text-[var(--text-soft)] sm:text-xs sm:tracking-[0.3em]">
               <span className="inline-block h-px w-10 bg-gradient-to-r from-[var(--pink)] to-[var(--cyan)]" />
               WEB DESIGN STUDIO — BULLCOM SERIES 06
             </p>
@@ -326,7 +326,7 @@ export default function Home() {
           <div className="grid gap-6 md:grid-cols-3">
             {WORKS.map((work) => (
               <article key={work.title} className="glass card-hover group overflow-hidden rounded-2xl">
-                <div className="relative h-52 overflow-hidden">
+                <div className="work-visual relative overflow-hidden">
                   <Image
                     src={work.image}
                     alt={`${work.title}のイメージ`}
@@ -365,6 +365,24 @@ export default function Home() {
           />
 
           {/* HP制作費 */}
+          <div className="section-visual section-visual-price glass relative mb-10 overflow-hidden rounded-3xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/15 to-transparent" />
+            <div className="absolute inset-y-0 left-0 z-10 flex w-1/2 items-end p-5 sm:p-7">
+              <div className="flex gap-2" aria-hidden="true">
+                <span className="h-3 w-12 rounded-full bg-[var(--pink)]" />
+                <span className="h-3 w-7 rounded-full bg-[var(--cyan)]" />
+                <span className="h-3 w-16 rounded-full bg-[var(--orange)]" />
+              </div>
+            </div>
+            <Image
+              src="/scene-price-consultation.png"
+              alt="デザイナーと事業者がホームページ制作の計画を相談している様子"
+              fill
+              sizes="(max-width: 640px) 100vw, 1152px"
+              className="object-cover object-[62%_center]"
+            />
+          </div>
+
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {HP_PRICES.map((plan) => (
               <div
@@ -480,6 +498,17 @@ export default function Home() {
             ja="サービス内容"
             description="Webからグラフィック、ブランディングまで。「会社の顔」をまるごとデザインします。"
           />
+          <div className="section-visual section-visual-services glass relative mb-10 overflow-hidden rounded-3xl">
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/5 via-transparent to-white/35" />
+            <Image
+              src="/scene-services-creation.png"
+              alt="デザイナーがウェブサイトや名刺、印刷物を制作している様子"
+              fill
+              sizes="(max-width: 640px) 100vw, 1152px"
+              className="object-cover object-[42%_center]"
+            />
+          </div>
+
           <div className="grid gap-6 md:grid-cols-2">
             {SERVICES.map((service) => (
               <div key={service.title} className="glass card-hover rounded-2xl p-7">
@@ -548,9 +577,10 @@ export default function Home() {
 
           {/* 無料診断バナー */}
           <div className="grad-border mt-16 overflow-hidden">
-            <div className="relative flex flex-col items-center gap-6 px-6 py-12 text-center md:px-12">
+            <div className="relative flex flex-col items-center gap-6 px-6 py-12 text-center md:grid md:grid-cols-[minmax(0,1fr)_minmax(280px,0.72fr)] md:items-center md:gap-10 md:px-12 md:text-left">
               <div className="aurora h-[220px] w-[220px] bg-[#f0509e] opacity-25 -left-20 -top-20" />
               <div className="aurora h-[220px] w-[220px] bg-[#4f8dff] opacity-25 -bottom-20 -right-20" />
+              <div className="relative w-full">
               <h3 className="font-head relative text-2xl font-black tracking-wide sm:text-3xl">
                 そのホームページ、<span className="grad-text">無料診断</span>しませんか？
               </h3>
@@ -558,7 +588,7 @@ export default function Home() {
                 「他社で作ったけど更新されていない」「表示が遅い」「セキュリティが不安」——
                 他社制作のサイトもOK。現状を無料で診断して、改善プランをご提案します。
               </p>
-              <div className="relative flex flex-wrap justify-center gap-4">
+              <div className="relative flex flex-wrap justify-center gap-4 md:justify-start">
                 <a href="tel:078-912-2656" className="btn btn-grad px-7 py-3.5 text-sm">
                   電話で診断を依頼する
                 </a>
@@ -570,6 +600,16 @@ export default function Home() {
                 >
                   LINEで診断を依頼する
                 </a>
+              </div>
+              </div>
+              <div className="diagnosis-visual relative overflow-hidden rounded-2xl border border-white/70 shadow-[0_18px_45px_rgba(69,50,127,0.14)]">
+                <Image
+                  src="/scene-support-security.png"
+                  alt="ウェブサイトの安全性と公開後のサポートを確認する担当者"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 360px"
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
