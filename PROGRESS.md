@@ -123,3 +123,8 @@
 - `public/hero-colorful-sky.png` を追加。コピー・料金・電話番号・CV導線・右側のデザインボードは維持し、テキスト周辺だけ白のグラデーションで可読性を確保。
 - 検証: `npm run lint` / `npm run build` 成功。ヘッドレスChrome 1440px・390pxで `scrollWidth === clientWidth` を確認。スクリーンショットは `screenshots-hero-sky-desktop.png` / `screenshots-hero-sky-mobile.png`。
 - 追加調整: TOPヒーローの `grid-overlay` を外し、空の背景を升目なしでそのまま見せるように変更。
+
+### 2026-07-27: 制作実績ビジュアルから人物を削除
+
+- `public/work-pc-repair.png`、`public/work-truck.png`、`public/work-boat.png` を人物なしの画像へ差し替え。PC修理の作業環境、トラック、ボートを主役にし、既存のカラフルなトーンとデバイス・分析グラフィックを維持。
+- 検証: TOPの制作実績セクションをヘッドレスChrome 1440px・390pxで確認し、人物が残っていないこと、`scrollWidth === clientWidth` を確認。`npm run lint` / `npm run build` 成功。
