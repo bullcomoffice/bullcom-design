@@ -3,6 +3,8 @@ import { Noto_Sans_JP, Zen_Kaku_Gothic_New, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import FloatingCta from "@/components/layout/FloatingCta";
+import { COMPANY, PHONE, SITE_URL } from "@/lib/site-data";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
@@ -54,13 +56,63 @@ export const metadata: Metadata = {
     siteName: "BULLCOM design",
     locale: "ja_JP",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "BULLCOM design｜思い通りのホームページを",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "BULLCOM design｜思い通りのホームページを",
     description:
       "Next.js製の高品質サイトをLP 3万円〜。デザインから開発、公開後の保守・セキュリティまでおまかせのHP制作スタジオ。",
+    images: ["/og-image.png"],
   },
+};
+
+// ローカルビジネスの構造化データ（神戸の実拠点・電話・営業時間があるためローカル検索に効く）
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE_URL}/#organization`,
+  name: "BULLCOM design",
+  alternateName: "ブルコムデザイン",
+  description:
+    "ホームページ制作・デザイン制作・ブランディング・保守運用を行うデザインスタジオ。全国対応。",
+  url: SITE_URL,
+  telephone: PHONE,
+  faxNumber: COMPANY.fax,
+  email: COMPANY.email,
+  founder: { "@type": "Person", name: COMPANY.owner },
+  foundingDate: "2002-07",
+  address: {
+    "@type": "PostalAddress",
+    postalCode: COMPANY.zip.replace("〒", ""),
+    addressCountry: "JP",
+    addressRegion: "兵庫県",
+    addressLocality: "神戸市西区",
+    streetAddress: "伊川谷町有瀬846-10 ギャラリエ1F",
+  },
+  areaServed: { "@type": "Country", name: "日本" },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "09:30",
+      closes: "15:30",
+    },
+  ],
+  paymentAccepted: COMPANY.payment,
+  parentOrganization: { "@type": "Organization", name: "BULLCOM", url: "https://bullcom.jp/" },
+  makesOffer: [
+    { "@type": "Offer", name: "ホームページ制作", price: "200000", priceCurrency: "JPY" },
+    { "@type": "Offer", name: "LP制作", price: "30000", priceCurrency: "JPY" },
+    { "@type": "Offer", name: "ホームページ保守・運用", price: "5000", priceCurrency: "JPY" },
+  ],
 };
 
 export default function RootLayout({
@@ -72,21 +124,15 @@ export default function RootLayout({
     <html lang="ja" className={`${notoSansJP.variable} ${zenKaku.variable} ${inter.variable}`}>
       {/* TODO: GA4 の測定ID発行後、bullcom 本家と同様に <Script> で gtag を設置する */}
       <body className="flex min-h-screen flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         {/* TODO: BULLCOM design 専用LINEができたらURL差し替え（現在は既存BULLCOMのLINE） */}
-        <a
-          href="https://lin.ee/vX5z2Xf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="floating-line"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.5 2 2 5.6 2 10c0 2.8 1.8 5.3 4.6 6.7-.1.6-.6 2.4-.7 2.7-.1.4.2.4.4.3.2-.1 2.6-1.8 3.7-2.5.7.1 1.3.1 2 .1 5.5 0 10-3.6 10-8.3S17.5 2 12 2z" />
-          </svg>
-          LINEで相談
-        </a>
+        <FloatingCta />
       </body>
     </html>
   );

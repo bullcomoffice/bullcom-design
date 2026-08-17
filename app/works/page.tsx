@@ -38,7 +38,7 @@ export default function WorksPage() {
                 <div className="work-visual relative overflow-hidden">
                   <Image
                     src={work.image}
-                    alt={`${work.title}のイメージ`}
+                    alt={`${work.title}のスクリーンショット`}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     className="object-cover transition duration-500 group-hover:scale-105"
@@ -56,6 +56,21 @@ export default function WorksPage() {
                   <p className="mt-2 text-sm leading-relaxed text-[var(--text-soft)]">
                     {work.description}
                   </p>
+                  {work.url && (
+                    <a
+                      href={work.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-en mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--text-soft)] transition hover:text-[var(--text)]"
+                    >
+                      サイトを見る
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                    </a>
+                  )}
                 </div>
               </article>
             ))}
@@ -63,23 +78,16 @@ export default function WorksPage() {
         </div>
       </section>
 
-      {/* お客様の声 */}
-      <section className="relative overflow-hidden py-24">
-        <div className="aurora h-[320px] w-[320px] bg-[#4f8dff] opacity-15 -right-28 top-16" />
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <SectionHead
-            en="VOICE"
-            ja="お客様の声"
-            description="ご依頼いただいたお客様からいただいた感想をご紹介します。"
-          />
-          {VOICES.length === 0 ? (
-            <div className="glass mx-auto max-w-lg rounded-2xl p-10 text-center">
-              <p className="font-head text-lg font-bold">準備中です</p>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--text-soft)]">
-                お客様の声は現在準備中です。公開までしばらくお待ちください。
-              </p>
-            </div>
-          ) : (
+      {/* お客様の声: 実データが集まるまでは非表示（VOICES に追加すると表示される） */}
+      {VOICES.length > 0 && (
+        <section className="relative overflow-hidden py-24">
+          <div className="aurora h-[320px] w-[320px] bg-[#4f8dff] opacity-15 -right-28 top-16" />
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <SectionHead
+              en="VOICE"
+              ja="お客様の声"
+              description="ご依頼いただいたお客様からいただいた感想をご紹介します。"
+            />
             <div className="grid gap-6 md:grid-cols-3">
               {VOICES.map((v) => (
                 <blockquote key={v.company} className="glass card-hover rounded-2xl p-7">
@@ -90,9 +98,9 @@ export default function WorksPage() {
                 </blockquote>
               ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       <CtaBand
         title="こんなサイトを作りたい、をお聞かせください"

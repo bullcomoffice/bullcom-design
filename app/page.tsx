@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import SectionHead from "@/components/ui/SectionHead";
+import Reveal from "@/components/ui/Reveal";
+import StatBand from "@/components/ui/StatBand";
 import CtaBand from "@/components/ui/CtaBand";
 import {
   HP_PRICES,
@@ -110,6 +112,8 @@ export default function Home() {
         </div>
       </section>
 
+      <StatBand />
+
       {/* ================= WORKS ================= */}
       <section id="works" className="relative py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -118,13 +122,14 @@ export default function Home() {
             ja="制作実績"
             description="BULLCOMシリーズをはじめ、集客の仕組みまで含めたサイトづくりをしています。実績は順次追加予定です。"
           />
+          <Reveal>
           <div className="grid gap-6 md:grid-cols-3">
             {WORKS.map((work) => (
               <article key={work.title} className="glass card-hover group overflow-hidden rounded-2xl">
                 <div className="work-visual relative overflow-hidden">
                   <Image
                     src={work.image}
-                    alt={`${work.title}のイメージ`}
+                    alt={`${work.title}のスクリーンショット`}
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-cover transition duration-500 group-hover:scale-105"
@@ -142,10 +147,26 @@ export default function Home() {
                   <p className="mt-2 text-sm leading-relaxed text-[var(--text-soft)]">
                     {work.description}
                   </p>
+                  {work.url && (
+                    <a
+                      href={work.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-en mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--text-soft)] transition hover:text-[var(--text)]"
+                    >
+                      サイトを見る
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                    </a>
+                  )}
                 </div>
               </article>
             ))}
           </div>
+          </Reveal>
           <div className="mt-10 text-center">
             <Link href="/works" className="btn btn-ghost px-7 py-3.5 text-sm">
               制作実績をもっと見る
@@ -183,6 +204,7 @@ export default function Home() {
             />
           </div>
 
+          <Reveal>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {HP_PRICES.map((plan) => (
               <div
@@ -215,9 +237,11 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </Reveal>
 
           {/* 保守サポート要約（詳細は /price） */}
-          <div className="glass mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl p-8 md:flex-row md:text-left">
+          <Reveal className="mt-12">
+          <div className="glass flex flex-col items-center justify-between gap-6 rounded-2xl p-8 md:flex-row md:text-left">
             <div className="text-center md:text-left">
               <p className="font-head text-lg font-bold">
                 公開後も安心の<span className="grad-text-warm">保守サポート</span>
@@ -232,6 +256,7 @@ export default function Home() {
               料金の詳細を見る
             </Link>
           </div>
+          </Reveal>
         </div>
       </section>
 
@@ -254,6 +279,7 @@ export default function Home() {
             />
           </div>
 
+          <Reveal>
           <div className="grid gap-6 md:grid-cols-2">
             {SERVICES.map((service) => (
               <Link
@@ -291,6 +317,7 @@ export default function Home() {
               </Link>
             ))}
           </div>
+          </Reveal>
           <div className="mt-10 text-center">
             <Link href="/services" className="btn btn-ghost px-7 py-3.5 text-sm">
               サービス一覧を見る
@@ -308,6 +335,7 @@ export default function Home() {
             ja="選ばれる理由"
             description="「集客できない」「更新できない」「セキュリティが不安」。ホームページの三大お悩みに、正面から応えます。"
           />
+          <Reveal>
           <div className="grid gap-6 md:grid-cols-3">
             {STRENGTHS.map((item) => (
               <div key={item.no} className="glass card-hover relative rounded-2xl p-7">
@@ -331,6 +359,7 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </Reveal>
 
           {/* 無料診断バナー */}
           <div className="grad-border mt-16 overflow-hidden">

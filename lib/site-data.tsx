@@ -34,6 +34,8 @@ export type Work = {
   description: string;
   label: string;
   image: string;
+  /** 公開中のサイトURL（実績カードから遷移できるようにする） */
+  url?: string;
 };
 
 export const WORKS: Work[] = [
@@ -43,6 +45,7 @@ export const WORKS: Work[] = [
     description: "神戸・明石のパソコン修理店。地域SEOで問い合わせを継続獲得する店舗サイト。",
     label: "PC REPAIR",
     image: "/work-pc-repair.png",
+    url: "https://bullcom.jp/",
   },
   {
     category: "買取・販売",
@@ -50,6 +53,7 @@ export const WORKS: Work[] = [
     description: "在庫掲載からSNS自動投稿・広告動画まで、集客の仕組みごと構築した事例。",
     label: "TRUCK",
     image: "/work-truck.png",
+    url: "https://truck-kaitori.jp/",
   },
   {
     category: "買取サービス",
@@ -57,6 +61,7 @@ export const WORKS: Work[] = [
     description: "広告×SEOのCV計測を設計し、データで改善を回せるようにした買取サイト。",
     label: "BOAT",
     image: "/work-boat.png",
+    url: "https://boatkaitori.com/",
   },
 ];
 
