@@ -48,12 +48,12 @@ export const WORKS: Work[] = [
     url: "https://bullcom.jp/",
   },
   {
-    category: "買取・販売",
-    title: "トラック買取・販売サイト",
-    description: "在庫掲載からSNS自動投稿・広告動画まで、集客の仕組みごと構築した事例。",
+    category: "買取サービス",
+    title: "トラック買取.jp",
+    description: "無料査定フォームからLINE査定まで、問い合わせ導線を作り込んだ買取サイト。",
     label: "TRUCK",
     image: "/work-truck.png",
-    url: "https://truck-kaitori.jp/",
+    url: "https://www.truck-asahi.com/",
   },
   {
     category: "買取サービス",
