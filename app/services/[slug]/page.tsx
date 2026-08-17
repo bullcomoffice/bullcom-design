@@ -104,10 +104,15 @@ export default async function ServiceDetailPage({ params }: Props) {
             {service.recommended.map((r) => (
               <div
                 key={r}
-                className="glass flex items-start gap-3 rounded-2xl p-5 text-sm leading-relaxed text-[var(--text-soft)]"
+                className="pick-card"
+                style={{ "--accent": service.color } as React.CSSProperties}
               >
-                <span className="grad-text mt-0.5 shrink-0 font-bold">✓</span>
-                {r}
+                <span className="pick-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+                <span>{r}</span>
               </div>
             ))}
           </div>

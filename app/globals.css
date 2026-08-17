@@ -550,6 +550,60 @@ body {
   border-top: 1px dashed color-mix(in srgb, var(--accent) 32%, transparent);
 }
 
+/* ---- 「こんな方におすすめです」カード ----
+   service-card と同じ配色ルール（淡い地＋濃い文字）で統一する */
+
+.pick-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.15rem 1.35rem 1.15rem 1.6rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  box-shadow: 0 10px 26px -22px color-mix(in srgb, var(--accent) 80%, transparent);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.75;
+  transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pick-card::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 5px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 45%, #fff)
+  );
+}
+
+.pick-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 72%, transparent);
+  box-shadow: 0 18px 38px -22px color-mix(in srgb, var(--accent) 90%, transparent);
+}
+
+.pick-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--accent) 18%, #fff);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 48%, transparent);
+  color: color-mix(in srgb, var(--accent) 42%, #241f38);
+}
+
 /* ---- scroll reveal ---- */
 
 .reveal {
