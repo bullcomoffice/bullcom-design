@@ -360,51 +360,12 @@ export default function Home() {
             ))}
           </div>
           </Reveal>
-
-          {/* 無料診断バナー */}
-          <div className="grad-border mt-16 overflow-hidden">
-            <div className="relative flex flex-col items-center gap-6 px-6 py-12 text-center md:grid md:grid-cols-[minmax(0,1fr)_minmax(280px,0.72fr)] md:items-center md:gap-10 md:px-12 md:text-left">
-              <div className="aurora h-[220px] w-[220px] bg-[#f0509e] opacity-25 -left-20 -top-20" />
-              <div className="aurora h-[220px] w-[220px] bg-[#4f8dff] opacity-25 -bottom-20 -right-20" />
-              <div className="relative w-full">
-              <h3 className="font-head relative text-2xl font-black tracking-wide sm:text-3xl">
-                そのホームページ、<span className="grad-text">無料診断</span>しませんか？
-              </h3>
-              <p className="relative max-w-2xl text-sm leading-relaxed text-[var(--text-soft)]">
-                「他社で作ったけど更新されていない」「表示が遅い」「セキュリティが不安」——
-                他社制作のサイトもOK。現状を無料で診断して、改善プランをご提案します。
-              </p>
-              <div className="relative flex flex-wrap justify-center gap-4 md:justify-start">
-                <a href={PHONE_TEL} className="btn btn-grad px-7 py-3.5 text-sm">
-                  電話で診断を依頼する
-                </a>
-                <a
-                  href={LINE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-line px-7 py-3.5 text-sm"
-                >
-                  LINEで診断を依頼する
-                </a>
-              </div>
-              </div>
-              <div className="diagnosis-visual relative overflow-hidden rounded-2xl border border-white/70 shadow-[0_18px_45px_rgba(69,50,127,0.14)]">
-                <Image
-                  src="/scene-support-security.png"
-                  alt="ウェブサイトの安全性と公開後のサポートを確認する担当者"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 360px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* ================= CONTACT ================= */}
       {/* ================= CONTACT（詳細は /contact） ================= */}
-      <CtaBand />
+      {/* 無料診断バナーを削除したぶん、ここで「他社サイトの無料診断」も訴求する */}
+      <CtaBand description="「何から始めればいいか分からない」段階で大丈夫です。ご相談・お見積りは無料。他社で作られたサイトの無料診断も承っています。" />
     </>
   );
 }
