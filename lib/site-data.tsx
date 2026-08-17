@@ -254,8 +254,8 @@ export const SERVICES: Service[] = [
       "問い合わせにつながるサイトに作り替えたい",
       "セキュリティや表示速度に不安がある",
     ],
-    heroImage: "/sub-services-studio.png",
-    heroAlt: "ホームページを制作しているデザイナーのイメージ",
+    heroImage: "/service-web.png",
+    heroAlt: "ノートPC・タブレット・スマートフォンにホームページのデザインを表示した制作イメージ",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="16 18 22 12 16 6" />
@@ -337,8 +337,8 @@ export const SERVICES: Service[] = [
       "自分で作った資料に、どうも素人っぽさが残る",
       "Webと紙をまとめて相談できる相手がほしい",
     ],
-    heroImage: "/scene-services-creation.png",
-    heroAlt: "名刺やチラシなど印刷物をデザインしている様子",
+    heroImage: "/service-graphic.png",
+    heroAlt: "名刺・チラシ・パンフレットとカラーチップを並べた印刷物デザインのイメージ",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 19l7-7 3 3-7 7-3-3z" />
@@ -391,8 +391,8 @@ export const SERVICES: Service[] = [
       "新しく事業やお店を始めるので、最初から世界観を固めたい",
       "外注先に渡せるデザインのルールがほしい",
     ],
-    heroImage: "/sub-about-partnership.png",
-    heroAlt: "ブランドの方向性を一緒に考える打ち合わせのイメージ",
+    heroImage: "/service-branding.png",
+    heroAlt: "カラーパレットや素材見本を並べたブランドのムードボード",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 3h12l4 6-10 13L2 9z" />
@@ -453,8 +453,8 @@ export const SERVICES: Service[] = [
       "SNSや広告に使う動画をつくりたい",
       "サイト制作と素材づくりをまとめて頼みたい",
     ],
-    heroImage: "/scene-price-consultation.png",
-    heroAlt: "取材や打ち合わせを通してコンテンツをつくるイメージ",
+    heroImage: "/service-contents.png",
+    heroAlt: "カメラ・照明・マイクとノートを並べた撮影と原稿制作のイメージ",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
