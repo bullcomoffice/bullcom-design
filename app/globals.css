@@ -448,6 +448,108 @@ body {
   font-size: 0.85em;
 }
 
+/* ---- サービス詳細ページの個票カード ----
+   --accent にサービスカラーを渡して、縁取り・左のバー・番号バッジを連動させる */
+
+.service-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: #fff;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  box-shadow: 0 12px 34px -26px color-mix(in srgb, var(--accent) 75%, transparent);
+  transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 左端のアクセントバー */
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 6px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 45%, #fff)
+  );
+}
+
+/* 右上の淡いカラーグロー */
+.service-card::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 190px;
+  height: 190px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  filter: blur(38px);
+  pointer-events: none;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 72%, transparent);
+  box-shadow: 0 22px 48px -24px color-mix(in srgb, var(--accent) 85%, transparent);
+}
+
+.service-card-body {
+  position: relative;
+  z-index: 1;
+  padding: 1.75rem 1.75rem 1.75rem 2.15rem;
+}
+
+@media (min-width: 640px) {
+  .service-card-body {
+    padding: 2.25rem 2.25rem 2.25rem 2.75rem;
+  }
+}
+
+/* 番号バッジ */
+.service-card-no {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  border-radius: 0.85rem;
+  /* 白文字の塗りだとオレンジ系でコントラストが取れないため、
+     淡いアクセント地に濃い文字（価格ピルと同じ考え方）で統一する */
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 20%, #fff),
+    color-mix(in srgb, var(--accent) 9%, #fff)
+  );
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  color: color-mix(in srgb, var(--accent) 42%, #241f38);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 18px -14px color-mix(in srgb, var(--accent) 90%, transparent);
+}
+
+/* 価格ピル */
+.service-card-price {
+  border-radius: 9999px;
+  padding: 0.4rem 1rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  /* アクセント色は明度差が大きい（特にオレンジ）ため、暗色を多めに混ぜて
+     どの色でも本文と同等の読みやすさ（WCAG AA）を確保する */
+  color: color-mix(in srgb, var(--accent) 42%, #241f38);
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  white-space: nowrap;
+}
+
+/* 特徴リストの区切り */
+.service-card-points {
+  border-top: 1px dashed color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
 /* ---- scroll reveal ---- */
 
 .reveal {

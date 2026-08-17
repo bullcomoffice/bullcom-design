@@ -49,46 +49,40 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="flex flex-col gap-6">
             {service.details.map((detail, i) => (
-              <div key={detail.name} className="glass card-hover rounded-2xl p-7 sm:p-9">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <span
-                      className="font-en flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold"
-                      style={{
-                        color: service.color,
-                        background: "var(--surface-strong)",
-                        border: "1px solid var(--border)",
-                      }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h2 className="font-head text-xl font-bold sm:text-2xl">{detail.name}</h2>
+              <div
+                key={detail.name}
+                className="service-card"
+                style={{ "--accent": service.color } as React.CSSProperties}
+              >
+                <div className="service-card-body">
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <span className="font-en service-card-no">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h2 className="font-head text-xl font-bold sm:text-2xl">{detail.name}</h2>
+                    </div>
+                    {detail.price && (
+                      <span className="font-en service-card-price">{detail.price}</span>
+                    )}
                   </div>
-                  {detail.price && (
-                    <span
-                      className="font-en rounded-full px-4 py-1.5 text-sm font-bold text-white"
-                      style={{ background: service.color }}
-                    >
-                      {detail.price}
-                    </span>
-                  )}
+
+                  <p className="mt-5 text-sm leading-relaxed text-[var(--text-soft)]">
+                    {detail.summary}
+                  </p>
+
+                  <ul className="service-card-points mt-6 grid gap-2.5 pt-5 text-sm text-[var(--text-soft)] sm:grid-cols-2">
+                    {detail.points.map((point) => (
+                      <li key={point} className="flex items-start gap-2.5">
+                        <span
+                          className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ background: service.color }}
+                        />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-
-                <p className="mt-5 text-sm leading-relaxed text-[var(--text-soft)]">
-                  {detail.summary}
-                </p>
-
-                <ul className="mt-5 grid gap-2.5 border-t border-[var(--border)] pt-5 text-sm text-[var(--text-soft)] sm:grid-cols-2">
-                  {detail.points.map((point) => (
-                    <li key={point} className="flex items-start gap-2.5">
-                      <span
-                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
-                        style={{ background: service.color }}
-                      />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
