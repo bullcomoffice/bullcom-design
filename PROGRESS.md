@@ -30,6 +30,20 @@
 
 ## セッション記録
 
+### 2026-08-18 (2): デザイン改善7点（CV導線・可読性・SNS・SEO・演出）
+
+実測をもとに改善。すべて本番反映済み。
+
+1. **モバイル固定CTAバー**（`components/layout/FloatingCta.tsx`）: 従来はLINEボタンのみで、CV優先1位の電話がスクロール中に押せず、さらにボタンが本文に重なっていた。下部に「電話｜フォーム｜LINE」の3分割バーを設置し、`body { padding-bottom: 4.25rem }`（1023px以下）で重なりを解消
+   - 注意: `.floating-bar` の display はCSSのメディアクエリで制御する。Tailwind の `lg:hidden` は詳細度が並ぶため globals.css の定義が後勝ちして効かなかった
+2. **可読性**: `--text-muted` を `#8a86a0`（3.45:1）→ `#6f6b87` に変更。本番実測 5.01:1 でWCAG AA達成。12pxの注釈に使われていたため影響が大きい
+3. **OG画像**: `public/og-image.png`（1200x630）を作成。gpt-image-2で背景を生成し、Pillowでロゴ・キャッチコピー・価格チップを合成。twitter card も `summary_large_image` に
+4. **制作実績を実サイトのスクショに**: bullcom.jp / truck-kaitori.jp / boatkaitori.com を playwright で撮影し 16:10 で切り出し。「サイトを見る」外部リンクも追加
+5. **構造化データ**: トップに `ProfessionalService`（所在地・電話・営業時間・提供サービス・親組織BULLCOM）を追加。ローカル検索向け
+6. **数字帯**（`components/ui/StatBand.tsx`）: 創業2002年・6サイト・LP3万円〜・保守5,000円〜。事実のみ掲載
+7. **スクロール演出**（`components/ui/Reveal.tsx`）: IntersectionObserverでセクションをフェードイン。`prefers-reduced-motion` で無効化
+   - お客様の声は実データが集まるまで非表示（`VOICES` に追加すれば自動表示）
+
 ### 2026-07-26 (2): サービス個別ページ・プライバシーポリシー・会社概要
 
 - **サービスを4ページに分割**: `/services/[slug]` の動的ルートで `web` `graphic` `branding` `contents` を静的生成
