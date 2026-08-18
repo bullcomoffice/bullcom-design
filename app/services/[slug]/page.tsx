@@ -48,7 +48,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className="relative py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="flex flex-col gap-6">
-            {service.details.map((detail, i) => (
+            {service.details.map((detail) => (
               <div
                 key={detail.name}
                 className="service-card"
@@ -57,8 +57,14 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <div className="service-card-body">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <span className="font-en service-card-no">
-                        {String(i + 1).padStart(2, "0")}
+                      <span className="service-card-no">
+                        <span
+                          className="service-card-icon"
+                          style={
+                            { "--icon": `url(/icons/service-${detail.icon}.png)` } as React.CSSProperties
+                          }
+                          aria-hidden="true"
+                        />
                       </span>
                       <h2 className="font-head text-xl font-bold sm:text-2xl">{detail.name}</h2>
                     </div>

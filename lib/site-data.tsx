@@ -145,6 +145,8 @@ export type ServiceDetail = {
   summary: string;
   points: string[];
   price?: string;
+  /** public/icons/service-{icon}.png を CSS マスクとして使う（色はサービスカラーに連動） */
+  icon: string;
 };
 
 export type Service = {
@@ -198,6 +200,7 @@ export const SERVICES: Service[] = [
     details: [
       {
         name: "HP・コーポレートサイト制作",
+        icon: "hp",
         summary:
           "会社の顔となるサイトを、構成の設計からご一緒します。スマートフォン表示は標準対応。ブログを自分で更新できる管理画面もお付けできます。",
         points: [
@@ -210,6 +213,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "LP制作",
+        icon: "lp",
         summary:
           "広告やキャンペーンの受け皿になる1ページ完結型のサイト。問い合わせや申し込みへ迷わず進める導線に絞って構成します。",
         points: [
@@ -221,6 +225,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "HPリニューアル",
+        icon: "renewal",
         summary:
           "古くなったサイトを、高速で安全なNext.js製に作り替えます。今の原稿や写真を活かしながら、足りない部分を補って再構成します。",
         points: [
@@ -232,6 +237,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "ECサイト構築",
+        icon: "ec",
         summary:
           "ネットショップの開設をお手伝いします。商品登録や受注の流れなど、公開後に運用しやすい形を優先して設計します。",
         points: [
@@ -242,6 +248,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "保守・運用",
+        icon: "support",
         summary:
           "公開後のサーバー管理、セキュリティ監視、更新代行まで。他社で制作されたサイトの保守だけでもお引き受けします。",
         points: [
@@ -295,6 +302,7 @@ export const SERVICES: Service[] = [
     details: [
       {
         name: "ロゴ・CIデザイン",
+        icon: "logo",
         summary:
           "会社やお店の顔になるロゴをおつくりします。名刺・看板・Webなど使う場面を想定して、小さくしても読みやすい形に整えます。",
         points: [
@@ -306,6 +314,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "名刺デザイン",
+        icon: "card",
         summary:
           "渡した相手に伝わる名刺に。ロゴやサイトのトーンに合わせて、情報の優先順位を整理してレイアウトします。",
         points: ["ロゴ・Webとトーンを統一", "印刷用データでお渡し"],
@@ -313,6 +322,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "チラシ・パンフレット",
+        icon: "flyer",
         summary:
           "配布して読まれる紙面をつくります。載せたい情報が多いときも、優先順位を整理して読みやすくまとめます。",
         points: [
@@ -323,6 +333,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "看板デザイン",
+        icon: "sign",
         summary:
           "遠くからでも伝わる看板に。掲出する場所や見られる距離を踏まえて、視認性優先でデザインします。",
         points: ["設置場所・視認距離を踏まえた設計", "施工業者への入稿データに対応"],
@@ -330,6 +341,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "パッケージデザイン",
+        icon: "package",
         summary:
           "商品の魅力が伝わるパッケージをデザインします。素材や形状のご相談も含めて一緒に考えます。",
         points: ["商品の見せ方・訴求内容から整理", "印刷仕様に合わせたデータ作成"],
@@ -371,6 +383,7 @@ export const SERVICES: Service[] = [
     details: [
       {
         name: "コンセプト設計・ブランド戦略",
+        icon: "concept",
         summary:
           "強みやお客様像を一緒に整理して、伝えるべきメッセージを言葉にします。デザインの前に、方向性を決めるところからご一緒します。",
         points: [
@@ -381,6 +394,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "ブランドガイドライン策定",
+        icon: "guideline",
         summary:
           "使う色、フォント、ロゴの余白、写真の選び方などをルール集にまとめます。誰が作っても同じ雰囲気を保てるようになります。",
         points: [
@@ -425,6 +439,7 @@ export const SERVICES: Service[] = [
     details: [
       {
         name: "写真撮影",
+        icon: "photo",
         summary:
           "サイトやチラシに使う写真を撮影します。スタッフや店内、商品など、実際の様子が伝わるカットをご用意します。",
         points: [
@@ -435,6 +450,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "動画制作",
+        icon: "movie",
         summary:
           "サービス紹介や広告用の動画をおつくりします。SNS向けの縦型など、使う場所に合わせた形式で仕上げます。",
         points: ["用途に合わせた尺・形式でご提案", "字幕・テロップ入れに対応"],
@@ -442,6 +458,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: "コピーライティング",
+        icon: "copy",
         summary:
           "キャッチコピーやサービス説明文を書きます。「文章を用意するのが一番大変」という方は、ヒアリングをもとにこちらでまとめます。",
         points: [
