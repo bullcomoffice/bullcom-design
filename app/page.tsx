@@ -285,35 +285,45 @@ export default function Home() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="glass card-hover group rounded-2xl p-7"
+                className="svc-card"
+                style={{ "--accent": service.color } as React.CSSProperties}
               >
-                <div className="flex items-center gap-4">
-                  <span
-                    className="flex h-12 w-12 items-center justify-center rounded-xl"
-                    style={{
-                      color: service.color,
-                      background: "var(--surface-strong)",
-                      border: "1px solid var(--border)",
-                    }}
-                  >
-                    {service.icon}
-                  </span>
-                  <h3 className="font-head text-xl font-bold">{service.title}</h3>
+                <div className="svc-card-body">
+                  <div className="flex items-center gap-4">
+                    <span className="svc-card-chip">{service.icon}</span>
+                    <div className="min-w-0">
+                      <p className="font-en svc-card-label">{service.title}</p>
+                      <h3 className="font-head mt-0.5 text-lg font-bold sm:text-xl">
+                        {service.pageTitle}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <ul className="svc-card-list">
+                    {service.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5">
+                        <span
+                          className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ background: service.color }}
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="svc-card-foot">
+                    <p className="font-en svc-card-price">
+                      <span className="svc-card-price-label">{service.prices[0].label}</span>
+                      {service.prices[0].price}
+                    </p>
+                    <span className="font-en svc-card-more">
+                      詳しく見る
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
-                <ul className="mt-5 flex flex-col gap-2.5 text-sm text-[var(--text-soft)]">
-                  {service.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <span
-                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
-                        style={{ background: service.color }}
-                      />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <span className="font-en mt-5 inline-block text-xs font-bold text-[var(--text-muted)] transition group-hover:text-[var(--text)]">
-                  詳しく見る →
-                </span>
               </Link>
             ))}
           </div>
@@ -338,7 +348,7 @@ export default function Home() {
           <Reveal>
           <div className="grid gap-6 md:grid-cols-3">
             {STRENGTHS.map((item) => (
-              <div key={item.no} className="glass card-hover relative rounded-2xl p-7">
+              <div key={item.no} className="reason-card p-7">
                 <p className="font-en absolute right-6 top-5 text-5xl font-extrabold text-[#6a5eb5]/10">
                   {item.no}
                 </p>
