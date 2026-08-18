@@ -16,8 +16,8 @@ export default function ContactPage() {
     <>
       <PageHero
         en="CONTACT"
-        image="/scene-price-consultation.png"
-        imageAlt="ホームページ制作の相談をするイメージ"
+        image="/sub-contact-desk.png"
+        imageAlt="電話・LINE・メールフォームでの相談窓口をイメージしたデスク"
         ja="お問い合わせ"
         description="ご相談・お見積りは無料です。「まだ何も決まってない」段階でも大歓迎。お気軽にどうぞ。"
         crumbs={[{ href: "/contact", label: "お問い合わせ" }]}
