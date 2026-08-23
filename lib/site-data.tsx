@@ -98,6 +98,36 @@ export const WORKS: Work[] = [
     color: "var(--purple)",
     url: "https://fune1katsu.com/",
   },
+  {
+    category: "セキュリティ",
+    title: "BULLCOM Security",
+    description:
+      "個人向けのウイルス対策から法人のHPセキュリティ診断まで扱う、ダークトーンのサイト。",
+    label: "SECURITY",
+    image: "/work-security.png",
+    color: "var(--blue)",
+    url: "https://bullcom.net/",
+  },
+  {
+    category: "コーポレート",
+    title: "伸天工業株式会社",
+    description:
+      "事業内容・保有機材・採用情報を掲載した企業サイト。現場の写真を主役にした構成です。",
+    label: "INDUSTRY",
+    image: "/work-shinten.png",
+    color: "var(--cyan)",
+    url: "https://shin-ten.co.jp/",
+  },
+  {
+    category: "買取サービス",
+    title: "船買取センター",
+    description:
+      "全国出張査定に対応する船・ボートの買取サイト。買取実績や対象品目も掲載しています。",
+    label: "BOAT CENTER",
+    image: "/work-boat-center.png",
+    color: "var(--orange)",
+    url: "https://huneya.jp/",
+  },
 ];
 
 /* ============ 料金 ============ */
