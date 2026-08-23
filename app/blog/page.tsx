@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import PageHero from "@/components/ui/PageHero";
 import { getBlogs } from "@/lib/microcms";
 import { catColors, defaultCatColor, formatDate } from "@/lib/blog-ui";
 
@@ -17,21 +18,17 @@ export default async function BlogPage() {
   const { contents: blogs } = await getBlogs(100);
 
   return (
-    <div className="relative overflow-hidden pt-16">
-      <div className="aurora h-[320px] w-[320px] bg-[#a06bff] opacity-25 -right-24 top-10" />
-      <div className="aurora h-[280px] w-[280px] bg-[#f0509e] opacity-20 -left-24 top-64" />
+    <>
+      <PageHero
+        en="BLOG"
+        image="/sub-blog-writing.png"
+        imageAlt="記事のレイアウトを表示したノートPCとノート・ペンのイメージ"
+        ja="ブログ・コラム"
+        description="ホームページ制作・デザイン・SEO・セキュリティのノウハウを発信しています。"
+        crumbs={[{ href: "/blog", label: "ブログ" }]}
+      />
 
-      <section className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <div className="mb-12 text-center">
-          <p className="font-en grad-text text-sm font-bold tracking-[0.35em]">BLOG</p>
-          <h1 className="font-head mt-3 text-3xl font-black tracking-wide sm:text-4xl">
-            ブログ・コラム
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-soft)]">
-            ホームページ制作・デザイン・SEO・セキュリティのノウハウを発信しています。
-          </p>
-        </div>
-
+      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
         {blogs.length === 0 ? (
           <div className="glass mx-auto max-w-lg rounded-2xl p-12 text-center">
             <p className="font-head text-lg font-bold">記事を準備中です</p>
@@ -100,6 +97,6 @@ export default async function BlogPage() {
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }

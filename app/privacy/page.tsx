@@ -127,6 +127,8 @@ export default function PrivacyPage() {
     <>
       <PageHero
         en="PRIVACY POLICY"
+        image="/sub-privacy-lock.png"
+        imageAlt="南京錠とセキュリティの盾を表示したノートPCのイメージ"
         ja="プライバシーポリシー"
         description="BULLCOM design（以下「当方」）は、お客様からお預かりする個人情報の重要性を認識し、以下の方針に基づいて適切に取り扱います。"
         crumbs={[{ href: "/privacy", label: "プライバシーポリシー" }]}
