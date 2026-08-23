@@ -13,14 +13,52 @@ export const metadata: Metadata = {
 };
 
 // 事業者情報は bullcom.jp/about（同一事業者）を参照して記載
+// よく見られる連絡先は上部のカードに、その他は下の一覧に分ける
+const CONTACTS = [
+  {
+    label: "TEL",
+    value: PHONE,
+    note: "受付 9:00〜19:00",
+    href: PHONE_TEL,
+    color: "var(--pink)",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z" />
+      </svg>
+    ),
+  },
+  {
+    label: "MAIL",
+    value: COMPANY.email,
+    note: "24時間受付",
+    href: `mailto:${COMPANY.email}`,
+    color: "var(--purple)",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-10 6L2 7" />
+      </svg>
+    ),
+  },
+  {
+    label: "OFFICE",
+    value: COMPANY.address,
+    note: COMPANY.zip,
+    color: "var(--blue)",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    ),
+  },
+];
+
 const PROFILE: { label: string; value: string }[] = [
   { label: "事業名", value: COMPANY.brand },
   { label: "運営", value: COMPANY.operator },
   { label: "代表者", value: COMPANY.owner },
-  { label: "所在地", value: `${COMPANY.zip} ${COMPANY.address}` },
-  { label: "電話番号", value: PHONE },
   { label: "FAX", value: COMPANY.fax },
-  { label: "メール", value: COMPANY.email },
   { label: "創業", value: COMPANY.founded },
   { label: "事業内容", value: "ホームページ制作・デザイン制作・ブランディング・保守運用" },
   { label: "対応エリア", value: COMPANY.area },
@@ -118,24 +156,40 @@ export default function AboutPage() {
       <section className="relative py-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <SectionHead en="PROFILE" ja="事業概要" />
-          <dl className="glass overflow-hidden rounded-2xl">
+
+          {/* 連絡先ハイライト */}
+          <div className="mb-8 grid gap-5 sm:grid-cols-3">
+            {CONTACTS.map((c) => {
+              const inner = (
+                <>
+                  <span className="profile-contact-chip">{c.icon}</span>
+                  <span className="font-en profile-contact-label">{c.label}</span>
+                  <span className="font-en profile-contact-value text-sm sm:text-base">
+                    {c.value}
+                  </span>
+                  <span className="relative z-[1] text-xs text-[var(--text-muted)]">{c.note}</span>
+                </>
+              );
+              const style = { "--accent": c.color } as React.CSSProperties;
+              return c.href ? (
+                <a key={c.label} href={c.href} className="profile-contact" style={style}>
+                  {inner}
+                </a>
+              ) : (
+                <div key={c.label} className="profile-contact" style={style}>
+                  {inner}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 詳細 */}
+          <dl className="profile-table">
+            <div className="profile-table-head" />
             {PROFILE.map((row) => (
-              <div
-                key={row.label}
-                className="flex flex-col gap-1 border-b border-[var(--border)] px-6 py-5 last:border-b-0 sm:flex-row sm:gap-6"
-              >
-                <dt className="w-40 shrink-0 text-xs font-bold text-[var(--text-muted)] sm:text-sm">
-                  {row.label}
-                </dt>
-                <dd className="flex-1 text-sm text-[var(--text-soft)]">
-                  {row.label === "電話番号" ? (
-                    <a href={PHONE_TEL} className="font-en font-bold text-[var(--text)]">
-                      {row.value}
-                    </a>
-                  ) : (
-                    row.value
-                  )}
-                </dd>
+              <div key={row.label} className="profile-row">
+                <dt>{row.label}</dt>
+                <dd>{row.value}</dd>
               </div>
             ))}
           </dl>

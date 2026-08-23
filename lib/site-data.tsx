@@ -17,7 +17,7 @@ export const COMPANY = {
   zip: "〒651-2113",
   address: "兵庫県神戸市西区伊川谷町有瀬846-10 ギャラリエ1F",
   fax: "078-939-6660",
-  email: "bullcom.office@gmail.com",
+  email: "info@bullcom.website",
   founded: "2002年7月",
   businessHours: "9:30〜15:30（事務所）",
   contactHours: "9:00〜19:00",

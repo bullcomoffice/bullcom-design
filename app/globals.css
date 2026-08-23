@@ -870,6 +870,164 @@ body {
   color: color-mix(in srgb, var(--accent) 45%, #241f38);
 }
 
+/* ---- 会社概要の連絡先カード＋事業概要テーブル ---- */
+
+.profile-contact {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 1.6rem 1.25rem 1.4rem;
+  border-radius: 1.15rem;
+  text-align: center;
+  background: #fff;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  box-shadow: 0 14px 34px -28px color-mix(in srgb, var(--accent) 80%, transparent);
+  transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.profile-contact::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, #fff));
+}
+
+.profile-contact::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 170px;
+  height: 170px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  filter: blur(34px);
+  pointer-events: none;
+}
+
+.profile-contact:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 22px 44px -26px color-mix(in srgb, var(--accent) 85%, transparent);
+}
+
+.profile-contact-chip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  color: color-mix(in srgb, var(--accent) 55%, #241f38);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 22%, #fff),
+    color-mix(in srgb, var(--accent) 10%, #fff)
+  );
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.profile-contact-label {
+  position: relative;
+  z-index: 1;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: color-mix(in srgb, var(--accent) 50%, #241f38);
+}
+
+.profile-contact-value {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* 事業概要テーブル */
+.profile-table {
+  overflow: hidden;
+  border-radius: 1.15rem;
+  background: #fff;
+  border: 1.5px solid rgba(91, 82, 145, 0.26);
+  box-shadow: 0 16px 40px -30px rgba(57, 39, 127, 0.5);
+}
+
+.profile-table-head {
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--pink),
+    var(--purple) 32%,
+    var(--blue) 66%,
+    var(--cyan)
+  );
+}
+
+.profile-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1.05rem 1.5rem;
+  border-bottom: 1px solid rgba(91, 82, 145, 0.12);
+  transition: background 0.25s;
+}
+
+.profile-row:last-child {
+  border-bottom: 0;
+}
+
+.profile-row:nth-child(even) {
+  background: rgba(247, 245, 255, 0.6);
+}
+
+.profile-row:hover {
+  background: rgba(240, 80, 158, 0.05);
+}
+
+.profile-row dt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 11rem;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ラベル頭のカラードット */
+.profile-row dt::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+}
+
+.profile-row dd {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+@media (min-width: 640px) {
+  .profile-row {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 1.15rem 1.75rem;
+  }
+}
+
 /* ---- scroll reveal ---- */
 
 .reveal {
