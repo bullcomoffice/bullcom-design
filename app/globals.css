@@ -768,6 +768,108 @@ body {
   box-shadow: 0 24px 48px -26px rgba(57, 39, 127, 0.42);
 }
 
+/* ---- デザイン制作の料金カード ---- */
+
+.dprice-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem 1.4rem 1.4rem;
+  border-radius: 1.15rem;
+  background: #fff;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  box-shadow: 0 14px 34px -28px color-mix(in srgb, var(--accent) 80%, transparent);
+  transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dprice-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 40%, #fff)
+  );
+}
+
+.dprice-card::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 170px;
+  height: 170px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  filter: blur(34px);
+  pointer-events: none;
+}
+
+.dprice-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 24px 46px -26px color-mix(in srgb, var(--accent) 85%, transparent);
+}
+
+.dprice-chip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 0.9rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 22%, #fff),
+    color-mix(in srgb, var(--accent) 10%, #fff)
+  );
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.dprice-icon {
+  width: 1.55rem;
+  height: 1.55rem;
+  background-color: color-mix(in srgb, var(--accent) 55%, #241f38);
+  -webkit-mask-image: var(--icon);
+  mask-image: var(--icon);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.dprice-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dprice-foot {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px dashed color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.dprice-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: color-mix(in srgb, var(--accent) 45%, #241f38);
+}
+
 /* ---- scroll reveal ---- */
 
 .reveal {

@@ -162,14 +162,31 @@ export default function PricePage() {
             ja="デザイン制作の料金"
             description="ロゴ・名刺・チラシなどの紙まわりも、Webと同じトーンでまとめてご依頼いただけます。"
           />
-          <div className="grid gap-x-10 gap-y-1 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {GRAPHIC_PRICES.map((item) => (
               <div
                 key={item.name}
-                className="flex items-baseline justify-between gap-4 border-b border-dashed border-[var(--border)] py-3.5 text-sm"
+                className="dprice-card"
+                style={{ "--accent": item.color } as React.CSSProperties}
               >
-                <span className="text-[var(--text-soft)]">{item.name}</span>
-                <span className="font-en shrink-0 font-bold text-[var(--text)]">{item.price}</span>
+                <span className="dprice-chip">
+                  <span
+                    className="dprice-icon"
+                    style={{ "--icon": `url(/icons/service-${item.icon}.png)` } as React.CSSProperties}
+                    aria-hidden="true"
+                  />
+                </span>
+
+                <div className="dprice-body">
+                  <h3 className="font-head text-base font-bold leading-snug">{item.name}</h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[var(--text-muted)]">
+                    {item.note}
+                  </p>
+                </div>
+
+                <div className="dprice-foot">
+                  <p className="font-en dprice-value">{item.price}</p>
+                </div>
               </div>
             ))}
           </div>

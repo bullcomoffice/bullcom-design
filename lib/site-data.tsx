@@ -102,15 +102,16 @@ export const HP_PRICES = [
   },
 ];
 
+/* icon は public/icons/service-{icon}.png（CSSマスク）、color はカードのアクセント */
 export const GRAPHIC_PRICES = [
-  { name: "ロゴ単体 / CI一式", price: "3万円〜" },
-  { name: "名刺デザイン作成", price: "2万円〜" },
-  { name: "チラシ作成", price: "2万円〜" },
-  { name: "パンフレット作成", price: "3万円〜" },
-  { name: "看板デザイン作成", price: "3万円〜" },
-  { name: "パッケージデザイン", price: "10万円〜" },
-  { name: "ブランディング（コンセプト設計＋ガイドライン）", price: "20万円〜" },
-  { name: "コピーライティング", price: "3万円〜" },
+  { name: "ロゴ・CI一式", note: "会社やお店の顔まわり", price: "3万円〜", icon: "logo", color: "var(--pink)" },
+  { name: "名刺デザイン", note: "ロゴ・Webとトーンを統一", price: "2万円〜", icon: "card", color: "var(--purple)" },
+  { name: "チラシ", note: "配布して読まれる紙面に", price: "2万円〜", icon: "flyer", color: "var(--blue)" },
+  { name: "パンフレット", note: "情報量が多くても読みやすく", price: "3万円〜", icon: "flyer", color: "var(--cyan)" },
+  { name: "看板デザイン", note: "遠くからでも伝わる視認性", price: "3万円〜", icon: "sign", color: "var(--orange)" },
+  { name: "パッケージ", note: "商品の魅力が伝わる形に", price: "10万円〜", icon: "package", color: "var(--pink)" },
+  { name: "ブランディング一式", note: "コンセプト設計＋ガイドライン", price: "20万円〜", icon: "concept", color: "var(--purple)" },
+  { name: "コピーライティング", note: "キャッチコピー・説明文", price: "3万円〜", icon: "copy", color: "var(--blue)" },
 ];
 
 export const SUBSC_PLANS = [
