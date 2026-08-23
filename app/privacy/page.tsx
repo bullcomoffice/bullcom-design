@@ -9,9 +9,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const SECTIONS: { title: string; body: React.ReactNode }[] = [
+const SECTIONS: { no: string; title: string; body: React.ReactNode }[] = [
   {
-    title: "1. 個人情報の定義",
+    no: "1",
+    title: "個人情報の定義",
     body: (
       <p>
         本ポリシーにおける「個人情報」とは、個人情報の保護に関する法律に定める個人情報を指し、
@@ -21,7 +22,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "2. 個人情報の取得",
+    no: "2",
+    title: "個人情報の取得",
     body: (
       <>
         <p>
@@ -37,7 +39,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "3. 利用目的",
+    no: "3",
+    title: "利用目的",
     body: (
       <>
         <p>取得した個人情報は、次の目的の範囲内で利用します。</p>
@@ -54,7 +57,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "4. 第三者への提供",
+    no: "4",
+    title: "第三者への提供",
     body: (
       <>
         <p>
@@ -72,7 +76,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "5. 個人情報の管理",
+    no: "5",
+    title: "個人情報の管理",
     body: (
       <p>
         当方は、個人情報の紛失、破壊、改ざん、漏えいなどを防止するため、
@@ -82,7 +87,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "6. お問い合わせフォームの送信について",
+    no: "6",
+    title: "お問い合わせフォームの送信について",
     body: (
       <p>
         本サイトのお問い合わせフォームでは、送信内容の受け取りに外部のフォーム送信サービスを
@@ -92,7 +98,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "7. アクセス解析ツールについて",
+    no: "7",
+    title: "アクセス解析ツールについて",
     body: (
       <p>
         本サイトでは、サイトの利用状況を把握するためにアクセス解析ツールを利用する場合があります。
@@ -102,7 +109,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "8. 開示・訂正・削除のご請求",
+    no: "8",
+    title: "開示・訂正・削除のご請求",
     body: (
       <p>
         ご本人から、個人情報の開示、訂正、追加、削除、利用停止のご請求があった場合は、
@@ -112,7 +120,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    title: "9. 本ポリシーの変更",
+    no: "9",
+    title: "本ポリシーの変更",
     body: (
       <p>
         法令の改正やサービス内容の変更に伴い、本ポリシーを変更する場合があります。
@@ -138,16 +147,25 @@ export default function PrivacyPage() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <div className="flex flex-col gap-5">
             {SECTIONS.map((section) => (
-              <div key={section.title} className="glass rounded-2xl p-7">
-                <h2 className="font-head text-lg font-bold">{section.title}</h2>
-                <div className="prose-privacy mt-4">{section.body}</div>
+              <div key={section.title} className="policy-card">
+                <div className="policy-card-body">
+                  <div className="flex items-center gap-3.5">
+                    <span className="font-en policy-no">{section.no}</span>
+                    <h2 className="font-head text-lg font-bold">{section.title}</h2>
+                  </div>
+                  <div className="prose-privacy mt-4">{section.body}</div>
+                </div>
               </div>
             ))}
           </div>
 
           {/* お問い合わせ窓口 */}
-          <div className="grad-border mt-8 p-7">
-            <h2 className="font-head text-lg font-bold">10. お問い合わせ窓口</h2>
+          <div className="policy-card mt-5">
+            <div className="policy-card-body">
+            <div className="flex items-center gap-3.5">
+              <span className="font-en policy-no">10</span>
+              <h2 className="font-head text-lg font-bold">お問い合わせ窓口</h2>
+            </div>
             <dl className="mt-4 flex flex-col gap-2 text-sm text-[var(--text-soft)]">
               <div className="flex flex-col gap-1 sm:flex-row sm:gap-4">
                 <dt className="w-28 shrink-0 font-bold text-[var(--text-muted)]">事業者名</dt>
@@ -178,6 +196,7 @@ export default function PrivacyPage() {
                 <dd>{COMPANY.email}</dd>
               </div>
             </dl>
+            </div>
           </div>
 
           <p className="mt-8 text-right text-xs text-[var(--text-muted)]">
