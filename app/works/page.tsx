@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
 import CtaBand from "@/components/ui/CtaBand";
 import SectionHead from "@/components/ui/SectionHead";
@@ -8,7 +9,7 @@ import { WORKS } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "制作実績",
   description:
-    "BULLCOM designの制作実績。コーポレートサイト、買取・販売サイトなど、集客の仕組みまで含めたサイトづくりの事例をご紹介します。",
+    "BULLCOM designの制作実績。コーポレートサイト、買取・販売サイト、セキュリティサービスなど、業種も目的も異なるサイトを集客の仕組みまで含めて制作しています。掲載しているのは一部の事例です。",
   alternates: { canonical: "/works" },
 };
 
@@ -23,7 +24,7 @@ export default function WorksPage() {
         image="/sub-works-portfolio.png"
         imageAlt="ノートPC・タブレット・スマートフォンに制作したサイトのデザインを並べたイメージ"
         ja="制作実績"
-        description="BULLCOMシリーズをはじめ、集客の仕組みまで含めたサイトづくりをしています。実績は順次追加していきます。"
+        description="コーポレートサイトから買取・販売サイト、セキュリティサービスまで。業種も目的も異なるサイトを、デザインだけでなく問い合わせにつながる導線や集客の仕組みまで含めて制作しています。ここでご紹介しているのは実績の一部です。近い業種の事例もお見せできますので、お気軽にご相談ください。"
         crumbs={[{ href: "/works", label: "制作実績" }]}
       />
 
@@ -72,6 +73,18 @@ export default function WorksPage() {
                 </div>
               </article>
             ))}
+          </div>
+
+          <div className="mx-auto mt-10 max-w-3xl border-t border-[var(--border)] pt-8 text-center">
+            <p className="text-sm leading-relaxed text-[var(--text-soft)]">
+              掲載しているのは<strong className="text-[var(--text)]">制作実績の一部</strong>です。
+              このほかにも、ランディングページや小規模なサイト、公開を控えている案件などを手がけています。
+              <br className="hidden sm:block" />
+              「自分の業種に近い事例が見たい」「こんなサイトは作れる？」といったご相談も歓迎です。
+            </p>
+            <Link href="/contact" className="btn btn-grad mt-6 px-7 py-3.5 text-sm">
+              事例について相談する
+            </Link>
           </div>
         </div>
       </section>
