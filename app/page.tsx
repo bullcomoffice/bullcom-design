@@ -124,26 +124,27 @@ export default function Home() {
           />
           <Reveal>
           <div className="grid gap-6 md:grid-cols-3">
-            {WORKS.map((work) => (
-              <article key={work.title} className="glass card-hover group overflow-hidden rounded-2xl">
-                <div className="work-visual relative overflow-hidden">
+            {WORKS.map((work, i) => (
+              <article
+                key={work.title}
+                className="work-card"
+                style={{ "--accent": work.color } as React.CSSProperties}
+              >
+                <div className="work-visual work-visual-frame">
+                  <span className="font-en work-no">{String(i + 1).padStart(2, "0")}</span>
                   <Image
                     src={work.image}
                     alt={`${work.title}のスクリーンショット`}
                     fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover transition duration-500 group-hover:scale-105"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#272442]/35 via-transparent to-white/5" />
-                  <span className="font-en absolute bottom-3 right-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-extrabold tracking-[0.18em] text-slate-700 shadow-sm">
-                    {work.label}
-                  </span>
+                  <span className="font-en work-label">{work.label}</span>
                 </div>
-                <div className="p-6">
-                  <span className="font-en inline-block rounded-full border border-[var(--border-strong)] px-3 py-1 text-xs font-semibold text-[var(--text-soft)]">
-                    {work.category}
-                  </span>
-                  <h3 className="font-head mt-3 text-lg font-bold">{work.title}</h3>
+
+                <div className="work-card-body">
+                  <span className="font-en work-tag">{work.category}</span>
+                  <h3 className="font-head mt-3 text-lg font-bold leading-snug">{work.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-[var(--text-soft)]">
                     {work.description}
                   </p>
@@ -152,7 +153,7 @@ export default function Home() {
                       href={work.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-en mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--text-soft)] transition hover:text-[var(--text)]"
+                      className="font-en work-more"
                     >
                       サイトを見る
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

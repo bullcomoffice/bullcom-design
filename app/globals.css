@@ -1086,6 +1086,120 @@ body {
   box-shadow: 0 8px 16px -10px rgba(57, 39, 127, 0.7);
 }
 
+/* ---- 制作実績カード（角あり・エディトリアル） ---- */
+
+.work-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0; /* 角を立てる */
+  background: #fff;
+  border: 1.5px solid rgba(36, 34, 58, 0.16);
+  box-shadow: 10px 10px 0 -2px color-mix(in srgb, var(--accent) 16%, transparent);
+  transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-card:hover {
+  transform: translate(-3px, -3px);
+  border-color: color-mix(in srgb, var(--accent) 70%, rgba(36, 34, 58, 0.5));
+  box-shadow: 14px 14px 0 -2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* 画像まわり */
+.work-visual-frame {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1.5px solid rgba(36, 34, 58, 0.16);
+}
+
+.work-visual-frame img {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-card:hover .work-visual-frame img {
+  transform: scale(1.06);
+}
+
+/* 左上の通し番号（角形・濃色） */
+.work-no {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  background: color-mix(in srgb, var(--accent) 62%, #1b1830);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+/* 右下の英字ラベル（角形・白地にアクセントの左罫） */
+.work-label {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 0.4rem 0.85rem;
+  background: rgba(255, 255, 255, 0.94);
+  border-left: 3px solid var(--accent);
+  color: #241f38;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.work-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.4rem 1.4rem 1.3rem;
+}
+
+/* カテゴリタグ（角形・左に色棒） */
+.work-tag {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.45rem;
+  padding: 0.28rem 0.7rem 0.28rem 0.55rem;
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  border-left: 3px solid var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--accent) 45%, #241f38);
+}
+
+.work-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--accent) 45%, #241f38);
+  transition: gap 0.25s;
+}
+
+.work-more::before {
+  content: "";
+  width: 1.4rem;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.25s;
+}
+
+.work-card:hover .work-more::before {
+  width: 2.2rem;
+}
+
 /* ---- scroll reveal ---- */
 
 .reveal {

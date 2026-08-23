@@ -34,6 +34,8 @@ export type Work = {
   description: string;
   label: string;
   image: string;
+  /** カードのアクセントカラー */
+  color: string;
   /** 公開中のサイトURL（実績カードから遷移できるようにする） */
   url?: string;
 };
@@ -45,6 +47,7 @@ export const WORKS: Work[] = [
     description: "神戸・明石のパソコン修理店。地域SEOで問い合わせを継続獲得する店舗サイト。",
     label: "PC REPAIR",
     image: "/work-pc-repair.png",
+    color: "var(--blue)",
     url: "https://bullcom.jp/",
   },
   {
@@ -53,6 +56,7 @@ export const WORKS: Work[] = [
     description: "無料査定フォームからLINE査定まで、問い合わせ導線を作り込んだ買取サイト。",
     label: "TRUCK",
     image: "/work-truck.png",
+    color: "var(--orange)",
     url: "https://www.truck-asahi.com/",
   },
   {
@@ -61,6 +65,7 @@ export const WORKS: Work[] = [
     description: "広告×SEOのCV計測を設計し、データで改善を回せるようにした買取サイト。",
     label: "BOAT",
     image: "/work-boat.png",
+    color: "var(--cyan)",
     url: "https://boatkaitori.com/",
   },
 ];
