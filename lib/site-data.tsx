@@ -68,6 +68,36 @@ export const WORKS: Work[] = [
     color: "var(--cyan)",
     url: "https://boatkaitori.com/",
   },
+  {
+    category: "リサイクル",
+    title: "パソコン無料回収 BULLCOM",
+    description:
+      "神戸・明石のパソコン無料回収。データ消去の不安を解消する導線を中心に構成したサイト。",
+    label: "PC RECYCLE",
+    image: "/work-pc-recycle.png",
+    color: "var(--lime)",
+    url: "https://bullcom.org/",
+  },
+  {
+    category: "販売サイト",
+    title: "トラック販売.jp",
+    description:
+      "中古トラックの在庫を車種別に探せる販売サイト。新着車両や在庫台数も掲載しています。",
+    label: "TRUCK SALES",
+    image: "/work-truck-sales.png",
+    color: "var(--magenta)",
+    url: "https://truck-asahi.co.jp/",
+  },
+  {
+    category: "一括査定",
+    title: "船買取一括見積もりサイト",
+    description:
+      "複数店舗の査定をまとめて依頼できる一括見積もりサイト。無料査定への導線に絞った構成です。",
+    label: "BOAT QUOTE",
+    image: "/work-boat-quote.png",
+    color: "var(--purple)",
+    url: "https://fune1katsu.com/",
+  },
 ];
 
 /* ============ 料金 ============ */

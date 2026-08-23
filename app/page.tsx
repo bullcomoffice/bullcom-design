@@ -124,7 +124,7 @@ export default function Home() {
           />
           <Reveal>
           <div className="grid gap-6 md:grid-cols-3">
-            {WORKS.map((work, i) => (
+            {WORKS.slice(0, 3).map((work, i) => (
               <article
                 key={work.title}
                 className="work-card"
