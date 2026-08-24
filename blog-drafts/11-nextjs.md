@@ -1,5 +1,5 @@
 ---
-order: 4
+order: 11
 no: 16
 category: つくりの話
 title: なぜNext.jsで作るのか。表示の速さと、安全なつくりの話

@@ -1,5 +1,5 @@
 ---
-order: 16
+order: 23
 no: 19
 category: つくりの話
 title: スマホで崩れるサイトと、崩れないサイトの違い

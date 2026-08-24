@@ -1,5 +1,5 @@
 ---
-order: 8
+order: 15
 no: 17
 category: つくりの話
 title: WordPressで作らない理由と、それでも選ぶ場合

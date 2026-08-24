@@ -1,5 +1,5 @@
 ---
-order: 14
+order: 21
 no: 9
 category: デザイン
 title: ロゴがないままホームページを作ると、どうなるか
