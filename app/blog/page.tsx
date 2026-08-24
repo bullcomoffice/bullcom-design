@@ -8,7 +8,7 @@ import { catColors, defaultCatColor, formatDate } from "@/lib/blog-ui";
 export const metadata: Metadata = {
   title: "ブログ・コラム",
   description:
-    "ホームページ制作・デザイン・SEO・セキュリティに関するノウハウを、BULLCOM designが発信します。",
+    "ホームページ制作とデザインのノウハウを、BULLCOM designが発信します。依頼する前に知っておきたい費用や進め方、Next.jsで制作している理由まで、制作の現場から具体的に。",
   alternates: {
     canonical: "/blog",
   },
@@ -24,7 +24,7 @@ export default async function BlogPage() {
         image="/sub-blog-writing.png"
         imageAlt="記事のレイアウトを表示したノートPCとノート・ペンのイメージ"
         ja="ブログ・コラム"
-        description="ホームページ制作・デザイン・SEO・セキュリティのノウハウを発信しています。"
+        description="ホームページの作り方、デザインの考え方、依頼する前に知っておきたいこと。制作の現場で実際に判断していることを、できるだけ具体的に書いていきます。BULLCOM designがNext.jsで制作している理由——表示の速さと、改ざんされにくい安全なつくり——に関わる話も、制作者の視点から取り上げます。"
         crumbs={[{ href: "/blog", label: "ブログ" }]}
       />
 
@@ -96,6 +96,19 @@ export default async function BlogPage() {
             })}
           </div>
         )}
+
+        <p className="mx-auto mt-12 max-w-2xl border-t border-[var(--border)] pt-8 text-center text-xs leading-relaxed text-[var(--text-muted)]">
+          セキュリティ対策そのものの詳しい情報は、姉妹サイトの
+          <a
+            href="https://bullcom.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mx-1 font-bold underline underline-offset-2 transition hover:text-[var(--text)]"
+          >
+            BULLCOM Security
+          </a>
+          で発信しています。こちらでは、あくまでホームページ制作に関わる範囲で取り上げます。
+        </p>
       </section>
     </>
   );
