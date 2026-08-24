@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// FormSubmit.co + 送信前ブラウザ画像圧縮（formsubmit-form skill の snippet.html 準拠）
-// - 添付があるため AJAX 不可 → ネイティブ送信 + _next リダイレクト(?sent=1)
-// - <input multiple> は1枚しか届かない仕様 → 2枚目以降は別nameのhidden inputに展開
-// - エイリアス文字列（bullcom.office@gmail.com の生メアド露出回避）。2026-07-18 有効化済み
-const FORMSUBMIT_ACTION = "https://formsubmit.co/7cfa2a028361eaede7c9ced9630770f0";
+// 送信は自前の Cloudflare Worker（/api/contact-submit）→ Resend API。
+// worker.js の handleContactSubmit と対。添付があるためネイティブ送信（AJAX不可）。
+// 送信後は _redirect のパスへ302で戻り、?sent=1 で完了表示に切り替わる。
+const ACTION = "/api/contact-submit";
 
 const CATEGORIES = [
   "HP新規制作",
@@ -18,6 +17,10 @@ const CATEGORIES = [
   "保守・サイト診断（他社制作もOK）",
   "その他",
 ];
+
+// worker.js の URL_PATTERN と同じ。サーバー側が本体の防御で、これは即時フィードバック用
+const URL_RE =
+  /https?:\/\/|www\.\S|\b[a-z0-9][a-z0-9-]{1,61}\.(com|net|org|jp|io|co|info|biz|xyz|shop|site|online|club|top|vip|link|click|live|store|me|tv|cc|ru|cn)\b/i;
 
 // 画像圧縮: 600KB未満や非画像はそのまま。最大1600px・JPEG品質0.8
 function compressImage(file: File): Promise<File> {
@@ -63,7 +66,7 @@ export default function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   // 送信後リダイレクト(?sent=1)で完了表示
   useEffect(() => {
@@ -75,7 +78,6 @@ export default function ContactForm() {
     return () => clearTimeout(t);
   }, []);
 
-  // 完了表示に切り替わったらスクロール
   useEffect(() => {
     if (!sent) return;
     const t = setTimeout(() => {
@@ -88,24 +90,26 @@ export default function ContactForm() {
     e.preventDefault();
     const form = formRef.current;
     if (!form || sending) return;
-    setSending(true);
-    setError(false);
+    setError("");
 
+    // URL混入チェック（圧縮より前に実施して無駄な処理を避ける）
+    const message = form.querySelector<HTMLTextAreaElement>('textarea[name="ご相談の詳細"]');
+    if (message && URL_RE.test(message.value)) {
+      setError("ご相談の詳細にURLは含めないでください。お手数ですがURLを外して送信してください。");
+      message.focus();
+      return;
+    }
+
+    setSending(true);
     try {
       // 送信後の戻り先（現在のドメインに自動追従）
-      const next = form.querySelector<HTMLInputElement>('input[name="_next"]');
-      if (next) {
-        next.value = `${location.origin}${location.pathname}?sent=1`;
-      }
+      const next = form.querySelector<HTMLInputElement>('input[name="_redirect"]');
+      if (next) next.value = `${location.pathname}?sent=1`;
 
-      // 再送信対策: 前回動的展開した余剰 input を掃除
-      form
-        .querySelectorAll('input[data-extra-photo="1"]')
-        .forEach((n) => n.remove());
+      // 再送信対策: 前回展開した余剰 input を掃除
+      form.querySelectorAll('input[data-extra-photo="1"]').forEach((n) => n.remove());
 
-      const inputs = Array.from(
-        form.querySelectorAll<HTMLInputElement>('input[type="file"]')
-      );
+      const inputs = Array.from(form.querySelectorAll<HTMLInputElement>('input[type="file"]'));
       await Promise.all(
         inputs.map(async (inp) => {
           const files = inp.files ? Array.from(inp.files) : [];
@@ -132,7 +136,7 @@ export default function ContactForm() {
 
       form.submit(); // ネイティブ送信（添付はこの方式でないと届かない）
     } catch {
-      setError(true);
+      setError("送信に失敗しました。お手数ですがお電話（078-912-2656）またはLINEでご連絡ください。");
       setSending(false);
     }
   }
@@ -149,6 +153,8 @@ export default function ContactForm() {
         <p className="mt-3 text-sm leading-relaxed text-[var(--text-soft)]">
           内容を確認のうえ、順次ご連絡いたします。
           <br />
+          確認メールをお送りしていますので、あわせてご確認ください。
+          <br />
           お急ぎの場合はお電話（078-912-2656）が確実です。
         </p>
       </div>
@@ -159,17 +165,14 @@ export default function ContactForm() {
     <form
       ref={formRef}
       id="contact-form"
-      action={FORMSUBMIT_ACTION}
+      action={ACTION}
       method="post"
       encType="multipart/form-data"
       onSubmit={handleSubmit}
       className="glass rounded-2xl p-7 sm:p-9"
     >
-      {/* FormSubmit 制御フィールド */}
       <input type="hidden" name="_subject" value="【BULLCOM design】お問い合わせ" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_next" value="" />
+      <input type="hidden" name="_redirect" value="/contact?sent=1" />
       <input
         type="text"
         name="_honey"
@@ -225,6 +228,8 @@ export default function ContactForm() {
             id="cf-phone"
             type="tel"
             name="電話番号"
+            pattern="0[0-9\-]*"
+            title="電話番号は「0」から始まる形式でご入力ください"
             placeholder="078-000-0000"
             className={inputCls}
           />
@@ -254,9 +259,12 @@ export default function ContactForm() {
           name="ご相談の詳細"
           required
           rows={6}
-          placeholder="例）10年前に作ったホームページをリニューアルしたい。参考サイトは○○。予算は○○万円くらいで考えています。"
+          placeholder="例）10年前に作ったホームページをリニューアルしたい。予算は○○万円くらいで考えています。"
           className={`${inputCls} resize-y`}
         />
+        <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+          ※迷惑メール対策のため、URLを含む送信はお受けできません
+        </p>
       </div>
 
       <div className="mt-5">
@@ -285,8 +293,8 @@ export default function ContactForm() {
       </button>
 
       {error && (
-        <p className="mt-4 text-center text-sm text-[#f87171]">
-          送信に失敗しました。お手数ですがお電話（078-912-2656）またはLINEでご連絡ください。
+        <p className="mt-4 rounded-xl border border-[#f3b5c8] bg-[#fff1f6] px-4 py-3 text-center text-sm text-[#b3214e]">
+          {error}
         </p>
       )}
     </form>

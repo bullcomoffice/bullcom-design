@@ -1,9 +1,11 @@
 name = "bullcom-design"
+main = "worker.js"
 compatibility_date = "2026-07-01"
 
-# 静的エクスポートの出力フォルダを指定
+# 静的エクスポートの出力フォルダ。Worker から env.ASSETS で参照する
 [assets]
 directory = "./out"
+binding = "ASSETS"
 
 # 本番ドメイン（bullcom.website）への切り替え時に有効化する:
 # ユーザー確認後、以下のコメントを外して `npx wrangler deploy`
