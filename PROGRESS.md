@@ -30,6 +30,30 @@
 
 ## セッション記録
 
+### 2026-08-24: ブログ27本をmicroCMSへ投入（予約公開つき）
+
+- **カテゴリを4分類で作成**: 費用と依頼(esos-pueb) / デザイン(41w1mai42x) / 運用・保守(19k0gc2dp0) / つくりの話(3f4h6zg8ua2)
+  ※テンプレ初期値の3件（チュートリアル/テクノロジー/更新情報）は未使用のまま残置
+- **記事27本を投入**: 過去分8本（7/01〜8/19）は下書き、未来分19本（8/26〜12/30）は予約公開を設定
+- **アイキャッチ27枚**をメディアにアップロードして各記事に紐付け
+- 公開スケジュールは毎週水曜9:45（JST）。APIには UTC（00:45Z）で渡す
+
+**APIの要点（実測で確定。ドキュメントはJS描画で読めないため直接検証した）**
+- 過去日付の投稿は可能。`publishedAt` は指定できるが `createdAt` は不可（`'createdAt' is unexpected key`）
+- 予約公開は2段階:
+  1. `POST /api/v1/blogs?status=draft` で下書き作成
+  2. `PUT https://{service}.microcms-management.io/api/v1/contents/blogs/{id}/reservation` に `{"publishTime":"...Z"}`
+- 公開状態の変更は `PATCH .../contents/blogs/{id}/status` に **配列** で `{"status":["DRAFT"]}` / `["PUBLISH"]`
+  （オブジェクトで送ると "Request body is not JSON object."）
+- 既に公開済みだと予約不可（"Cannot be reserved for the public because it has already been published"）→ 先にDRAFTへ戻す
+- メディアアップロードは `POST {service}.microcms-management.io/api/v1/media`（マネジメントAPI権限が必要）。
+  **連続実行はレート制限に当たる**ので1件ごとに2〜3秒空ける（12枚目以降が一斉に失敗した）
+- APIキーの権限: コンテンツAPIに POST/PUT/PATCH と下書き取得、マネジメントAPIに「公開状態の変更」「スケジュール設定の変更」「メディアの取得/アップロード」を付与。DELETEは事故防止で未付与
+
+**再実行の手順**: `blog-drafts/build-posts.py` で posts.json を生成 → `blog-drafts/post-all.sh` で投入
+
+
+
 ### 2026-08-18 (2): デザイン改善7点（CV導線・可読性・SNS・SEO・演出）
 
 実測をもとに改善。すべて本番反映済み。
