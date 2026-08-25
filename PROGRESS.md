@@ -46,6 +46,8 @@
     — いずれも bullcom-security の本番稼働版をそのままコピー。挙動は変えていない
   - `.github/workflows/sns-post.yml` — deploy.yml とは別ワークフロー。`repository_dispatch(microcms-publish)` と手動実行で起動
   - `public/blog-thumbnails/{記事ID}.jpg` 27枚（Instagramは画像必須。microCMSのeyecatchは0バイト事故の実績があるので使わない）
+  - `scripts/sns-post-texts.json` — `blog-drafts/*.md` の「## SNS投稿」から本文＋ハッシュタグを抜き出し記事IDをキーにしたもの（27本）。
+    これが無いと投稿文が「【新着記事】{タイトル}」の既定文になる。記事を足したら再生成すること
 - 記事IDとサムネの紐付けは、管理APIの `reservationTime.publishTime` と投入時の posts.json を突き合わせて特定（27本すべて確定）
 - GitHub Secrets を設定（bullcom.net と同じアカウントへ投稿するため認証8件は同値）
   - 同値: `IG_BUSINESS_ACCOUNT_ID` `IG_PAGE_ACCESS_TOKEN` `FB_PAGE_ID` `GBP_CLIENT_ID` `GBP_CLIENT_SECRET` `GBP_REFRESH_TOKEN` `GBP_ACCOUNT_ID` `GBP_LOCATION_ID`
@@ -55,6 +57,10 @@
   - IG `bullcom2656` / FB `It Support Bullcom` / GBP `BULLCOM(ブルコム)` にトークンが通ることを確認。bullcom.net と同一アカウント
   - サムネ27枚が workers.dev で HTTP 200 かつ 10KB以上（0バイト事故チェック）
   - microCMSの `fields` に `slug` を投げても200が返り、未定義なので記事URLは `id` にフォールバックする（`/blog/[id]` と一致）
+  - `gh workflow run sns-post.yml` を実行 → 記事取得まで通り「公開から2019分・上限超過のためスキップ」で正常終了。
+    投稿はしていない。npm ci / Secrets / microCMS取得 / スキップ判定までの疎通が取れている
+- なお GBP は投稿文が「…詳しくはこちら👇」＋スクリプトの「詳細はこちら → URL」で少し重複する。
+  原稿どおりの文面を優先して手は入れていない。気になるなら `post-to-gbp.cjs` の `buildSummary()` を調整する
 
 #### ⚠️ 未完了：本番投稿テストは bullcom.website 切替が先
 
