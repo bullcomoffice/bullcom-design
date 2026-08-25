@@ -31,7 +31,10 @@
   - 投稿先は **bullcom.net と同じアカウント**（IG `bullcom2656` / FBページ `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）。認証Secretsも同値
   - **X（旧Twitter）は作らない**。API従量課金のため手動運用（`x-schedule` skill）。sns-post.yml のXステップはコメントのまま残す — 復活させないこと
   - 画像は `public/blog-thumbnails/{記事ID}.jpg`（コミット必須）。microCMSのeyecatchは0バイト事故の実績があるので使わない
-  - 起動は microCMS Webhook → `repository_dispatch(microcms-publish)`。**Webhook はドメイン切替まで未設定**（PROGRESS.md 参照）
+  - 起動は microCMS Webhook → `repository_dispatch(microcms-publish)`（`sns-auto-post`、設定済み・有効）
+  - **microCMSのAPIキーに「下書きコンテンツの全取得」を付けないこと**。付けるとサイトに未公開記事が出るうえ、
+    SNSスクリプトが未公開記事を投稿する（PROGRESS.md 2026-08-26 参照）
+  - 記事を一括公開するときは先に `gh secret set SNS_POST_MAX_MINUTES --body 0` で投稿を止める。終わったら 60 に戻す
 - 参考: 既存プロジェクト `D:\Data\Projects\Next\bullcom\`
 
 ## 開発メモ

@@ -4,21 +4,15 @@
 
 ### ユーザー対応待ち
 - [ ] **メール送受信テスト**（★DNS移管後の未確認事項。外部から `info@bullcom.website` 宛に1通送って受信できるか）
-- [ ] **microCMS Webhook設定**（記事公開→自動デプロイ＋SNS自動投稿。PATが要るので下記手順で。bullcom本家の設定コピーが早い）
-  - ドメイン切替は 2026-08-26 に完了。画像URLも生きているので設定してよい
-  - microCMS: bullcom-design → API設定 → Webhook → カスタム通知
-  - URL: `https://api.github.com/repos/bullcomoffice/bullcom-design/dispatches`
-  - ヘッダー: `Authorization: Bearer <GitHub PAT>` / `Accept: application/vnd.github+json`
-  - ボディ: `{"event_type": "microcms-publish"}`（デフォルトボディ送信をOFFにしてカスタムボディで）
+- [ ] **08/26 09:45 の初回自動投稿を目視確認**（IG `bullcom2656` / FB `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）
+  - 画像が出ているか、本文とリンクが正しいかを必ず見る。Actionsが success でも投稿が空のことがある
+  - 失敗していたら公開から60分以内に `gh workflow run sns-post.yml` で再実行できる
 - [ ] トップページのデザインレビュー / 実績カード3件（PC修理/トラック/ボート）の内容確認
 - [ ] LINE: design専用アカウントを作るか（現在は既存BULLCOMの lin.ee/vX5z2Xf を仮設定）
 - [ ] GA4 プロパティ作成 → 測定ID共有（layout.tsx にTODOコメントあり）
 
 ### 次セッション以降
 - [ ] ドメイン切替後、フォームの `_next` リダイレクト（?sent=1完了表示）を本番ドメインで再確認（workers.devでは効かずFormSubmitのThanksページに飛ぶ既知事象）
-- [ ] SNS自動投稿の本番テスト（ドメイン切替後）: `gh workflow run sns-post.yml` → IG/FB/GBP の実投稿を目視確認。
-      直近記事の公開から60分以内でないとスキップされるので、テスト時は `SNS_POST_MAX_MINUTES` を一時的に上げる
-- [ ] 過去8本の下書きをいつ公開するか決める
 - [ ] `lib/blog-ui.ts` の catColors を実際の4カテゴリ名に合わせる
 - [ ] 下層ページ拡充（サービス詳細 / 制作実績詳細 / FAQ / 会社概要）
 - [ ] OG画像作成（現在未設定）
@@ -32,6 +26,51 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-26: SNS自動投稿を有効化。あわせて「下書きが本番公開されていた」事故を修正
+
+#### ⚠️ APIキーの「下書きコンテンツの全取得」が原因で、未公開27本がサイトに出ていた
+
+microCMSのAPIキー（default）に **「下書きコンテンツの全取得」** 権限が付いており、
+コンテンツAPIが DRAFT まで返していた。ビルドもSNSスクリプトも同じキーを使うため:
+
+- `/blog` に未公開の27本が並び、**予約公開が完全に無意味になっていた**
+- SNSスクリプトの `fetchLatestArticle` が **未公開記事を「最新記事」として掴んでいた**
+  （Webhookを先に入れていたら、未公開記事をIG/FB/GBPへ投稿していた）
+
+→ 管理画面 → APIキー → default → コンテンツAPI の「下書きコンテンツの全取得」をOFF。
+   管理API側の予約設定そのものは正常だった（毎週水9:45、08/26〜12/30の19本）。
+   **キーの権限は「GET のみ」で運用すること。プレビューが要るなら draftKey を使う。**
+
+#### 記事の公開状態を整理
+
+- 予約なしだった下書き8本を、当初の意図どおり **7/01〜8/19 の毎週水曜9:45** で公開
+- microCMSテンプレのサンプル記事（`nqgv3qjy1t`）は**削除せず下書きへ**戻してサイトから外した
+- 結果: 公開中8本 / 予約19本 / 下書き1本（サンプル）
+
+**publishedAt のハマりどころ**: 下書きのままだと
+`'publishedAt' field error. This field is valid for content that is meant to be published.` で400。
+**先に公開 → その後 publishedAt を過去日付へ PATCH** の順でないと通らない。
+また公開状態の変更は `PATCH {service}.microcms-management.io/api/v1/contents/blogs/{id}/status` に
+`{"status":["PUBLISH"]}`。**PUT だと 405 Method Not Allowed**（予約は PUT なので紛らわしい）。
+
+#### Webhook（microCMS → GitHub）
+
+`GitHub Actions` プリセットで登録。名前 `sns-auto-post` / ユーザー名 `bullcomoffice` /
+リポジトリ `bullcom-design` / イベント `microcms-publish`。通知タイミングは既定のまま
+（「コンテンツの公開（予約設定による操作）」が含まれる＝週次の自動公開で発火する）。
+GitHubトークンの入力はユーザーが実施。
+
+**一括公開のときは SNS 連投に注意**。今回は8本を連続公開したので、事前に
+`gh secret set SNS_POST_MAX_MINUTES --body 0` で投稿を止め、作業後に 60 へ戻した。
+（0にすると `minutes > 0` が常に真になりスキップされる＝実質キルスイッチ）
+
+#### 検証済み
+
+- Webhookが8回とも発火し、`Build & Deploy` と `SNS Auto Post` が毎回 success で起動
+- SNS側は8本とも「公開からの経過時間 9898分・上限超過のためスキップ」で**投稿されず**（連投事故なし）
+- 本番 `/blog` に公開済み8本のみが並ぶことを確認
+- **未実施: 実際のSNS投稿の目視確認** → 08/26 09:45 の自動公開が初回の本番投稿になる
 
 ### 2026-08-26: bullcom.website を Cloudflare へ移管（本番ドメイン切替）
 
