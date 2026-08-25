@@ -3,9 +3,9 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] **08/26 09:45 の初回自動投稿を目視確認**（IG `bullcom2656` / FB `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）
-  - 画像が出ているか、本文とリンクが正しいかを必ず見る。Actionsが success でも投稿が空のことがある
-  - 失敗していたら公開から60分以内に `gh workflow run sns-post.yml` で再実行できる
+- [ ] 08/26 09:45 の予約公開が自動投稿まで通るか確認（実投稿テストは 2026-08-26 に3媒体とも成功済み。
+      残るは「予約公開トリガー」経路の初回確認のみ。失敗しても公開から60分以内なら
+      `gh workflow run sns-post.yml` で撃ち直せる）
 - [ ] トップページのデザインレビュー / 実績カード3件（PC修理/トラック/ボート）の内容確認
 - [ ] LINE: design専用アカウントを作るか（現在は既存BULLCOMの lin.ee/vX5z2Xf を仮設定）
 - [ ] GA4 プロパティ作成 → 測定ID共有（layout.tsx にTODOコメントあり）
@@ -69,7 +69,30 @@ GitHubトークンの入力はユーザーが実施。
 - Webhookが8回とも発火し、`Build & Deploy` と `SNS Auto Post` が毎回 success で起動
 - SNS側は8本とも「公開からの経過時間 9898分・上限超過のためスキップ」で**投稿されず**（連投事故なし）
 - 本番 `/blog` に公開済み8本のみが並ぶことを確認
-- **未実施: 実際のSNS投稿の目視確認** → 08/26 09:45 の自動公開が初回の本番投稿になる
+#### 実投稿テスト（2026-08-26）: IG / FB / GBP すべて成功
+
+7/1付の記事（`85wnqdfepbh`）を下書き→再公開して本番投稿を確認した。
+
+| 媒体 | 結果 | 確認内容 |
+|---|---|---|
+| Instagram | ✅ https://www.instagram.com/p/Dcer-4aEgbb/ | 画像あり・原稿のSNS文・リンク正しい |
+| Facebook | ✅ Post ID `122119639707309436` | 画像あり・同上 |
+| GBP | ✅ state `LIVE` | 画像あり・CTA URL が本番ドメイン |
+
+投稿文は `scripts/sns-post-texts.json` のカスタムテキストが使われ、
+リンクはすべて `https://bullcom.website/blog/{id}` で正しい。テスト後 publishedAt は 7/01 に戻した。
+
+**★ Webhookが発火する操作の切り分け（重要）**
+
+- **コンテンツAPI**（`{service}.microcms.io/api/v1/blogs/{id}` への PATCH 等）→ **発火する**
+- **管理APIの status エンドポイント**（`.../contents/blogs/{id}/status`）→ **発火しない**
+
+つまりスクリプトから公開状態だけ変えても自動投稿は走らない。
+手で確認したいときは publishedAt を PATCH するか `gh workflow run sns-post.yml` を使う。
+なお本番の週次公開は「予約設定による公開」なので、この制約とは無関係に発火する。
+
+**日付の巻き戻しでもWebhookは飛ぶ**ので、publishedAt を直すときも
+`SNS_POST_MAX_MINUTES=0` で止めてから作業すること。
 
 ### 2026-08-26: bullcom.website を Cloudflare へ移管（本番ドメイン切替）
 

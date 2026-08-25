@@ -34,7 +34,10 @@
   - 起動は microCMS Webhook → `repository_dispatch(microcms-publish)`（`sns-auto-post`、設定済み・有効）
   - **microCMSのAPIキーに「下書きコンテンツの全取得」を付けないこと**。付けるとサイトに未公開記事が出るうえ、
     SNSスクリプトが未公開記事を投稿する（PROGRESS.md 2026-08-26 参照）
-  - 記事を一括公開するときは先に `gh secret set SNS_POST_MAX_MINUTES --body 0` で投稿を止める。終わったら 60 に戻す
+  - 記事を一括公開するときや publishedAt を直すときは、先に `gh secret set SNS_POST_MAX_MINUTES --body 0` で
+    投稿を止める。終わったら 60 に戻す（0 にすると常にスキップされる＝キルスイッチ）
+  - **Webhookはコンテンツ API の操作でしか発火しない**。管理APIの `/status` で公開状態を変えても飛ばない
+    （週次の予約公開は別トリガーなので問題なし）
 - 参考: 既存プロジェクト `D:\Data\Projects\Next\bullcom\`
 
 ## 開発メモ
