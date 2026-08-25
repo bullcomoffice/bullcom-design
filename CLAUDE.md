@@ -19,7 +19,11 @@
 
 - Next.js 16 + React 19 + Tailwind v4 + TypeScript（`output: "export"` 静的エクスポート）
 - ホスティング: Cloudflare Workers 静的アセット（`npx wrangler deploy`、wrangler.toml）
-  - 公開URL: https://bullcom-design.bullcom-office.workers.dev（bullcom.website切替はwrangler.tomlのroutesコメント解除）
+  - 公開URL: https://bullcom.website （www も同じサイト。workers.dev も退避先として生かしてある）
+  - **カスタムドメインは wrangler.toml に書かない**。APIトークンにゾーン権限が無く deploy ごと失敗するため、
+    Cloudflareダッシュボードの Workers → ドメイン タブで管理している（PROGRESS.md 2026-08-26 参照）
+  - DNSは Cloudflare、**メールは CoreServer のまま**。MX → `mail.bullcom.website`、ワイルドカード `*` はプロキシOFF。
+    apex を触るときこの2つを壊さないこと
 - GitHub: https://github.com/bullcomoffice/bullcom-design → push で自動デプロイ（.github/workflows/deploy.yml）
 - CMS: microCMS（コードは実装済み・サービス未作成。env: MICROCMS_SERVICE_DOMAIN/MICROCMS_API_KEY。未設定でもビルド可）
 - フォーム: FormSubmit 稼働中（components/ui/ContactForm.tsx、エイリアス化・有効化済み）

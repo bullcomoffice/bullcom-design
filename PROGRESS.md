@@ -3,13 +3,9 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] **bullcom.website 本番ドメイン切替**（★SNS自動投稿の前提。`SITE_URL` をこのドメインで登録済み）
-  - 現状: NSは Value Domain、実体は LiteSpeed サーバーで `https://bullcom.website/` は 403。Cloudflareのゾーン一覧にも無い
-  - 手順: Cloudflareにゾーン追加 → Value Domain で NS を Cloudflare へ変更 → `wrangler.toml` の `[[routes]]` コメント解除 → deploy
-  - 現在 bullcom.website で動いている物は置き換わるので要確認
+- [ ] **メール送受信テスト**（★DNS移管後の未確認事項。外部から `info@bullcom.website` 宛に1通送って受信できるか）
 - [ ] **microCMS Webhook設定**（記事公開→自動デプロイ＋SNS自動投稿。PATが要るので下記手順で。bullcom本家の設定コピーが早い）
-  - ⚠️ **ドメイン切替が済むまで設定しないこと**。設定した時点で次の予約公開（毎週水9:45）が自動投稿され、
-    画像URLが403のため Instagram が失敗し FB/GBP に死んだリンクが載る
+  - ドメイン切替は 2026-08-26 に完了。画像URLも生きているので設定してよい
   - microCMS: bullcom-design → API設定 → Webhook → カスタム通知
   - URL: `https://api.github.com/repos/bullcomoffice/bullcom-design/dispatches`
   - ヘッダー: `Authorization: Bearer <GitHub PAT>` / `Accept: application/vnd.github+json`
@@ -36,6 +32,57 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-26: bullcom.website を Cloudflare へ移管（本番ドメイン切替）
+
+メールは CoreServer のまま。移管の要点と、途中で起こした障害の記録。
+
+#### 移設したDNS（Cloudflare zone `2928ca8de4363bdb37af189176fe9c44` / Free）
+
+Cloudflareの自動スキャンで11件インポートされたが、**そのままではメールが壊れる**ため3点直した。
+
+| 修正 | 内容 |
+|---|---|
+| MXの向き先 | `bullcom.website` → `mail.bullcom.website`（優先度10）。ルートをWorkerに載せるとMXがCloudflareのIPを指してしまうため |
+| `mail` を新設 | A `163.44.176.15` / AAAA `2400:8500:1301:162::15:1`、どちらもプロキシOFF |
+| ワイルドカード `*` | A/AAAA ともプロキシOFFへ（インポート時はON）。pop/smtp/imap/webmail/ftp を CoreServer 直通で維持 |
+
+そのまま移設: SPF / `google-site-verification` / DMARC / **DKIM（セレクタ `x`、411文字）**。
+DKIMは255バイト超で2チャンクに分割されるので、引用符を除いて結合し旧値と1文字ずつ照合して一致を確認した。
+
+apex と www の A/AAAA は削除し、Worker のカスタムドメインに置き換えた。
+
+#### ⚠️ 起こした障害と原因（同じ轍を踏まないこと）
+
+**1. ゾーンが `initializing` のまま20時間、ドメイン全体が引けなくなった**
+
+ゾーン作成後、オンボーディング（プラン選択 → DNS確認 → NS案内）を完了せず、
+DNSレコード画面へ直接URLで飛んでしまった。プラン未選択だとゾーンが `initializing` で止まり、
+**割り当てられたNSが `Query refused` を返す**。NSはすでにCloudflareへ切替済みだったため、
+Webもメールも名前解決できない状態になった。
+
+→ 対処: ダッシュボードで無料プランを選択 → 「アクティベーションに進む」→「ネームサーバーを更新しました」
+まで完了させたら `pending` に移り、即座にNSが応答を返すようになった。
+**ゾーンを作ったら必ずオンボーディングを最後まで通すこと。**
+
+**2. `wrangler deploy` の `[[routes]]` で deploy ごと失敗し、workers.dev まで落ちた**
+
+`custom_domain = true` のルートを書いて deploy したところ、
+`/zones/{id}/workers/routes` が `Authentication error [code: 10000]` で失敗。
+現在の `CLOUDFLARE_API_TOKEN` はこのゾーンのルート操作権限を持っていない（新規ゾーンのため）。
+さらに `workers_dev` が未指定だったので、この deploy で **workers.dev が無効化され退避先も消えた**。
+
+→ 対処: `wrangler.toml` から `[[routes]]` を外し `workers_dev = true` を明記して復旧。
+カスタムドメインは**ダッシュボードの Workers → ドメイン タブ**で登録した（apex と www の2件）。
+登録時に `Hostname ... already has externally managed DNS records` と出るので、
+先にそのホスト名のA/AAAAを削除しておく必要がある。
+
+#### 検証済み
+
+- `https://bullcom.website/` `https://www.bullcom.website/` `/blog` `/blog-thumbnails/{id}.jpg` すべて HTTP 200
+- workers.dev も 200 のまま（退避先として維持）
+- MX → `mail.bullcom.website` → 163.44.176.15、pop/smtp も 163.44.176.15 のまま
+- **未実施: 実際のメール送受信テスト**（外部から1通送って受け取る確認）
 
 ### 2026-08-25: SNS自動投稿（IG / FB / GBP）を構築
 

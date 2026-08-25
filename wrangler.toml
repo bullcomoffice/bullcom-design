@@ -7,8 +7,11 @@ compatibility_date = "2026-07-01"
 directory = "./out"
 binding = "ASSETS"
 
-# 本番ドメイン（bullcom.website）への切り替え時に有効化する:
-# ユーザー確認後、以下のコメントを外して `npx wrangler deploy`
-# [[routes]]
-# pattern = "bullcom.website"
-# custom_domain = true
+# workers.dev も残す（本番ドメインが不調なときの退避先）
+workers_dev = true
+
+# 本番ドメイン（bullcom.website / www）は Cloudflare ダッシュボードの
+# Workers ルート → カスタムドメイン で登録している。
+# ここに [[routes]] を書くと deploy 時にゾーン権限が要るが、現在の
+# CLOUDFLARE_API_TOKEN はこのゾーンのルート操作を許可されていないため
+# 「Authentication error [code: 10000]」で deploy ごと失敗する。書かないこと。
