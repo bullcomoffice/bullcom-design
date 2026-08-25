@@ -1,0 +1,53 @@
+name: SNS Auto Post
+
+# microCMS で記事が公開されると repository_dispatch(microcms-publish) が飛んできて起動する。
+# デプロイは deploy.yml が別途走る（ビルド失敗を検知できるよう分離している）。
+on:
+  repository_dispatch:
+    types: [microcms-publish]
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+
+      # X（旧Twitter）はAPIが従量課金のため構築しない。
+      # 投稿は x-schedule skill（ブラウザの予約投稿）で手動運用する。復活させないこと。
+      # - name: Post to X (Twitter)
+      #   env:
+      #     ...
+      #   run: node scripts/post-to-x.cjs
+
+      - name: Post to Instagram & Facebook
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          MICROCMS_API_ID: ${{ secrets.MICROCMS_API_ID }}
+          IG_BUSINESS_ACCOUNT_ID: ${{ secrets.IG_BUSINESS_ACCOUNT_ID }}
+          IG_PAGE_ACCESS_TOKEN: ${{ secrets.IG_PAGE_ACCESS_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          SNS_HASHTAGS_IG: ${{ secrets.SNS_HASHTAGS_IG }}
+          SNS_POST_MAX_MINUTES: ${{ secrets.SNS_POST_MAX_MINUTES }}
+        run: node scripts/post-to-instagram.cjs
+
+      - name: Post to Google Business Profile
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          MICROCMS_API_ID: ${{ secrets.MICROCMS_API_ID }}
+          GBP_CLIENT_ID: ${{ secrets.GBP_CLIENT_ID }}
+          GBP_CLIENT_SECRET: ${{ secrets.GBP_CLIENT_SECRET }}
+          GBP_REFRESH_TOKEN: ${{ secrets.GBP_REFRESH_TOKEN }}
+          GBP_ACCOUNT_ID: ${{ secrets.GBP_ACCOUNT_ID }}
+          GBP_LOCATION_ID: ${{ secrets.GBP_LOCATION_ID }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          SNS_POST_MAX_MINUTES: ${{ secrets.SNS_POST_MAX_MINUTES }}
+        run: node scripts/post-to-gbp.cjs

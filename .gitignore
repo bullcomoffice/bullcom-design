@@ -28,3 +28,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# 検証用スクリーンショット（capture.mjs の出力）
+/screenshots-*.png
