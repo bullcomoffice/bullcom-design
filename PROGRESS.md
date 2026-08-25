@@ -3,7 +3,6 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] **メール送受信テスト**（★DNS移管後の未確認事項。外部から `info@bullcom.website` 宛に1通送って受信できるか）
 - [ ] **08/26 09:45 の初回自動投稿を目視確認**（IG `bullcom2656` / FB `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）
   - 画像が出ているか、本文とリンクが正しいかを必ず見る。Actionsが success でも投稿が空のことがある
   - 失敗していたら公開から60分以内に `gh workflow run sns-post.yml` で再実行できる
@@ -121,7 +120,8 @@ Webもメールも名前解決できない状態になった。
 - `https://bullcom.website/` `https://www.bullcom.website/` `/blog` `/blog-thumbnails/{id}.jpg` すべて HTTP 200
 - workers.dev も 200 のまま（退避先として維持）
 - MX → `mail.bullcom.website` → 163.44.176.15、pop/smtp も 163.44.176.15 のまま
-- **未実施: 実際のメール送受信テスト**（外部から1通送って受け取る確認）
+- **メール受信テスト: 2026-08-26 に外部から送信して着信を確認済み**。
+  MX → `mail.bullcom.website` → 163.44.176.15（CoreServer）の経路で問題なく届く
 
 ### 2026-08-25: SNS自動投稿（IG / FB / GBP）を構築
 
