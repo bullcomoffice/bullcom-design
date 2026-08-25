@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 
 export const PHONE = "078-912-2656";
 export const PHONE_TEL = "tel:078-912-2656";
-// TODO: BULLCOM design 専用LINEができたら差し替え（現在は既存BULLCOMと共用）
-export const LINE_URL = "https://lin.ee/vX5z2Xf";
+// BULLCOM design 専用の公式LINE（@529xcjts）。2026-08-26 に既存BULLCOM共用から差し替え
+export const LINE_URL = "https://lin.ee/5Sgn6PJ";
 export const SITE_URL = "https://bullcom.website";
 
 /* 事業者情報。BULLCOM（bullcom.jp）と同一事業者のデザイン事業ブランド。

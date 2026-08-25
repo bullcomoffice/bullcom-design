@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // SNS自動投稿スクリプトはNode用のCommonJS(.cjs)。require() が正しい書き方なので
+    // Next.js側のTypeScriptルールの対象から外す
+    "scripts/**",
   ]),
 ]);
 
