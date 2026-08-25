@@ -23,7 +23,11 @@
 - GitHub: https://github.com/bullcomoffice/bullcom-design → push で自動デプロイ（.github/workflows/deploy.yml）
 - CMS: microCMS（コードは実装済み・サービス未作成。env: MICROCMS_SERVICE_DOMAIN/MICROCMS_API_KEY。未設定でもビルド可）
 - フォーム: FormSubmit 稼働中（components/ui/ContactForm.tsx、エイリアス化・有効化済み）
-- SNS自動投稿: microCMS Webhook → GitHub Actions 予定（未実装）
+- SNS自動投稿: Instagram / Facebook / Google Business Profile（`scripts/post-to-instagram.cjs` `scripts/post-to-gbp.cjs`、`.github/workflows/sns-post.yml`）
+  - 投稿先は **bullcom.net と同じアカウント**（IG `bullcom2656` / FBページ `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）。認証Secretsも同値
+  - **X（旧Twitter）は作らない**。API従量課金のため手動運用（`x-schedule` skill）。sns-post.yml のXステップはコメントのまま残す — 復活させないこと
+  - 画像は `public/blog-thumbnails/{記事ID}.jpg`（コミット必須）。microCMSのeyecatchは0バイト事故の実績があるので使わない
+  - 起動は microCMS Webhook → `repository_dispatch(microcms-publish)`。**Webhook はドメイン切替まで未設定**（PROGRESS.md 参照）
 - 参考: 既存プロジェクト `D:\Data\Projects\Next\bullcom\`
 
 ## 開発メモ

@@ -3,8 +3,13 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] **bullcom.website 本番ドメイン切替の判断**（現在workers.devで公開中。切替は wrangler.toml のコメント解除+deploy。現在bullcom.websiteで動いてる物は置き換わるので要確認）
-- [ ] **microCMS Webhook設定**（記事公開→自動デプロイ。PATが要るので下記手順で。bullcom本家の設定コピーが早い）
+- [ ] **bullcom.website 本番ドメイン切替**（★SNS自動投稿の前提。`SITE_URL` をこのドメインで登録済み）
+  - 現状: NSは Value Domain、実体は LiteSpeed サーバーで `https://bullcom.website/` は 403。Cloudflareのゾーン一覧にも無い
+  - 手順: Cloudflareにゾーン追加 → Value Domain で NS を Cloudflare へ変更 → `wrangler.toml` の `[[routes]]` コメント解除 → deploy
+  - 現在 bullcom.website で動いている物は置き換わるので要確認
+- [ ] **microCMS Webhook設定**（記事公開→自動デプロイ＋SNS自動投稿。PATが要るので下記手順で。bullcom本家の設定コピーが早い）
+  - ⚠️ **ドメイン切替が済むまで設定しないこと**。設定した時点で次の予約公開（毎週水9:45）が自動投稿され、
+    画像URLが403のため Instagram が失敗し FB/GBP に死んだリンクが載る
   - microCMS: bullcom-design → API設定 → Webhook → カスタム通知
   - URL: `https://api.github.com/repos/bullcomoffice/bullcom-design/dispatches`
   - ヘッダー: `Authorization: Bearer <GitHub PAT>` / `Accept: application/vnd.github+json`
@@ -15,8 +20,10 @@
 
 ### 次セッション以降
 - [ ] ドメイン切替後、フォームの `_next` リダイレクト（?sent=1完了表示）を本番ドメインで再確認（workers.devでは効かずFormSubmitのThanksページに飛ぶ既知事象）
-- [ ] microCMS Webhook → GitHub repository_dispatch 連携（microcms-publish、要PAT。sns-auto-post-setup skill参照）
-- [ ] SNS自動投稿セットアップ（sns-auto-post-setup skill）
+- [ ] SNS自動投稿の本番テスト（ドメイン切替後）: `gh workflow run sns-post.yml` → IG/FB/GBP の実投稿を目視確認。
+      直近記事の公開から60分以内でないとスキップされるので、テスト時は `SNS_POST_MAX_MINUTES` を一時的に上げる
+- [ ] 過去8本の下書きをいつ公開するか決める
+- [ ] `lib/blog-ui.ts` の catColors を実際の4カテゴリ名に合わせる
 - [ ] 下層ページ拡充（サービス詳細 / 制作実績詳細 / FAQ / 会社概要）
 - [ ] OG画像作成（現在未設定）
 - [ ] TBD解消: 税表記統一（現在「税別」と仮表記） / 撮影・動画の料金 / お客様の声収集
@@ -29,6 +36,36 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-25: SNS自動投稿（IG / FB / GBP）を構築
+
+- `sns-auto-post-setup` skill で構築。**X（旧Twitter）は作らない**（API従量課金のため手動運用に切替済み）。
+  `scripts/post-to-x.cjs` はコピーせず、`sns-post.yml` のXステップはコメントで残すだけ。復活させないこと
+- 配置したもの
+  - `scripts/post-to-instagram.cjs`（IG+FB）/ `scripts/post-to-gbp.cjs` / `scripts/lib/sns-common.cjs`
+    — いずれも bullcom-security の本番稼働版をそのままコピー。挙動は変えていない
+  - `.github/workflows/sns-post.yml` — deploy.yml とは別ワークフロー。`repository_dispatch(microcms-publish)` と手動実行で起動
+  - `public/blog-thumbnails/{記事ID}.jpg` 27枚（Instagramは画像必須。microCMSのeyecatchは0バイト事故の実績があるので使わない）
+- 記事IDとサムネの紐付けは、管理APIの `reservationTime.publishTime` と投入時の posts.json を突き合わせて特定（27本すべて確定）
+- GitHub Secrets を設定（bullcom.net と同じアカウントへ投稿するため認証8件は同値）
+  - 同値: `IG_BUSINESS_ACCOUNT_ID` `IG_PAGE_ACCESS_TOKEN` `FB_PAGE_ID` `GBP_CLIENT_ID` `GBP_CLIENT_SECRET` `GBP_REFRESH_TOKEN` `GBP_ACCOUNT_ID` `GBP_LOCATION_ID`
+  - サイト固有: `MICROCMS_API_ID=blogs` / `SITE_URL=https://bullcom.website` / `SNS_HASHTAGS_IG` / `SNS_POST_MAX_MINUTES=60`
+  - `FB_PAGE_ID` だけ控えが無く、Graph APIから取得 → `1165513313302170`（It Support Bullcom）
+- 検証済み（いずれも読み取りのみ。実投稿はしていない）
+  - IG `bullcom2656` / FB `It Support Bullcom` / GBP `BULLCOM(ブルコム)` にトークンが通ることを確認。bullcom.net と同一アカウント
+  - サムネ27枚が workers.dev で HTTP 200 かつ 10KB以上（0バイト事故チェック）
+  - microCMSの `fields` に `slug` を投げても200が返り、未定義なので記事URLは `id` にフォールバックする（`/blog/[id]` と一致）
+
+#### ⚠️ 未完了：本番投稿テストは bullcom.website 切替が先
+
+`SITE_URL=https://bullcom.website` にしてあるが、**このドメインはまだ Cloudflare に載っていない**。
+現状 NS は Value Domain、実体は LiteSpeed サーバーで `https://bullcom.website/` は **403** を返す。
+このまま投稿すると Instagram の画像取得が失敗し、GBP/FB には死んだリンクが載る。
+
+- Cloudflare のゾーン一覧に `bullcom.website` は**無い**（bullcom.jp / .net / .org / .cyou 等はある）
+- 切替手順: Cloudflareにゾーン追加 → Value Domain で NS を Cloudflare のものへ変更 → `wrangler.toml` の `[[routes]]` をコメント解除 → deploy
+- **microCMS Webhook はまだ設定していない**。設定すると次の予約公開（毎週水9:45）で自動投稿が走ってしまうため、
+  ドメイン切替が済むまで意図的に保留している
 
 ### 2026-08-24: ブログ27本をmicroCMSへ投入（予約公開つき）
 
