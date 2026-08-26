@@ -17,6 +17,8 @@
 - 公式LINE: `@529xcjts`（BULLCOM Design）/ 友だち追加URL `https://lin.ee/5Sgn6PJ`。
   サイト側は `lib/site-data.tsx` の `LINE_URL` 1箇所で全ページに効く。
   **既存BULLCOMの `@crt1899h` とは別アカウント**なので混同しないこと
+  - 運用は**チャットのみ・24時間365日**（応答時間オフ／手動チャット）。リッチメニューは作らない
+  - プロフィールのSNS欄は bullcom.net と共用の IG `bullcom2656` / FB `It Support Bullcom` を掲載
 
 ## 技術構成（既存シリーズと同じ）
 
