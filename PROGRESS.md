@@ -22,6 +22,24 @@
 
 ## セッション記録
 
+### 2026-08-29 (3): お問い合わせ通知の宛先を2件に変更
+
+`worker.js` の受信設定を変更した（ユーザー指示）。
+
+| 変更前 | 変更後 |
+|---|---|
+| TO: `contact@bullcom.website` / CC: `bullcom.office@gmail.com` | TO: `contact@bullcom.website` + `bullcom.contact@gmail.com` / CC なし |
+
+- `CONTACT_CC` は「移行期の保険」として置かれていたものなので空にし、2件とも正規の宛先（TO）へ揃えた
+- **`CONTACT_TO[0]` はお客様宛の確認メールの `reply_to` にも使われる**ので、先頭は独自ドメインのままにしてある
+  （お客様に見えるのは `contact@bullcom.website` だけで、Gmail 側のアドレスは露出しない）
+- Gmail のアドレスが `bullcom.office@` → `bullcom.contact@` に替わっている点に注意（別アドレス）
+
+**反映にはデプロイが必要**。`worker.js` は静的アセットと同じ Worker なので、main への push →
+GitHub Actions の `npx wrangler deploy` で本番へ乗る。push するまで本番の宛先は旧設定のまま。
+
+検証: `node --check worker.js` ✓ / lint ✓ / build ✓。実メール到達の確認は End-to-End テスト時に行う。
+
 ### 2026-08-29 (2): カテゴリバッジの色を実カテゴリに対応 / フォーム完了表示を本番で確認
 
 #### `lib/blog-ui.ts` の catColors を実際の4カテゴリへ

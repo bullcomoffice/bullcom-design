@@ -27,9 +27,10 @@ function html(body, status, headers) {
 
 /* ---------- サイト固有設定 ---------- */
 const SITE_NAME = "BULLCOM design";
-const CONTACT_TO = ["contact@bullcom.website"];
-// 移行期の保険。contact@ の受信が安定したら空配列にしてよい
-const CONTACT_CC = ["bullcom.office@gmail.com"];
+// 通知の宛先。2件とも同じ本文が届く（2026-08-29 に bullcom.office@ から bullcom.contact@ へ変更）
+// [0] はお客様宛の確認メールの reply_to にも使われるので、先頭は独自ドメインのままにすること
+const CONTACT_TO = ["contact@bullcom.website", "bullcom.contact@gmail.com"];
+const CONTACT_CC = [];
 // Resend で検証した送信専用サブドメイン（root の既存MXには触れない）
 const CONTACT_FROM = "BULLCOM design <noreply@send.bullcom.website>";
 

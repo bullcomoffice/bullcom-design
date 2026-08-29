@@ -33,7 +33,7 @@
 - CMS: microCMS（コードは実装済み・サービス未作成。env: MICROCMS_SERVICE_DOMAIN/MICROCMS_API_KEY。未設定でもビルド可）
 - フォーム: **Cloudflare Worker + Resend** 稼働中（`components/ui/ContactForm.tsx` → `/api/contact-submit` → `worker.js`）。
   2026-08-24 に FormSubmit から移行。送信後は同一オリジンへ302で戻り `?sent=1` で完了表示。
-  宛先は `contact@bullcom.website`（CC: bullcom.office@gmail.com）、送信元 `noreply@send.bullcom.website`。
+  宛先は `contact@bullcom.website` と `bullcom.contact@gmail.com` の2件（`worker.js` の `CONTACT_TO`）、送信元 `noreply@send.bullcom.website`。
   Secret は Worker 側の `RESEND_API_KEY`（GitHub Secrets ではない）
 - SNS自動投稿: Instagram / Facebook / Google Business Profile（`scripts/post-to-instagram.cjs` `scripts/post-to-gbp.cjs`、`.github/workflows/sns-post.yml`）
   - 投稿先は **bullcom.net と同じアカウント**（IG `bullcom2656` / FBページ `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）。認証Secretsも同値
