@@ -3,6 +3,9 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
+- [ ] 🚨 **最優先: お問い合わせフォームが本番で壊れている**。Resend が `send.bullcom.website` を
+      「未検証」と判定して 403 を返す（8/26 のDNS移管でResendの検証レコードが引き継がれなかった）。
+      Resendダッシュボードの DNS レコードを Cloudflare に入れ直す作業が必要（下記 2026-08-29 (4) 参照）
 - [x] 08/26 09:45 の予約公開が自動投稿まで通るか確認 → **2026-08-29 確認完了・全自動で成功**
       （下記「2026-08-29」参照。次の予約公開は 09/02 水 9:45）
 - [ ] トップページのデザインレビュー / 実績カード3件（PC修理/トラック/ボート）の内容確認
@@ -21,6 +24,61 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-29 (4): 🚨 お問い合わせフォームが本番で動いていないことが判明（Resend 403）
+
+宛先変更のEnd-to-Endテストで発覚。**フォームは送信できず、お客様には「送信できませんでした」の
+エラーページが出る状態**だった。宛先変更が原因ではなく、それ以前から壊れていた。
+
+#### 原因: Resend が送信ドメインを未検証と判定している
+
+```
+[contact] Resend error 403
+{"statusCode":403,"message":"The send.bullcom.website domain is not verified.
+ Please, add and verify your domain on https://resend.com/domains","name":"validation_error"}
+```
+
+`send.bullcom.website` の DNS を引くと **TXT も MX も1件も無い**（NODATA）。
+**2026-08-26 の Cloudflare 移管で、Resend の検証レコードが引き継がれなかった**のが原因。
+移管時に確認したのはルートドメインのメール系（MX / SPF / DKIM セレクタ `x` / DMARC / google-site-verification）だけで、
+`send.` サブドメイン配下のResend用レコードは Cloudflare の自動スキャン11件に含まれていなかった。
+
+→ **フォームは 2026-08-26 のDNS移管以降ずっと送信失敗**していた可能性が高い
+（Resend移行が 8/24、DNS移管が 8/26。移行直後は動いていたはず）。
+
+#### 復旧に必要な作業（ユーザー作業。APIトークンにゾーン権限が無いため代行できない）
+
+1. https://resend.com/domains → `send.bullcom.website` を開き、表示されるDNSレコードを確認
+   （通常 MX 1件 + SPF の TXT 1件 + DKIM の TXT 1件、必要なら DMARC）
+2. Cloudflare の `bullcom.website` ゾーンに同じ内容で追加する。**プロキシは必ずOFF（DNS only）**
+3. Resend の画面で Verify → `Verified` になるのを確認
+4. `https://bullcom.website/contact` から実際に送信してテスト
+
+**ルートドメインのメール設定（MX → `mail.bullcom.website`、ワイルドカード `*` のプロキシOFF）には触れないこと。**
+CoreServer のメール受信が壊れる。
+
+#### ついでに直したもの
+
+- **`worker.js`: Resend失敗時の理由をログに残すようにした**（`console.error("[contact] Resend error", ...)`）。
+  これまで失敗理由が本番で一切見えず、エラーページの文言しか手掛かりが無かった。
+  読み方: `npx wrangler tail --format json`（`logs[].message` に出る）。今回の原因特定もこれで行った
+- **`wrangler.toml`: `workers_dev = true` の位置がおかしかった**。`[assets]` テーブルの後ろに書かれていたため
+  TOML の仕様で `assets.workers_dev` と解釈され、deploy のたびに
+  「Unexpected fields found in assets field: "workers_dev"」の警告が出ていた（設定は効いていない。
+  ルート未設定時の既定が true なので結果的に workers.dev は生きていた）。`[assets]` の前へ移動して解消
+
+#### 検証に使った手順（再現用）
+
+ハニーポットではなく実フォームと同じ multipart POST を投げる。フィールド名は日本語なので UTF-8 で組むこと。
+`ご相談の詳細` に URL を含めると `URL_PATTERN` に弾かれるので入れない。
+
+```
+POST https://bullcom.website/api/contact-submit
+  _subject / _redirect=/contact?sent=1 / _honey=（空）
+  お名前 / 会社名 / email / 電話番号 / ご相談内容 / ご相談の詳細
+→ 正常なら 302 Location: https://bullcom.website/contact?sent=1
+→ 400 + 送信エラーページ なら Resend 側で失敗している。wrangler tail でログを見る
+```
 
 ### 2026-08-29 (3): お問い合わせ通知の宛先を2件に変更
 

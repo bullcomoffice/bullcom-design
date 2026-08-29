@@ -211,6 +211,8 @@ async function handleContactSubmit(request, env) {
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
+    // 失敗理由が本番で一切見えず原因究明できなかったため記録する（`npx wrangler tail` で読む）
+    console.error("[contact] Resend error", res.status, await res.text().catch(() => ""));
     return contactErrorPage(
       "送信に失敗しました。お手数ですが、お電話またはLINEでご連絡ください。"
     );

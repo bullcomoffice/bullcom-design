@@ -2,13 +2,16 @@ name = "bullcom-design"
 main = "worker.js"
 compatibility_date = "2026-07-01"
 
+# workers.dev も残す（本番ドメインが不調なときの退避先）
+# ※ [assets] より前に置くこと。TOML はテーブル宣言以降が全てその配下になるため、
+#   [assets] の後ろに書くと assets.workers_dev と解釈され
+#   「Unexpected fields found in assets field」の警告が出て設定が効かない
+workers_dev = true
+
 # 静的エクスポートの出力フォルダ。Worker から env.ASSETS で参照する
 [assets]
 directory = "./out"
 binding = "ASSETS"
-
-# workers.dev も残す（本番ドメインが不調なときの退避先）
-workers_dev = true
 
 # 本番ドメイン（bullcom.website / www）は Cloudflare ダッシュボードの
 # Workers ルート → カスタムドメイン で登録している。
