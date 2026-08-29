@@ -31,7 +31,10 @@
     apex を触るときこの2つを壊さないこと
 - GitHub: https://github.com/bullcomoffice/bullcom-design → push で自動デプロイ（.github/workflows/deploy.yml）
 - CMS: microCMS（コードは実装済み・サービス未作成。env: MICROCMS_SERVICE_DOMAIN/MICROCMS_API_KEY。未設定でもビルド可）
-- フォーム: FormSubmit 稼働中（components/ui/ContactForm.tsx、エイリアス化・有効化済み）
+- フォーム: **Cloudflare Worker + Resend** 稼働中（`components/ui/ContactForm.tsx` → `/api/contact-submit` → `worker.js`）。
+  2026-08-24 に FormSubmit から移行。送信後は同一オリジンへ302で戻り `?sent=1` で完了表示。
+  宛先は `contact@bullcom.website`（CC: bullcom.office@gmail.com）、送信元 `noreply@send.bullcom.website`。
+  Secret は Worker 側の `RESEND_API_KEY`（GitHub Secrets ではない）
 - SNS自動投稿: Instagram / Facebook / Google Business Profile（`scripts/post-to-instagram.cjs` `scripts/post-to-gbp.cjs`、`.github/workflows/sns-post.yml`）
   - 投稿先は **bullcom.net と同じアカウント**（IG `bullcom2656` / FBページ `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）。認証Secretsも同値
   - **X（旧Twitter）は作らない**。API従量課金のため手動運用（`x-schedule` skill）。sns-post.yml のXステップはコメントのまま残す — 復活させないこと

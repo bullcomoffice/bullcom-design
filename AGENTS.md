@@ -22,10 +22,12 @@
 
 ## ⚠️ 最重要の運用ルール
 
-- **main に push すると GitHub Actions が本番へ自動デプロイする**（https://bullcom-design.bullcom-office.workers.dev）。push は必ずユーザーの確認を取ってから行うこと。ローカル確認まではコミットのみでよい
-- `components/ui/ContactForm.tsx` は FormSubmit で**本稼働中**。以下を変更しないこと（見た目のクラス調整はOK）:
-  - form の action（エイリアスURL）・hidden フィールド（_subject/_template/_captcha/_next/_honey）
+- **main に push すると GitHub Actions が本番へ自動デプロイする**（https://bullcom.website 。workers.dev も退避先として生きている）。push は必ずユーザーの確認を取ってから行うこと。ローカル確認まではコミットのみでよい
+- `components/ui/ContactForm.tsx` は **Cloudflare Worker + Resend** で本稼働中（2026-08-24 に FormSubmit から移行）。以下を変更しないこと（見た目のクラス調整はOK）:
+  - form の action（`/api/contact-submit`）・hidden フィールド（`_subject` / `_redirect` / `_honey`）
   - ネイティブ送信ロジック（画像圧縮・複数ファイルの hidden input 展開・form.submit()）— 添付は AJAX では送れない仕様のため
+  - 送信先は `worker.js` の `CONTACT_TO` / `CONTACT_CC` / `CONTACT_FROM`。フィールド名は `KNOWN_FIELDS` と対になっているので、
+    項目名を変えるときは worker.js 側も同時に直すこと（語彙が一致しない送信はスパムとして弾かれる）
 - ブログ（app/blog/）と microCMS 連携の構造（エンドポイント名・フィールド名）を壊さない
 - 料金・電話番号・サービス内容などの**事実情報は変更禁止**（要件定義書 §8 が正）。コピーライティングの改善は歓迎
 

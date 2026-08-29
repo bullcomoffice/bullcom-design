@@ -9,10 +9,8 @@
 - [ ] GA4 プロパティ作成 → 測定ID共有（layout.tsx にTODOコメントあり）
 
 ### 次セッション以降
-- [ ] ドメイン切替後、フォームの `_next` リダイレクト（?sent=1完了表示）を本番ドメインで再確認（workers.devでは効かずFormSubmitのThanksページに飛ぶ既知事象）
-- [ ] `lib/blog-ui.ts` の catColors を実際の4カテゴリ名に合わせる
+- [ ] フォームの End-to-End 送信テスト（Resend移行後まだ未実施。実行すると contact@ と Gmail に実際にメールが届く）
 - [ ] 下層ページ拡充（サービス詳細 / 制作実績詳細 / FAQ / 会社概要）
-- [ ] OG画像作成（現在未設定）
 - [ ] TBD解消: 税表記統一（現在「税別」と仮表記） / 撮影・動画の料金 / お客様の声収集
 
 ### microCMS情報（2026-07-18 セットアップ完了）
@@ -23,6 +21,61 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-29 (2): カテゴリバッジの色を実カテゴリに対応 / フォーム完了表示を本番で確認
+
+#### `lib/blog-ui.ts` の catColors を実際の4カテゴリへ
+
+microCMSテンプレ初期値の想定（お知らせ/制作事例/SEO/セキュリティ/ノウハウ）のままだったため、
+**9本中6本がデフォルト紫**で色分けが機能していなかった。2026-08-24 に作った4分類に置き換えた。
+
+| カテゴリ | 色 | 白文字コントラスト |
+|---|---|---|
+| 費用と依頼 | `#db1374`（--pink 系） | 4.82:1 |
+| デザイン | `#8846ff`（--purple 系） | 4.81:1 |
+| 運用・保守 | `#1366ff`（--blue 系） | 4.80:1 |
+| つくりの話 | `#077c95`（--cyan 系） | 4.85:1 |
+
+**ブランド色をそのまま使わなかった理由**: バッジは白の太字12pxを載せるので、
+`--pink #f0509e` は 3.31:1、`--purple` 3.48:1、`--blue` 3.19:1 と WCAG AA(4.5:1) に届かない。
+`--cyan` に至っては 1.76:1。色相（HLS の H・S）を保ったまま明度だけ下げて 4.8:1 に揃えた。
+未使用のテンプレ3カテゴリ（チュートリアル/テクノロジー/更新情報）はデフォルト色に任せる。
+
+検証: lint ✓ / build ✓ / `out/blog.html` で4カテゴリすべてが専用色になり、デフォルト色への
+フォールバックが0件であることを確認（2+3+2+2＝9本）。
+
+#### ついでに整理した積み残し
+
+「OG画像作成（現在未設定）」が残っていたが、**2026-08-18 に作成済み**だった
+（`public/og-image.png` 1200x630 / 本番で HTTP 200・698KB、`app/layout.tsx` の openGraph と
+twitter card 両方に設定済み）。実態に合わせて削除した。
+
+#### フォームの完了表示（?sent=1）を本番ドメインで確認 → **問題なし**
+
+積み残しは「FormSubmit の `_next` が workers.dev で効かない」という話だったが、
+**2026-08-24 に Cloudflare Worker + Resend へ移行済みで、前提そのものが変わっていた**（下記）。
+
+- `POST https://bullcom.website/api/contact-submit` → `302` / `Location: https://bullcom.website/contact?sent=1`
+  （ハニーポット `_honey` に値を入れて実行。この経路はメールを送らずリダイレクトだけ返すので**テスト送信にならない**）
+- ヘッドレスChromeで `https://bullcom.website/contact?sent=1` を描画 → 「🎉 送信ありがとうございました！」の完了ブロックを確認
+- 同一オリジンへの302なので、FormSubmit時代の「外部Thanksページに飛ぶ」事象は構造的に起こらない
+
+#### ⚠️ ドキュメントの記載漏れを補完
+
+**2026-08-24 の「FormSubmit → Cloudflare Worker + Resend 移行」（コミット `c8fb0bb`）が
+PROGRESS / CLAUDE.md / AGENTS.md のどこにも書かれていなかった**ため、3ファイルとも実装に合わせて修正した。
+
+- 送信経路: `ContactForm.tsx`（action=`/api/contact-submit`）→ `worker.js` の `handleContactSubmit` → Resend API
+- hidden フィールドは `_subject` / `_redirect` / `_honey`（`_next` `_template` `_captcha` は無い）
+- 宛先 `contact@bullcom.website` / CC `bullcom.office@gmail.com` / 送信元 `noreply@send.bullcom.website`
+- 自動返信あり（送信者宛、reply_to は contact@）
+- 認証は **Worker の Secret `RESEND_API_KEY`**（GitHub Secrets ではない）:
+  `printf '%s' '<APIキー>' | npx wrangler secret put RESEND_API_KEY`
+- スパム対策が3段（ハニーポット / フィールド名の文字化け検出 / `KNOWN_FIELDS` の語彙照合 / 本文のURL混入拒否）。
+  **フォームの項目名を変えると `KNOWN_FIELDS` と食い違って正規の送信まで弾かれる**ので、worker.js と同時に直すこと
+
+**未実施**: 実際にメールが届くところまでの End-to-End テストは、移行後まだ一度も行われていない
+（記録が無い）。実行するとお客様宛と同じ経路で contact@ と Gmail にテストメールが届く。
 
 ### 2026-08-29: 予約公開 → SNS自動投稿の全自動フローが初回で成功（確認のみ）
 
