@@ -28,8 +28,10 @@ boatkaitori.com 12:00。boatkaitori の月報は1時間なので 13:00 まで走
   **2026-08-30 の初回週次で「未確認」のまま放置されていたことが判明し、所有権確認を完了させた**
   （apex の TXT `google-site-verification=…` で自動確認）。
   URLプレフィックス形式を resource_id に渡すと「アクセス権がありません」になる。
-- GA4: **未設置**（`app/layout.tsx:125` にTODOコメント。→ 対策台帳 A-7）。
-  設置されるまで週報のGA4項目は「-」で記録する。
+- GA4: **設置済み（2026-08-30）**。測定ID `G-ET4GPWNTYJ` / プロパティID `552101754`
+  （アカウント BULLCOM）。フォームCVはキーイベント **`contact_form_sent`**
+  （`ContactForm.tsx` の完了表示effectから送信。page_viewの`?sent=1`はreplaceStateとレースするため不使用）。
+  ※イベント一覧に現れたら★でキーイベントにマークする残作業あり（→ A-7）
 - 静的エクスポート（`output: "export"`）を Cloudflare Workers 静的アセットへデプロイ。
   **main への push でデプロイが走る**（`.github/workflows/deploy.yml`）。
 - ドメインは 2026-08-26 に Cloudflare へ移管したばかり。GSCの履歴データはそれ以前と地続きだが、
@@ -54,7 +56,7 @@ boatkaitori.com 12:00。boatkaitori の月報は1時間なので 13:00 まで走
 
 ### まだ無いもの
 
-GA4（→ 対策台帳 A-7。プロパティ作成はユーザー作業）
+なし（A-1〜A-7 すべて対応済み。A-7 はキーイベントのマーク1クリックのみ残）
 
 ## 対象キーワード（暫定・初回週次で確定する）
 
