@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Noto_Sans_JP, Zen_Kaku_Gothic_New, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -122,7 +123,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className={`${notoSansJP.variable} ${zenKaku.variable} ${inter.variable}`}>
-      {/* TODO: GA4 の測定ID発行後、bullcom 本家と同様に <Script> で gtag を設置する */}
+      <head>
+        {/* GA4（プロパティ: BULLCOM design bullcom.website / 2026-08-30 設置）。
+            フォームCVは送信後に /contact?sent=1 へ302で戻る作りなので page_view で拾える */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-ET4GPWNTYJ"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ET4GPWNTYJ');
+          `}
+        </Script>
+      </head>
       <body className="flex min-h-screen flex-col">
         <script
           type="application/ld+json"
