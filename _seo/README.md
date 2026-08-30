@@ -31,7 +31,7 @@ boatkaitori.com 12:00。boatkaitori の月報は1時間なので 13:00 まで走
 - GA4: **設置済み（2026-08-30）**。測定ID `G-ET4GPWNTYJ` / プロパティID `552101754`
   （アカウント BULLCOM）。フォームCVはキーイベント **`contact_form_sent`**
   （`ContactForm.tsx` の完了表示effectから送信。page_viewの`?sent=1`はreplaceStateとレースするため不使用）。
-  ※イベント一覧に現れたら★でキーイベントにマークする残作業あり（→ A-7）
+  キーイベントのマークは 2026-08-31 完了。
 - 静的エクスポート（`output: "export"`）を Cloudflare Workers 静的アセットへデプロイ。
   **main への push でデプロイが走る**（`.github/workflows/deploy.yml`）。
 - ドメインは 2026-08-26 に Cloudflare へ移管したばかり。GSCの履歴データはそれ以前と地続きだが、
@@ -56,7 +56,7 @@ boatkaitori.com 12:00。boatkaitori の月報は1時間なので 13:00 まで走
 
 ### まだ無いもの
 
-なし（A-1〜A-7 すべて対応済み。A-7 はキーイベントのマーク1クリックのみ残）
+なし（A-1〜A-7 すべて対応済み）
 
 ## 対象キーワード（暫定・初回週次で確定する）
 
