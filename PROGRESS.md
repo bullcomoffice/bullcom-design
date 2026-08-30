@@ -3,16 +3,13 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] 🚨 **最優先: お問い合わせフォームが本番で壊れている**。Resend が `send.bullcom.website` を
-      「未検証」と判定して 403 を返す（8/26 のDNS移管でResendの検証レコードが引き継がれなかった）。
-      Resendダッシュボードの DNS レコードを Cloudflare に入れ直す作業が必要（下記 2026-08-29 (4) 参照）
+- [x] お問い合わせフォームの復旧 → **2026-08-30 完了・実配信まで確認済み**（下記 2026-08-30 (6) 参照）
 - [x] 08/26 09:45 の予約公開が自動投稿まで通るか確認 → **2026-08-29 確認完了・全自動で成功**
       （下記「2026-08-29」参照。次の予約公開は 09/02 水 9:45）
 - [ ] トップページのデザインレビュー / 実績カード3件（PC修理/トラック/ボート）の内容確認
 - [ ] GA4 プロパティ作成 → 測定ID共有（layout.tsx にTODOコメントあり）
 
 ### 次セッション以降
-- [ ] フォームの End-to-End 送信テスト（Resend移行後まだ未実施。実行すると contact@ と Gmail に実際にメールが届く）
 - [ ] 下層ページ拡充（サービス詳細 / 制作実績詳細 / FAQ / 会社概要）
 - [ ] TBD解消: 税表記統一（現在「税別」と仮表記） / 撮影・動画の料金 / お客様の声収集
 
@@ -24,6 +21,50 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-30 (6): お問い合わせフォーム復旧 — Resendドメイン検証を通し、実配信まで確認 ✅
+
+8/29 に発覚した「フォームが本番で送信できない」問題（Resend 403）を解消した。
+**8/26 のDNS移管以降ずっと壊れていたフォームが、これで完全復旧**。
+
+#### やったこと（ユーザーのログイン済みChromeで実施）
+
+1. **Resendダッシュボード**（resend.com/domains → send.bullcom.website、Status: Failed）から
+   必要なDNSレコード3件の全文を取得
+   - 画面上は値が「[…]」で中略表示されるが、**コピー用ボタンの `aria-label` に全文が入っている**。
+     DOMのテキストを繋ぐだけだと欠損しうるので、aria-label から取ること
+2. **Cloudflare** の bullcom.website ゾーンに3件を追加（すべて DNS only）
+
+| Type | Name | Content | 優先度 |
+|---|---|---|---|
+| TXT | `resend._domainkey.send` | p=MIGf…（DKIM公開鍵 216字） | - |
+| MX | `send.send` | feedback-smtp.us-east-1.amazonses.com | 10 |
+| TXT | `send.send` | v=spf1 include:amazonses.com ~all | - |
+
+   - Resendの「Name」列は**ゾーン相対**（`send.send` = send.send.bullcom.website）。
+     4件目の受信用MX（inbound-smtp、Enable Receiving）は送信検証に不要なので追加していない
+   - ルートのメール系レコード（MX → mail.bullcom.website、ワイルドカード）には触れていない
+3. DoH（dns.google）で3件とも引けることを確認 → Resend の **Restart** で検証再実行
+   → 数分で **「Domain verified: Your domain is ready to send emails.」**（Status: Verified）
+
+#### End-to-End テスト（実配信）: ✅ 全経路成功
+
+実フォームと同じ multipart POST を本番へ送信（承認済みのテスト）。
+
+| 確認項目 | 結果 |
+|---|---|
+| フォーム送信 | ✅ 302 → `/contact?sent=1`（以前は 400 エラーページ） |
+| 通知メール（contact@bullcom.website + bullcom.contact@gmail.com の2件宛） | ✅ Resendログで **Delivered** |
+| 自動返信（送信者宛） | ✅ Resendログで **Delivered** |
+
+8/29 の宛先変更（bullcom.contact@gmail.com への TO 追加）もこのテストで実配信まで確認できた。
+受信箱での見え方（迷惑メール行きになっていないか）は目視で一度確認しておくとより確実。
+
+#### 教訓
+
+- **サブドメイン配下のDNSレコードは、ゾーン移管時の自動スキャンに乗らない**。
+  移管チェックリストに「メール送信サービス（Resend等）の検証レコード」を含めること
+- Resendの検証は Failed のまま放置しても自動再試行されない。**Restart を押す必要がある**
 
 ### 2026-08-30 (5): 初回の週次レポート実施 — GSCが未確認で、Googleは旧サーバーの403を記憶していた
 
