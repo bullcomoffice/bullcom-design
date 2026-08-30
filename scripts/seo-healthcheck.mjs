@@ -83,14 +83,21 @@ function parseRobots(body) {
   return groups;
 }
 
-/** 指定ボットがパス path を取得してよいか（最長一致。同長なら Allow 優先） */
+/**
+ * 指定ボットがパス path を取得してよいか（最長一致。同長なら Allow 優先）。
+ *
+ * ⚠️ 同じ User-agent のグループが複数あるときは、RFC 9309 のとおり**全部まとめて**評価する。
+ *    Cloudflare の Managed robots.txt はこちらの robots.txt の前に連結されるため、
+ *    GPTBot に対して managed 側の `Disallow: /` と自前の `Allow: /` が並ぶ。
+ *    最初のグループだけ見ると「ブロック中」と誤判定する。
+ */
 function robotsAllows(groups, bot, path = "/") {
   const name = bot.toLowerCase();
-  const group =
-    groups.find((g) => g.agents.includes(name)) || groups.find((g) => g.agents.includes("*"));
-  if (!group) return true; // 該当グループが無ければ制限なし
+  const matched = groups.filter((g) => g.agents.includes(name));
+  const use = matched.length ? matched : groups.filter((g) => g.agents.includes("*"));
+  if (!use.length) return true; // 該当グループが無ければ制限なし
   let best = null;
-  for (const rule of group.rules) {
+  for (const rule of use.flatMap((g) => g.rules)) {
     if (rule.value === "") continue; // 空のDisallowは「全許可」の意味
     if (!path.startsWith(rule.value)) continue;
     const longer = !best || rule.value.length > best.value.length;
@@ -161,6 +168,15 @@ async function run() {
       "robots.txt Sitemap行",
       r.body.includes(`Sitemap: ${BASE}/sitemap.xml`),
       r.body.includes("Sitemap:") ? "あり" : "なし"
+    );
+    // Cloudflare の Managed robots.txt は自前の robots.txt の**前に連結**される。
+    // RFC 9309 どおりにグループを統合すれば Allow が勝つが、そう実装していない
+    // クローラもありうるので、競合そのものを解消したい（ダッシュボードで無効化する）。
+    const managed = r.body.includes("BEGIN Cloudflare Managed content");
+    check(
+      "Cloudflare Managed robots.txt が無効",
+      !managed,
+      managed ? "有効。AIボットへのDisallowが自前の記述と競合している" : "無効"
     );
   });
 

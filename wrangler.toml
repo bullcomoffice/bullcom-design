@@ -12,6 +12,10 @@ workers_dev = true
 [assets]
 directory = "./out"
 binding = "ASSETS"
+# 既定ではアセットに一致するパスは Worker を通らずに配信される。それだと
+# worker.js の URL正規化（対策台帳 A-1）が呼ばれず、末尾スラッシュはアセット層の
+# 307 のまま、http/www も素通しになる。全リクエストを先に Worker へ渡す。
+run_worker_first = true
 
 # 本番ドメイン（bullcom.website / www）は Cloudflare ダッシュボードの
 # Workers ルート → カスタムドメイン で登録している。
