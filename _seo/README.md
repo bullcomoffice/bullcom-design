@@ -25,8 +25,9 @@ boatkaitori.com 12:00。boatkaitori の月報は1時間なので 13:00 まで走
 - 正規形は**末尾スラッシュ無し**（`next.config.ts` に `trailingSlash` 未指定。canonical も `/faq` 形式）。
   姉妹サイト bullcom.net は逆なので混同しないこと。
 - GSCプロパティ: **`sc-domain:bullcom.website`**（ドメインプロパティ）。
-  apex の TXT に `google-site-verification=ZeGVFZ7gWy0KRyO7vpwyoiKjBZ3P_vIdxiX9IJOvRio` があり、
-  Cloudflare 移管後も残っている。URLプレフィックス形式を resource_id に渡すと「アクセス権がありません」になる。
+  **2026-08-30 の初回週次で「未確認」のまま放置されていたことが判明し、所有権確認を完了させた**
+  （apex の TXT `google-site-verification=…` で自動確認）。
+  URLプレフィックス形式を resource_id に渡すと「アクセス権がありません」になる。
 - GA4: **未設置**（`app/layout.tsx:125` にTODOコメント。→ 対策台帳 A-7）。
   設置されるまで週報のGA4項目は「-」で記録する。
 - 静的エクスポート（`output: "export"`）を Cloudflare Workers 静的アセットへデプロイ。
