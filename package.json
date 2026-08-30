@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "node -e \"require('fs').rmSync('.next/cache',{recursive:true,force:true})\" && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seo:check": "node scripts/seo-healthcheck.mjs",
+    "seo:log": "node scripts/seo-healthcheck.mjs --append"
   },
   "dependencies": {
     "microcms-js-sdk": "^3.4.0",

@@ -48,6 +48,18 @@
     （週次の予約公開は別トリガーなので問題なし）
 - 参考: 既存プロジェクト `D:\Data\Projects\Next\bullcom\`
 
+## SEO / GEO 運用（週報・月報）
+
+- 運用ルールの正は `D:\Data\Projects\Next\bullcom\_seo\report-operation.md`（全プロジェクト共通）
+- サイト固有の前提・対象KW・実務メモは [_seo/README.md](_seo/README.md)
+- **週報: 毎週日曜13:00（最終日曜はスキップ）／ 月報: 毎月最終日曜13:00（週報を兼ねる）**。
+  タスクIDは `bullcom-design-seo-weekly-review` / `bullcom-design-seo-monthly-review`。
+  cron はどちらも `0 13 * * 0` で、最終日曜かどうかはプロンプト冒頭のガード式で判定する
+  （cron は第N曜日を表現できない）。13:00 は他プロジェクト（net 9:00 / huneya 10:23 / jp 11:00）と重ねないため
+- 外形チェック: `npm run seo:check`（表示のみ）/ `npm run seo:log`（`_seo/health-log.md` に追記）
+- **正規形は末尾スラッシュ無し**。姉妹サイト bullcom.net は末尾スラッシュ有りなので実装を流用するとき注意
+- 2026-08-30 の初回チェックは 7/17 PASS。未対応は `_seo/action-log.md` の A-1〜A-7
+
 ## 開発メモ
 
 - dev: `npm run dev -- -p 3210`（`.claude/launch.json` 設定済）

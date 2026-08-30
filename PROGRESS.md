@@ -3,6 +3,9 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
+- [ ] SEO/GEOの基礎工事（`_seo/action-log.md` の A-1〜A-7）。優先は
+      **A-3（Cloudflare Managed robots.txt がAIクローラをブロック）→ A-1（URL正規化）→ A-2（sitemap）→ A-6（記事description）**。
+      A-3 は「AIに学習させるか」の方針判断が要るので着手前に確認が必要
 - [ ] 🚨 **最優先: お問い合わせフォームが本番で壊れている**。Resend が `send.bullcom.website` を
       「未検証」と判定して 403 を返す（8/26 のDNS移管でResendの検証レコードが引き継がれなかった）。
       Resendダッシュボードの DNS レコードを Cloudflare に入れ直す作業が必要（下記 2026-08-29 (4) 参照）
@@ -24,6 +27,70 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-30: SEO/GEO 週報・月報の運用を新設
+
+`D:\Data\Projects\Next\bullcom\_seo\report-operation.md`（全プロジェクト共通の運用ルール）に沿って、
+bullcom.website にも週報・月報を新設した。
+
+#### スケジュール
+
+| | cron | 実施 | 所要 | タスクID |
+|---|---|---|---|---|
+| 週報 | `0 13 * * 0` | 毎週日曜13:00（**最終日曜はスキップ**） | 15分 | `bullcom-design-seo-weekly-review` |
+| 月報 | `0 13 * * 0` | 毎月**最終日曜**13:00（週報を兼ねる） | 1時間 | `bullcom-design-seo-monthly-review` |
+
+- cron は「第N曜日」を表現できないため、**両方とも毎週日曜起動**にして、プロンプト冒頭の
+  ガード式 `[ "$(date -d '+7 days' +%m)" != "$(date +%m)" ]` で自分の担当日かを判定する方式
+- 13:00 にしたのは他プロジェクトと重ねないため（bullcom.net 9:00 / huneya 10:23 / bullcom.jp 11:00。
+  bullcom.jp の月報は1時間なので12:00まで走る）
+- 判定を8週分検算済み。8/30=月報 → 9/6・9/13・9/20=週報 → 9/27=月報 → …
+
+#### 作ったもの
+
+| ファイル | 役割 |
+|---|---|
+| `_seo/README.md` | サイト固有の前提・対象KW・実務メモ |
+| `_seo/weekly-log.md` | 週次記録（テンプレ付き・最新を上に追記） |
+| `_seo/monthly-review.md` | 月次チェックリスト兼記録先 |
+| `_seo/action-log.md` | 対策台帳（A-番号・🔵検証中/⏳継続観察/✅完了/❌棄却） |
+| `_seo/health-log.md` | 外形チェック履歴（スクリプトが `--append` で追記） |
+| `scripts/seo-healthcheck.mjs` | 外形チェック本体（依存なし・Node18+ の fetch のみ） |
+
+`npm run seo:check`（表示のみ）/ `npm run seo:log`（履歴に追記）。全PASSで終了コード0。
+
+#### 初回チェックの結果: **7/17 PASS** — 失敗10項目を A-1〜A-7 に起票
+
+SEOの基礎工事を一度も通していない状態だった。**退行ではなく「まだ作っていない」もの**が大半。
+
+| ID | 内容 |
+|---|---|
+| A-1 | URL正規化が無い（http→https / www→非www が **200**、末尾スラッシュが **307**）。最大8通りのURLで200を返す |
+| A-2 | `sitemap.xml` が **404** |
+| A-3 | robots.txt が **Cloudflare Managed** で、GPTBot / ClaudeBot / Google-Extended 等を `Disallow: /`。Sitemap行も無い |
+| A-4 | `llms.txt` が **404** |
+| A-5 | 記事に `Article` 構造化データが無い（`BreadcrumbList` のみ） |
+| A-6 | 記事の meta description が**タイトルと一字一句同じ**（`app/blog/[slug]/page.tsx:26` の `description: blog.title`） |
+| A-7 | GA4 未設置。週報のGA4項目と月報のCVが埋まらない |
+
+**A-3 が最重要**。GEO（AI検索での露出）を目的にしているのに、AIクローラを名指しで拒否している。
+この状態でGEO引用テストをしても出ないのが当然で、運用の前提が崩れる。
+ただし「AIに学習させたくない」意図でCloudflare側を有効にした可能性があるので、**着手前に方針確認が要る**。
+なお `OAI-SearchBot` と `PerplexityBot` は個別指定が無く `User-agent: *` の `Allow: /` にフォールバックしていて許可されている。
+
+#### 実装上のハマりどころ
+
+- **robots.txt は「ボット名が書いてあるか」で判定してはいけない**。参考実装（bullcom.jp）は
+  `body.includes("GPTBot")` で許可判定していたが、Cloudflare Managed robots.txt は
+  **Disallow でボット名を列挙する**ため、その方式だと「記載あり＝許可」と誤判定する。
+  このサイトのスクリプトでは User-agent グループを解析して、実際に `/` を取得してよいかまで判定している
+- **正規形は末尾スラッシュ無し**（`trailingSlash` 未指定・canonical も `/faq` 形式）。
+  bullcom.net は逆なので、あちらの実装をコピーすると判定が反転する
+- description の判定で title からサイト名を除くとき、**先頭の「｜」で分割しない**。
+  記事タイトル自体に「｜」が入ると前半だけを拾い、同一なのにPASSする。
+  サフィックス `｜BULLCOM design` を末尾から除去して比較している
+- GSCは `sc-domain:bullcom.website`。apex TXT の `google-site-verification=ZeGVFZ7…` が
+  Cloudflare 移管後も残っているので、ドメインプロパティは生きているはず
 
 ### 2026-08-29 (4): 🚨 お問い合わせフォームが本番で動いていないことが判明（Resend 403）
 
