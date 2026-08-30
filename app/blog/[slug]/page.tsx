@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getBlogById, getBlogs } from "@/lib/microcms";
 import { catColors, defaultCatColor, formatDate } from "@/lib/blog-ui";
+import { excerpt } from "@/lib/excerpt";
+import { COMPANY, SITE_URL } from "@/lib/site-data";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -21,18 +23,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const blog = await getBlogById(slug);
   if (!blog) return { title: "ブログ" };
   const ogImage = blog.eyecatch?.url;
+  // 対策台帳 A-6: 以前は description にタイトルをそのまま入れていた（スニペットがタイトルの繰り返しになる）
+  const description = excerpt(blog.content) || blog.title;
   return {
     title: blog.title,
-    description: blog.title,
+    description,
     alternates: {
       canonical: `/blog/${slug}`,
     },
     openGraph: {
       title: blog.title,
+      description,
       url: `https://bullcom.website/blog/${slug}`,
       siteName: "BULLCOM design",
       locale: "ja_JP",
       type: "article",
+      publishedTime: blog.publishedAt ?? blog.createdAt,
+      modifiedTime: blog.revisedAt ?? blog.updatedAt,
       ...(ogImage && { images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }] }),
     },
   };
@@ -77,8 +84,30 @@ export default async function BlogPostPage({ params }: Props) {
     ],
   };
 
+  // 対策台帳 A-5: パンくずだけ入っていて Article が無かった。
+  // 発行日・更新日・著者・発行元をGoogleに伝える。publisher は layout.tsx の
+  // ProfessionalService（@id: {SITE_URL}/#organization）を参照する。
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: blog.title,
+    description: excerpt(blog.content),
+    datePublished: blog.publishedAt ?? blog.createdAt,
+    dateModified: blog.revisedAt ?? blog.updatedAt ?? blog.publishedAt ?? blog.createdAt,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/blog/${slug}` },
+    author: { "@type": "Organization", name: COMPANY.brand, url: SITE_URL },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    ...(blog.category?.name && { articleSection: blog.category.name }),
+    // アイキャッチはmicroCMS、無い場合はコミット済みのSNS用サムネにフォールバック
+    image: [blog.eyecatch?.url ?? `${SITE_URL}/blog-thumbnails/${slug}.jpg`],
+  };
+
   return (
     <div className="relative overflow-hidden pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

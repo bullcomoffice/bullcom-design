@@ -243,12 +243,46 @@ async function handleContactSubmit(request, env) {
   return Response.redirect(redirectUrl, 302);
 }
 
+/* ---------- URL正規化（対策台帳 A-1） ---------- */
+// 正規形は「https / 非www / 末尾スラッシュ無し」。
+// 静的アセット層に渡すと末尾スラッシュは 307（一時）になり、Googleが評価を統合しない。
+// Worker が全リクエストを先に受けるので、ここで 301 を1回返して寄せる。
+// ⚠️ このサイトは末尾スラッシュ**無し**が正規形。姉妹サイト bullcom.net は逆なので流用しないこと。
+const CANONICAL_HOST = "bullcom.website";
+
+function canonicalRedirect(request) {
+  const url = new URL(request.url);
+  let changed = false;
+
+  if (url.protocol === "http:") {
+    url.protocol = "https:";
+    changed = true;
+  }
+  // 退避先の workers.dev は触らない（本番ドメインが不調なときの逃げ道として残してある）
+  if (url.hostname === `www.${CANONICAL_HOST}`) {
+    url.hostname = CANONICAL_HOST;
+    changed = true;
+  }
+  // ルート以外の末尾スラッシュを落とす。/sitemap.xml のような拡張子つきも同じ扱いでよい
+  if (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+    url.pathname = url.pathname.replace(/\/+$/, "");
+    changed = true;
+  }
+
+  return changed ? Response.redirect(url.toString(), 301) : null;
+}
+
 const handler = {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // フォーム送信は正規化より先に処理する（301はPOSTをGETに変えてしまうため）
     if (url.pathname === "/api/contact-submit" && request.method === "POST") {
       return await handleContactSubmit(request, env);
     }
+
+    const redirect = canonicalRedirect(request);
+    if (redirect) return redirect;
+
     // それ以外は静的アセットを返す
     return env.ASSETS.fetch(request);
   },
