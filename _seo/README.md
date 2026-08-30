@@ -41,15 +41,21 @@ bullcom.jp 11:00。bullcom.jp の月報は1時間なので 12:00 まで走る）
 - 全ページ self-canonical（末尾スラッシュ無し）
 - トップに **ProfessionalService** 構造化データ（住所・電話・営業時間・提供サービス・親組織BULLCOM）
 - `/faq` に **FAQPage**
-- ブログ記事に **BreadcrumbList**（※ Article は未実装 → A-5）
+- ブログ記事に **BreadcrumbList**
 - 下層ページ・サービス個別4ページに固有の meta description
 - OG画像（`public/og-image.png` 1200x630）+ twitter card `summary_large_image`
 - ブログ27本（公開9本 / 予約18本、毎週水9:45）と、公開をトリガーにした SNS自動投稿（IG/FB/GBP）
 
-### まだ無いもの（初回チェックで判明。すべて対策台帳に起票済み）
+### 2026-08-30 に追加した対策（A-1〜A-6。外形チェック 18/18 PASS）
 
-sitemap.xml / llms.txt / robots.txt の自前配信 / URL正規化（https・非www・末尾スラッシュ）/
-記事の Article 構造化データ / 記事の meta description（現在タイトルと同一）/ GA4
+- URL正規化（https / 非www / 末尾スラッシュ無し へ301。`worker.js` + `run_worker_first = true`）
+- `app/sitemap.ts`（22URL）/ `app/robots.ts`（AIクローラ明示Allow + Sitemap行）/ `public/llms.txt`
+- 記事に **Article** 構造化データ / 記事 description を本文抜粋に（`lib/excerpt.ts`）
+- Cloudflare側の「AI ボットアクセスを管理」2設定を許可へ変更
+
+### まだ無いもの
+
+GA4（→ 対策台帳 A-7。プロパティ作成はユーザー作業）
 
 ## 対象キーワード（暫定・初回週次で確定する）
 
@@ -98,11 +104,26 @@ https://search.google.com/search-console/performance/search-analytics
 
 ### robots.txt は「ボット名が書いてあるか」で判定してはいけない
 
-現在の `https://bullcom.website/robots.txt` は **Cloudflare の Managed robots.txt** が
-配信されており、GPTBot / ClaudeBot / Google-Extended 等を **`Disallow: /` で列挙**している。
+かつて `https://bullcom.website/robots.txt` は **Cloudflare の Managed robots.txt** が
+配信されており、GPTBot / ClaudeBot / Google-Extended 等を **`Disallow: /` で列挙**していた
+（2026-08-30 に無効化して解消。→ 対策台帳 A-3）。
 名前の有無だけを見ると「記載あり＝許可」と誤判定するため、
-`scripts/seo-healthcheck.mjs` では User-agent グループを解析して
-実際に `/` を取得してよいかまで判定している。
+`scripts/seo-healthcheck.mjs` では User-agent グループを RFC 9309 のとおり統合して解析し、
+実際に `/` を取得してよいかまで判定している。再発検知用に
+「Cloudflare Managed robots.txt が無効」のチェック項目も持たせてある。
+
+### AIクローラ設定は Cloudflare 側に2つある
+
+ゾーン**概要ページの右カラム**の「AI ボットアクセスを管理」。
+Security メニューの下ではなく、`/ai-crawl-control` へ直接飛ぶと Page not found になる。
+
+| 設定 | 現在値 | 意味 |
+|---|---|---|
+| robots.txt を管理する | robots.txt 設定を無効にする | Cloudflare が robots.txt に手を加えない |
+| AI トレーニング ボットをブロックする | ブロックしない（クローラーを許可する） | ネットワーク層で遮断しない |
+
+**robots.txt を直しても、後者が「すべてのページでブロック」だとクローラーは到達できない**。
+GEO引用が急に出なくなったら、まずここが戻されていないか見ること。
 
 ### 外形チェックの「ブログ description」判定
 

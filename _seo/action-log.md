@@ -51,7 +51,7 @@
 - **継続観察**: Search Console でサイトマップが「成功しました」になり、検出URL数が22になるか。
   そのあと予約公開（毎週水9:45）の記事が自動で足されて索引されるか
 
-## A-3 robots.txt が Cloudflare Managed で、AIクローラをブロックしている 🔵検証中
+## A-3 robots.txt が Cloudflare Managed で、AIクローラをブロックしている ✅完了
 
 - **検出**: 2026-08-30 初回外形チェック。自前の `robots.txt` が無く、
   **Cloudflare の Managed robots.txt** が配信されている。内容は
@@ -69,18 +69,23 @@
 - **判断が要る点**: 「AIに学習させたくない」という意図でCloudflare側を有効にしたのであれば、
   GEO運用そのものの方針を先に決める必要がある。**着手前にユーザー確認**
 - **方針決定**: 2026-08-30 ユーザー判断で **「拒否ではなく許可」** に確定
-- **結果**: 2026-08-30 コード側は対応・デプロイ済み。`app/robots.ts` を追加し、
-  AIクローラ13種を**明示的に `Allow: /` で列挙**、`Sitemap:` 行と `Host:` を追加 ✅
-- **⚠️ 残作業（ユーザー作業）**: Cloudflare の Managed robots.txt が**まだ有効**で、
-  自前の robots.txt の**前に連結**されている。結果として GPTBot / ClaudeBot / Google-Extended に
-  `Disallow: /`（Cloudflare）と `Allow: /`（自前）が並ぶ状態。
-  RFC 9309 では同じ User-agent のグループは統合され、同じ長さの指定なら Allow が勝つため
-  主要クローラは許可と解釈するはずだが、**競合そのものを消したい**。
-  → Cloudflare ダッシュボード → 対象ゾーン → **AI Crawl Control（旧 Bots）の
-  「robots.txt の管理 / Managed robots.txt」を無効化**する。
-  APIトークンにゾーン権限が無いため代行できない。
-  外形チェックに「Cloudflare Managed robots.txt が無効」の項目を追加してあるので、
-  無効化すると 18/18 PASS になる
+- **対応（コード側）**: 2026-08-30 デプロイ済み。`app/robots.ts` を追加し、
+  AIクローラ13種を**明示的に `Allow: /` で列挙**、`Sitemap:` 行と `Host:` を追加
+- **Cloudflare側の設定も変更（2026-08-30・ダッシュボードで実施）**:
+  ゾーン概要ページ右カラムの「**AI ボットアクセスを管理**」に2つの設定があり、両方を許可側にした。
+  Security メニューの中ではなく**概要ページの右カラム**にあるので探すときは注意
+  （`/ai-crawl-control` のようなURLへ直接飛ぶと「Page not found」になる）
+
+  | 設定 | 変更前 | 変更後 |
+  |---|---|---|
+  | robots.txt を管理する | robots.txt でトレーニングをブロックする設定を行う | **robots.txt 設定を無効にする** |
+  | AI トレーニング ボットをブロックする | 広告のあるページのみをブロックする | **ブロックしない（クローラーを許可する）** |
+
+  後者は robots.txt ではなく**ネットワーク層でAIトレーニングクローラーを遮断する**設定。
+  当サイトに広告は無いので実害は出ていなかったはずだが、方針に合わせて無効化した。
+  robots.txt だけ直しても、この設定が「すべてのページでブロック」だとクローラーは到達できない
+- **結果**: 2026-08-30 完了。配信される robots.txt から Cloudflare Managed のブロックが消え、
+  自前の内容のみになった。外形チェック **18/18 PASS** ✅
 
 ## A-4 llms.txt が無い ⏳継続観察
 
@@ -168,3 +173,24 @@ Managed robots.txt の無効化（A-3）と、ユーザー作業待ちの GA4（
 - **`output: "export"` では `app/robots.ts` / `app/sitemap.ts` に
   `export const dynamic = "force-static"` が必須**。無いと
   「not configured on route」でビルドごと落ちる
+
+---
+
+## 記録: 2026-08-30 A-3 完了。外形チェック 18/18 PASS
+
+Cloudflare ダッシュボードの2設定を許可側へ変更し、初回チェックで見つかった外形の問題は全て解消した。
+
+| | 初回 | 完了時 |
+|---|---|---|
+| 外形チェック | 7/17 PASS | **18/18 PASS** |
+
+残るは **A-7（GA4）** のみ。プロパティ作成はユーザー作業。
+
+### Cloudflare側で分かったこと
+
+- 「AI ボットアクセスを管理」は **ゾーン概要ページの右カラム**にある。
+  Security メニューの下ではないし、`/ai-crawl-control` へ直接飛ぶと Page not found になる
+- **設定は2つある**。robots.txt の管理（宣言）と、AIトレーニングボットのブロック（実際の遮断）。
+  robots.txt を直しても後者が「すべてのページでブロック」だと到達できないので、両方見ること
+- Managed robots.txt は自前の robots.txt を**上書きせず前に連結**する。
+  無効化してはじめて自前の内容だけが配信される
