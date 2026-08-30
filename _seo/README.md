@@ -7,20 +7,18 @@ BULLCOM design のSEO/GEO対策を「実装 → スケジュールで答え合�
 
 ## 実施スケジュール
 
-| | 日時 | 所要 | タスクID |
-|---|---|---|---|
-| 週報 | 毎週日曜 **13:00**（最終日曜はスキップ） | 15分 | `bullcom-design-seo-weekly-review` |
-| 月報 | 毎月**最終日曜** 13:00（週報を兼ねる） | 1時間 | `bullcom-design-seo-monthly-review` |
+**自動起動はしない。** Googleカレンダー（`bullcom.office@gmail.com`）に予定だけを入れてあるので、
+それを見て実施したいときにこのディレクトリのセッションで指示する。
 
-どちらも cron は `0 13 * * 0`（毎週日曜）で起動し、プロンプト冒頭のガード式で
-自分の担当日かを判定する。cron は「第N曜日」を表現できないため。
+| | 日時 | 所要 | RRULE | 始め方 |
+|---|---|---|---|---|
+| 週報 | 毎週日曜 **13:00**（最終日曜はスキップ） | 15分 | `FREQ=WEEKLY;BYDAY=SU` | 「BULLCOM designの週次レポートやって」 |
+| 月報 | 毎月**最終日曜** 13:00（週報を兼ねる） | 1時間 | `FREQ=MONTHLY;BYDAY=-1SU` | 「BULLCOM designの月次レビューやって」 |
 
-```bash
-if [ "$(date -d '+7 days' +%m)" != "$(date +%m)" ]; then echo last-sunday; else echo normal-sunday; fi
-```
+最終日曜は両方の予定がカレンダーに並ぶが、**週報は実施しない**（月報が兼ねる）。
 
-13:00 にしたのは他プロジェクトと重ねないため（bullcom.net 9:00 ／ huneya 10:23 ／
-bullcom.jp 11:00。bullcom.jp の月報は1時間なので 12:00 まで走る）。
+13:00 にしたのは他サイトと重ねないため（bullcom.net 9:00 ／ bullcom.jp 11:00 ／
+boatkaitori.com 12:00。boatkaitori の月報は1時間なので 13:00 まで走る）。
 
 ## サイトの前提
 

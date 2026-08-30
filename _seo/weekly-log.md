@@ -1,6 +1,7 @@
 # 週次記録（bullcom.website）
 
-毎週日曜13:00の週次レポートの記録。**最新を上に追記**する。
+毎週日曜13:00（カレンダー予定）の週次レポートの記録。**最新を上に追記**する。
+自動起動はしない — カレンダーを見て「BULLCOM designの週次レポートやって」と指示して始める。
 実施タイミングと手順は
 [`report-operation.md`](../../bullcom/_seo/report-operation.md)、
 サイト固有の前提は [`README.md`](./README.md) を参照。

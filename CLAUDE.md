@@ -53,9 +53,9 @@
 - 運用ルールの正は `D:\Data\Projects\Next\bullcom\_seo\report-operation.md`（全プロジェクト共通）
 - サイト固有の前提・対象KW・実務メモは [_seo/README.md](_seo/README.md)
 - **週報: 毎週日曜13:00（最終日曜はスキップ）／ 月報: 毎月最終日曜13:00（週報を兼ねる）**。
-  タスクIDは `bullcom-design-seo-weekly-review` / `bullcom-design-seo-monthly-review`。
-  cron はどちらも `0 13 * * 0` で、最終日曜かどうかはプロンプト冒頭のガード式で判定する
-  （cron は第N曜日を表現できない）。13:00 は他プロジェクト（net 9:00 / huneya 10:23 / jp 11:00）と重ねないため
+  **自動起動はしない**。Googleカレンダー（bullcom.office@gmail.com）の繰り返し予定を見て
+  「BULLCOM designの週次レポートやって」「〜月次レビューやって」と指示して始める。
+  13:00 は他サイト（net 9:00 / jp 11:00 / boatkaitori 12:00）と重ねないため
 - 外形チェック: `npm run seo:check`（表示のみ）/ `npm run seo:log`（`_seo/health-log.md` に追記）
 - **正規形は末尾スラッシュ無し**。姉妹サイト bullcom.net は末尾スラッシュ有りなので実装を流用するとき注意
 - 2026-08-30 の初回チェックは 7/17 PASS。未対応は `_seo/action-log.md` の A-1〜A-7
