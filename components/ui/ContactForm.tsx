@@ -71,6 +71,13 @@ export default function ContactForm() {
   // 送信後リダイレクト(?sent=1)で完了表示
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get("sent") !== "1") return;
+    // GA4のコンバージョン計測（キーイベント: contact_form_sent）。
+    // page_view で ?sent=1 を拾う方式は、直後の history.replaceState とレースするため
+    // 明示イベントで送る。gtag未ロード時（GA4無効環境）は何もしない
+    (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag?.(
+      "event",
+      "contact_form_sent"
+    );
     const t = setTimeout(() => {
       setSent(true);
       history.replaceState(null, "", window.location.pathname + "#contact-form");
