@@ -3,9 +3,9 @@
 ## 進行中タスク
 
 ### ユーザー対応待ち
-- [ ] SEO/GEOの基礎工事（`_seo/action-log.md` の A-1〜A-7）。優先は
-      **A-3（Cloudflare Managed robots.txt がAIクローラをブロック）→ A-1（URL正規化）→ A-2（sitemap）→ A-6（記事description）**。
-      A-3 は「AIに学習させるか」の方針判断が要るので着手前に確認が必要
+- [ ] **Cloudflareダッシュボードで Managed robots.txt を無効化**（対策台帳 A-3の残作業）。
+      ゾーン → AI Crawl Control の robots.txt 管理。APIトークンにゾーン権限が無く代行できない。
+      無効化すると外形チェックが 18/18 PASS になる
 - [ ] 🚨 **最優先: お問い合わせフォームが本番で壊れている**。Resend が `send.bullcom.website` を
       「未検証」と判定して 403 を返す（8/26 のDNS移管でResendの検証レコードが引き継がれなかった）。
       Resendダッシュボードの DNS レコードを Cloudflare に入れ直す作業が必要（下記 2026-08-29 (4) 参照）
@@ -27,6 +27,60 @@
 - カテゴリ名はテンプレ初期値（チュートリアル等）。`lib/blog-ui.ts` の catColors はお知らせ/制作事例/デザイン/SEO/セキュリティ/ノウハウ想定なので、カテゴリを整理するときに合わせると色が付く（未定義名は紫のデフォルト色）
 
 ## セッション記録
+
+### 2026-08-30 (2): SEOの基礎工事（A-1〜A-6）を実装・デプロイ。7/17 → 17/18 PASS
+
+ユーザー判断で **A-3 は「AIクローラを拒否ではなく許可」** に決定。あわせて他も実装した。
+
+| ID | 対応 | 状態 |
+|---|---|---|
+| A-1 | `worker.js` で https / 非www / 末尾スラッシュ無し へ **301正規化** | ✅完了 |
+| A-2 | `app/sitemap.ts`（静的10 + サービス4 + 記事 = **22URL**・末尾スラッシュ0件） | ⏳継続観察 |
+| A-3 | `app/robots.ts`。AIクローラ13種を明示 `Allow` + `Sitemap:` 行 | 🔵検証中（**残作業あり**） |
+| A-4 | `public/llms.txt`（1,961字） | ⏳継続観察 |
+| A-5 | 記事に `Article` 構造化データ | ⏳継続観察 |
+| A-6 | `lib/excerpt.ts` で記事 description を本文抜粋に（40字→**86字**・タイトルと別文） | ⏳継続観察 |
+| A-7 | GA4 | 🔴未着手（ユーザー作業待ち） |
+
+#### ⚠️ 詰まった点（次に同じことをするとき必ず読む）
+
+**1. `run_worker_first` が無いと A-1 は「直したのに直らない」**
+
+`worker.js` に正規化を書いてデプロイしても、外形チェックは 307 のままだった。
+**Workers静的アセットは既定で、アセットに一致するリクエストを Worker に通さない**。
+`/about/` も `/` も `out/` の中身に一致するので、正規化コードが一度も呼ばれていなかった。
+
+→ `wrangler.toml` の `[assets]` に **`run_worker_first = true`** を追加して解決。
+   bullcom.jp も同じ構成（あちらの A-1 の記録にも同じ話がある）。
+
+なお反映直後は旧レスポンスが残るので、**デプロイ成功＝即反映ではない**。
+`?cb=$RANDOM` を付けて数十秒後に測り直すこと（一度これで「まだ効いていない」と誤判断した）。
+
+**2. Cloudflare Managed robots.txt は上書きではなく「前に連結」される**
+
+自前の `robots.txt` を置いても、配信されるのは
+`# BEGIN Cloudflare Managed content` … `# END` のブロック **＋ 自前の内容**。
+結果 GPTBot / ClaudeBot / Google-Extended には
+`Disallow: /`（Cloudflare）と `Allow: /`（自前）が並ぶ。
+
+RFC 9309 では同じ User-agent のグループは統合され、同じ長さの指定なら Allow が勝つので
+主要クローラは許可と解釈するはずだが、**競合そのものはダッシュボードで消すべき**（→ 進行中タスク）。
+
+外形チェック側も「最初に一致したグループだけ見る」実装だと誤判定するので、
+**同じUser-agentのグループを全部まとめて評価**するよう直した（チェック項目は17→18に増えた）。
+
+**3. `output: "export"` では `app/robots.ts` / `app/sitemap.ts` に `dynamic = "force-static"` が必須**
+
+無いと `export const dynamic = "force-static"/export const revalidate not configured on route`
+でビルドごと落ちる。
+
+#### 検証
+
+- 外形チェック **17/18 PASS**（残1は上記のCloudflare側の作業）
+- 主要13URL（トップ・サービス4・料金・実績・ブログ・記事・FAQ・会社概要・問い合わせ・
+  プライバシー・OG画像・サムネ）すべて 200
+- **フォームのPOST経路も 302 のまま**。正規化は `/api/contact-submit` の POST より**後**に
+  評価するようにしてある（301はPOSTをGETに変えてしまうため）
 
 ### 2026-08-30: SEO/GEO 週報・月報の運用を新設
 

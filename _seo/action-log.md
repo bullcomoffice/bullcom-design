@@ -12,7 +12,7 @@
 
 ---
 
-## A-1 URL正規化が無い（https / 非www / 末尾スラッシュ）🔴未着手
+## A-1 URL正規化が無い（https / 非www / 末尾スラッシュ）✅完了
 
 - **検出**: 2026-08-30 初回外形チェック。外形3項目が同時に落ちている
   - `http://bullcom.website/` → **HTTP 200**（301していない）
@@ -29,18 +29,29 @@
   https・非www・末尾スラッシュ無しの3条件をまとめて評価し、差分があるときだけ301を1回返す
   （bullcom.jp の `src/worker.js` が同じ作りなので流用できる）
 - **注意**: このサイトの正規形は**末尾スラッシュ無し**。bullcom.net は逆なので実装をコピーしないこと
-- **結果**: —
+- **結果**: 2026-08-30 対応・デプロイ済み ✅
+  - `worker.js` の `handler.fetch` 先頭で https / 非www / 末尾スラッシュ無し を評価し、
+    差分があるときだけ 301 を1回返す。フォーム送信（POST）は正規化より**前**に処理する
+    （301はPOSTをGETに変えてしまうため）。退避先の workers.dev は対象外
+  - **一度目のデプロイでは効かなかった**。Workers静的アセットは既定でアセットに一致する
+    リクエストを Worker に通さないため、正規化コードが呼ばれていなかった。
+    `wrangler.toml` の `[assets]` に **`run_worker_first = true`** を足して解決
+  - 外形チェックで `http→https` `www→非www` `末尾スラッシュ` の3項目とも **301** を確認。
+    主要13URL・フォームPOST経路も 200/302 のまま
 
-## A-2 sitemap.xml が無い 🔴未着手
+## A-2 sitemap.xml が無い ⏳継続観察
 
 - **検出**: 2026-08-30 初回外形チェック。`https://bullcom.website/sitemap.xml` が **404**
 - **なぜ問題か**: 静的ページ13本＋ブログ9本（予約18本が今後追加）をクロールの発見任せにしている。
   週次で記事が増える運用なので、新着記事の索引が遅れる
 - **対策案**: `app/sitemap.ts` を追加し、静的ルート＋microCMSの記事一覧から生成する
   （bullcom.jp の `app/sitemap.ts` が同構成）。**末尾スラッシュを付けないこと**（A-1と整合）
-- **結果**: —
+- **結果**: 2026-08-30 対応・デプロイ済み。`app/sitemap.ts` を追加し、
+  静的10ページ＋サービス4ページ＋記事から生成。外形チェックで **22 URL・末尾スラッシュ混入0件** を確認 ✅
+- **継続観察**: Search Console でサイトマップが「成功しました」になり、検出URL数が22になるか。
+  そのあと予約公開（毎週水9:45）の記事が自動で足されて索引されるか
 
-## A-3 robots.txt が Cloudflare Managed で、AIクローラをブロックしている 🔴未着手
+## A-3 robots.txt が Cloudflare Managed で、AIクローラをブロックしている 🔵検証中
 
 - **検出**: 2026-08-30 初回外形チェック。自前の `robots.txt` が無く、
   **Cloudflare の Managed robots.txt** が配信されている。内容は
@@ -57,18 +68,32 @@
   bullcom.jp / bullcom.net と同じ方針に揃える
 - **判断が要る点**: 「AIに学習させたくない」という意図でCloudflare側を有効にしたのであれば、
   GEO運用そのものの方針を先に決める必要がある。**着手前にユーザー確認**
-- **結果**: —
+- **方針決定**: 2026-08-30 ユーザー判断で **「拒否ではなく許可」** に確定
+- **結果**: 2026-08-30 コード側は対応・デプロイ済み。`app/robots.ts` を追加し、
+  AIクローラ13種を**明示的に `Allow: /` で列挙**、`Sitemap:` 行と `Host:` を追加 ✅
+- **⚠️ 残作業（ユーザー作業）**: Cloudflare の Managed robots.txt が**まだ有効**で、
+  自前の robots.txt の**前に連結**されている。結果として GPTBot / ClaudeBot / Google-Extended に
+  `Disallow: /`（Cloudflare）と `Allow: /`（自前）が並ぶ状態。
+  RFC 9309 では同じ User-agent のグループは統合され、同じ長さの指定なら Allow が勝つため
+  主要クローラは許可と解釈するはずだが、**競合そのものを消したい**。
+  → Cloudflare ダッシュボード → 対象ゾーン → **AI Crawl Control（旧 Bots）の
+  「robots.txt の管理 / Managed robots.txt」を無効化**する。
+  APIトークンにゾーン権限が無いため代行できない。
+  外形チェックに「Cloudflare Managed robots.txt が無効」の項目を追加してあるので、
+  無効化すると 18/18 PASS になる
 
-## A-4 llms.txt が無い 🔴未着手
+## A-4 llms.txt が無い ⏳継続観察
 
 - **検出**: 2026-08-30 初回外形チェック。`/llms.txt` が **404**
 - **なぜ問題か**: AI検索向けにサイトの要約・主要URL・事業内容を明示する導線が無い。
   姉妹2サイトには設置済みで、design だけ欠けている
 - **対策案**: `public/llms.txt` を追加（事業概要・サービス・料金レンジ・対応エリア・主要URL）。
   A-3 でクローラを許可してからでないと読まれない点に注意
-- **結果**: —
+- **結果**: 2026-08-30 対応・デプロイ済み。`public/llms.txt`（1,961字）。
+  事業概要・サービス・料金レンジ・対応エリア・主要URL・関連サイトを記載 ✅
+- **継続観察**: A-3 のクローラ許可が完全に通ったあと、GEO引用テストの○が増えるか
 
-## A-5 ブログ記事に Article 構造化データが無い 🔴未着手
+## A-5 ブログ記事に Article 構造化データが無い ⏳継続観察
 
 - **検出**: 2026-08-30 初回外形チェック。`/blog/{id}` に `BreadcrumbList` はあるが
   **`Article` が未検出**
@@ -76,9 +101,12 @@
   検索結果のリッチな見え方（発行日表示など）が出にくい。パンくずだけ入っている中途半端な状態
 - **対策案**: `app/blog/[slug]/page.tsx` に `Article`（headline / datePublished / dateModified /
   image / author / publisher）のJSON-LDを追加する。bullcom.jp の実装を流用できる
-- **結果**: —
+- **結果**: 2026-08-30 対応・デプロイ済み。`Article`（headline / description / datePublished /
+  dateModified / image / author / publisher）を追加。publisher は layout.tsx の
+  ProfessionalService（`@id: {SITE_URL}/#organization`）を参照 ✅
+- **継続観察**: GSCの「拡張 → 記事」レポートにエラーが出ないか（月次で確認）
 
-## A-6 記事の meta description がタイトルと同一 🔴未着手
+## A-6 記事の meta description がタイトルと同一 ⏳継続観察
 
 - **検出**: 2026-08-30 初回外形チェック。`app/blog/[slug]/page.tsx:26` が
   `description: blog.title` になっており、**description がタイトルと一字一句同じ**（40字）
@@ -88,7 +116,10 @@
   ヘルパーを追加する（bullcom.jp の `lib/excerpt.ts` を流用）。
   microCMSのリッチテキストなので、タグ除去とエンティティのデコードが要る
 - **効果検証**: 表示回数の多い記事のCTRが動くかを**月次**で確認する
-- **結果**: —
+- **結果**: 2026-08-30 対応・デプロイ済み。`lib/excerpt.ts` を追加し、
+  リッチテキストからタグ除去＋エンティティ復号して110字以内で抜粋（句点があればそこで切る）。
+  外形チェックで **86字・タイトルと別文** を確認 ✅
+- **継続観察**: 表示回数の多い記事のCTRが動くかを**月次**で確認する
 
 ## A-7 GA4 が未設置 🔴未着手
 
@@ -115,3 +146,25 @@
 - 優先度は **A-3（AIクローラのブロック解除）→ A-1（正規化）→ A-2（sitemap）→ A-6（description）** の順を推奨。
   A-3 はGEO運用の前提そのもの、A-1 は放置するほど重複インデックスが積み上がるため
 - A-3 だけは方針判断（AIに学習させるかどうか）が要るので、着手前にユーザー確認が必要
+
+---
+
+## 記録: 2026-08-30 初回対応
+
+初回チェック **7/17 PASS** → **17/18 PASS**（A-3の残作業でチェック項目が1つ増えた）。
+A-1〜A-6 をすべて実装・デプロイし、残るは Cloudflare ダッシュボードでの
+Managed robots.txt の無効化（A-3）と、ユーザー作業待ちの GA4（A-7）のみ。
+
+### 詰まった点
+
+- **`run_worker_first` を知らないと A-1 は「直したのに直らない」**。
+  Workers静的アセットは既定でアセット一致のリクエストを Worker に通さないので、
+  `worker.js` に正規化を書いてデプロイしても呼ばれない。`[assets]` に
+  `run_worker_first = true` が要る（bullcom.jp も同じ構成）
+- **Cloudflare Managed robots.txt は自前の robots.txt を上書きせず、前に連結する**。
+  そのため同じボットに Disallow と Allow が並ぶ。外形チェック側も
+  「最初に一致したグループだけ見る」実装だと誤判定するので、
+  RFC 9309 のとおり**同じUser-agentのグループを全部まとめて**評価するよう直した
+- **`output: "export"` では `app/robots.ts` / `app/sitemap.ts` に
+  `export const dynamic = "force-static"` が必須**。無いと
+  「not configured on route」でビルドごと落ちる
