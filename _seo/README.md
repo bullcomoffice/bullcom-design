@@ -80,6 +80,18 @@ npm run seo:log     # 表示 + _seo/health-log.md に追記
 
 全項目PASSなら終了コード0、1つでも失敗なら1。
 
+### 週報・月報のPDF出力
+
+提出用PDFは `D:\Data\Dropbox\BULLCOM\週報月報` に出す（全サイト共通の置き場）。
+レポート本文を `_seo/reports/YYYY-MM-DD.md`（月報は `YYYY-MM-monthly.md`）に書いてから:
+
+```bash
+python scripts/md2pdf.py _seo/reports/2026-08-30.md
+```
+
+→ `bullcom.website_2026-08-30.pdf` が命名規則どおりに生成される（reportlab・design ブランド色）。
+`weekly-log.md` は運用の内部記録、`_seo/reports/*.md` は提出用レポートの原稿、と役割を分ける。
+
 ## 実務メモ
 
 ### GSCは URL パラメータで直接開ける
