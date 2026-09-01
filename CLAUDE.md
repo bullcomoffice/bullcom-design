@@ -39,7 +39,8 @@
   - 投稿先は **bullcom.net と同じアカウント**（IG `bullcom2656` / FBページ `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）。認証Secretsも同値
   - **X（旧Twitter）は自動化しない**。API従量課金のため、共用アカウント **@BULLCOM_co** に
     x.com のネイティブ予約投稿を手動登録する運用（bullcom.net の日次予約と同じアカウント。
-    あちらは朝9時台なので design は**水曜12:00**枠を使う）。初回登録は 2026-09-02。
+    あちらは朝9時台なので design は**水曜10:00**枠を使う）。初回登録は 2026-09-02。
+    投稿には `public/blog-thumbnails/{記事ID}.jpg` のサムネを添付する（本文＋URL＋タグ3個＋画像）。
     ※Chromeには @Truck_asahi もログインしているので、**投稿前に必ずアカウントを確認**すること。
     sns-post.yml のXステップはコメントのまま残す — 復活させないこと
   - 画像は `public/blog-thumbnails/{記事ID}.jpg`（コミット必須）。microCMSのeyecatchは0バイト事故の実績があるので使わない
