@@ -36,10 +36,21 @@ GBP `BULLCOM(ブルコム)`）。認証Secretsは全リポジトリで同値。
   → Instagramは画像必須。microCMSのeyecatchは0バイト事故の実績があるため使わない
 
 ## GitHub Secrets
-認証8件は bullcom-design / bullcom-security のリポジトリと同値（GitHubからは読み出せないので
-値はユーザーに投入してもらうか、控えを受け取って gh secret set で入れる）:
-  IG_BUSINESS_ACCOUNT_ID / IG_PAGE_ACCESS_TOKEN / FB_PAGE_ID /
+認証8件は bullcom-design / bullcom-security のリポジトリと同値。
+**値の控えは `D:/Data/Projects/Next/bullcom/.env.local` にある**（ユーザーへの手入力依頼は不要）。
+そこから読んで gh secret set で投入する。**値をチャット画面に表示しないこと**:
+  IG_BUSINESS_ACCOUNT_ID / IG_PAGE_ACCESS_TOKEN /
   GBP_CLIENT_ID / GBP_CLIENT_SECRET / GBP_REFRESH_TOKEN / GBP_ACCOUNT_ID / GBP_LOCATION_ID
+  → 上記7件は .env.local に同名で入っている
+  FB_PAGE_ID → .env.local には無い。値は 1165513313302170（It Support Bullcom・公開情報）
+
+投入例（Git Bash）:
+  ENV="D:/Data/Projects/Next/bullcom/.env.local"
+  for k in IG_BUSINESS_ACCOUNT_ID IG_PAGE_ACCESS_TOKEN GBP_CLIENT_ID GBP_CLIENT_SECRET            GBP_REFRESH_TOKEN GBP_ACCOUNT_ID GBP_LOCATION_ID; do
+    grep "^$k=" "$ENV" | cut -d= -f2- | tr -d '
+' | gh secret set "$k"
+  done
+  gh secret set FB_PAGE_ID --body 1165513313302170
 サイト固有4〜6件:
   MICROCMS_SERVICE_DOMAIN / MICROCMS_API_KEY / MICROCMS_API_ID（例: blogs）
   SITE_URL=https://<本番ドメイン> / SNS_HASHTAGS_IG / SNS_POST_MAX_MINUTES=60
@@ -88,8 +99,10 @@ microCMS の Webhook（「GitHub Actions」プリセット、イベント名 mic
 ## 備考（このファイル自体のメモ）
 
 - 認証8件の由来: bullcom.net（bullcom-security）構築時に取得したもの。
-  GitHub Secrets は読み出せないため、新規リポジトリへは**ユーザーが控えから投入する**
-  （FB_PAGE_ID だけは IG_PAGE_ACCESS_TOKEN があれば Graph API で取得可能）
+  **正本の控えは `D:/Data/Projects/Next/bullcom/.env.local`**（GBP系はコメントで取得経緯も残っている）。
+  GitHub Secrets は読み出せないため、新規リポジトリへはこのファイルから投入する。
+  FB_PAGE_ID だけはファイルに無いが公開情報（1165513313302170）。
+  GBP_REFRESH_TOKEN の期限切れ復旧手順は bullcom-security/PROGRESS.md の 2026-05-30 セクション参照
 - 複数リポジトリで同じ8件を使うため、増えてきたら **GitHub Organization レベルの Secrets**
   に昇格させると投入作業が不要になる（bullcomoffice は org なので可能）
 - bullcom-design での構築記録: PROGRESS.md の 2026-08-25 / 2026-08-26 セクション
