@@ -46,6 +46,8 @@
     投稿を止める。終わったら 60 に戻す（0 にすると常にスキップされる＝キルスイッチ）
   - **Webhookはコンテンツ API の操作でしか発火しない**。管理APIの `/status` で公開状態を変えても飛ばない
     （週次の予約公開は別トリガーなので問題なし）
+- ブログ記事の作成ルールは [blog-drafts/README.md](blog-drafts/README.md)（本文600〜970字・h2のみ・
+  冒頭110字がdescriptionになる・SNS投稿文とサムネ必須・投入前にキルスイッチ等）
 - 参考: 既存プロジェクト `D:\Data\Projects\Next\bullcom\`
 
 ## SEO / GEO 運用（週報・月報）
