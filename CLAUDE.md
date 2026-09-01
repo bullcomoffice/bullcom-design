@@ -37,7 +37,11 @@
   Secret は Worker 側の `RESEND_API_KEY`（GitHub Secrets ではない）
 - SNS自動投稿: Instagram / Facebook / Google Business Profile（`scripts/post-to-instagram.cjs` `scripts/post-to-gbp.cjs`、`.github/workflows/sns-post.yml`）
   - 投稿先は **bullcom.net と同じアカウント**（IG `bullcom2656` / FBページ `It Support Bullcom` / GBP `BULLCOM(ブルコム)`）。認証Secretsも同値
-  - **X（旧Twitter）は作らない**。API従量課金のため手動運用（`x-schedule` skill）。sns-post.yml のXステップはコメントのまま残す — 復活させないこと
+  - **X（旧Twitter）は自動化しない**。API従量課金のため、共用アカウント **@BULLCOM_co** に
+    x.com のネイティブ予約投稿を手動登録する運用（bullcom.net の日次予約と同じアカウント。
+    あちらは朝9時台なので design は**水曜12:00**枠を使う）。初回登録は 2026-09-02。
+    ※Chromeには @Truck_asahi もログインしているので、**投稿前に必ずアカウントを確認**すること。
+    sns-post.yml のXステップはコメントのまま残す — 復活させないこと
   - 画像は `public/blog-thumbnails/{記事ID}.jpg`（コミット必須）。microCMSのeyecatchは0バイト事故の実績があるので使わない
   - 起動は microCMS Webhook → `repository_dispatch(microcms-publish)`（`sns-auto-post`、設定済み・有効）
   - **microCMSのAPIキーに「下書きコンテンツの全取得」を付けないこと**。付けるとサイトに未公開記事が出るうえ、
