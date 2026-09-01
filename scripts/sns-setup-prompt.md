@@ -74,6 +74,9 @@ microCMS の Webhook（「GitHub Actions」プリセット、イベント名 mic
 - GBPは投稿が審査で削除されることがある。実投稿後に生存確認をする
 - 記事URLは microCMS に slug フィールドが無ければ記事IDにフォールバックする。
   サイト側のルート（/blog/[id] か /blog/[slug] か）と一致しているか確認する
+- IG_PAGE_ACCESS_TOKEN には60日の有効期限がある（旧HPプロジェクトの記録）。
+  トークン疎通チェック（検証1）が突然401/190エラーになったら期限切れを疑い、
+  再発行した値を全リポジトリのSecretsへ入れ直す
 
 ## 最後に
 検証1〜3まで完了したら、実投稿テスト（検証4）を行うかユーザーに確認してから実施し、
@@ -90,3 +93,6 @@ microCMS の Webhook（「GitHub Actions」プリセット、イベント名 mic
 - 複数リポジトリで同じ8件を使うため、増えてきたら **GitHub Organization レベルの Secrets**
   に昇格させると投入作業が不要になる（bullcomoffice は org なので可能）
 - bullcom-design での構築記録: PROGRESS.md の 2026-08-25 / 2026-08-26 セクション
+- **IG_PAGE_ACCESS_TOKEN は60日期限**（出典: `D:\Data\Dropbox\AI\Claude\code\HP\PROGRESS.md` の
+  今後の課題欄）。期限切れ時は再発行して**全リポジトリ**（bullcom-security / bullcom-design /
+  新設分）の Secrets を更新する必要がある。リポジトリが増えるほど org Secrets 化の価値が上がる
