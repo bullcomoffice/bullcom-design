@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
 import { getBlogs } from "@/lib/microcms";
-import { catColors, defaultCatColor, formatDate } from "@/lib/blog-ui";
+import BlogCard from "@/components/ui/BlogCard";
 
 export const metadata: Metadata = {
   title: "ブログ・コラム",
@@ -42,58 +41,9 @@ export default async function BlogPage() {
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {blogs.map((blog) => {
-              const color = catColors[blog.category?.name ?? ""] ?? defaultCatColor;
-              return (
-                <Link
-                  key={blog.id}
-                  href={`/blog/${blog.id}`}
-                  className="glass card-hover group overflow-hidden rounded-2xl"
-                >
-                  <div className="relative h-44 overflow-hidden">
-                    {blog.eyecatch ? (
-                      <Image
-                        src={blog.eyecatch.url}
-                        alt=""
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div
-                        className="flex h-full items-center justify-center"
-                        style={{
-                          background: `linear-gradient(135deg, ${color}, var(--bg-soft))`,
-                        }}
-                      >
-                        <Image
-                          src="/logo-mark.png"
-                          alt=""
-                          width={72}
-                          height={70}
-                          className="opacity-80"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center gap-3 text-xs">
-                      {blog.category && (
-                        <span
-                          className="rounded-full px-2.5 py-1 font-bold text-white"
-                          style={{ background: color }}
-                        >
-                          {blog.category.name}
-                        </span>
-                      )}
-                      <time className="font-en text-[var(--text-muted)]">
-                        {formatDate(blog.publishedAt ?? blog.createdAt)}
-                      </time>
-                    </div>
-                    <h2 className="mt-3 line-clamp-2 font-bold leading-snug">{blog.title}</h2>
-                  </div>
-                </Link>
-              );
-            })}
+            {blogs.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
+            ))}
           </div>
         )}
 

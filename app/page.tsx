@@ -4,6 +4,8 @@ import SectionHead from "@/components/ui/SectionHead";
 import Reveal from "@/components/ui/Reveal";
 import StatBand from "@/components/ui/StatBand";
 import CtaBand from "@/components/ui/CtaBand";
+import BlogCard from "@/components/ui/BlogCard";
+import { getLatestBlogs } from "@/lib/microcms";
 import {
   HP_PRICES,
   LINE_URL,
@@ -17,7 +19,10 @@ import {
 
 /* ============ ページ本体 ============ */
 
-export default function Home() {
+export default async function Home() {
+  // microCMS未設定・取得失敗時は空配列（セクションごと非表示）
+  const { contents: latestBlogs } = await getLatestBlogs(3).catch(() => ({ contents: [] }));
+
   return (
     <>
       {/* ================= HERO ================= */}
@@ -373,6 +378,33 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+
+      {/* ================= BLOG（新着3本 → /blog） ================= */}
+      {latestBlogs.length > 0 && (
+        <section id="blog" className="relative overflow-hidden py-24">
+          <div className="aurora h-[360px] w-[360px] bg-[#f0509e] opacity-15 -right-32 top-1/4" />
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <SectionHead
+              en="BLOG"
+              ja="制作の現場から"
+              description="依頼する前に知っておきたい費用や進め方、公開後の運用まで。ホームページとデザインの「よくある疑問」に、実務の視点で答えています。"
+            />
+            <Reveal>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {latestBlogs.map((blog) => (
+                  <BlogCard key={blog.id} blog={blog} headingLevel="h3" />
+                ))}
+              </div>
+              <div className="mt-12 text-center">
+                <Link href="/blog" className="btn btn-ghost px-8 py-3.5 text-sm">
+                  ブログ一覧を見る
+                  <span aria-hidden="true" className="ml-2">→</span>
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* ================= CONTACT（詳細は /contact） ================= */}
       {/* 無料診断バナーを削除したぶん、ここで「他社サイトの無料診断」も訴求する */}
