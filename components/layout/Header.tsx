@@ -24,7 +24,20 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border)] bg-[rgba(255,253,251,0.8)] backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
+        <Link
+          href="/"
+          className="flex items-center gap-2.5"
+          onClick={(e) => {
+            setOpen(false);
+            // トップ滞在中は同一URLへの遷移になり位置が動かない（#blog 等のハッシュも残る）ので
+            // 自前でヒーローまで戻す。smooth はブラウザ設定で無効化されていると動かないため即時スクロール
+            if (pathname === "/") {
+              e.preventDefault();
+              history.replaceState(null, "", "/");
+              window.scrollTo(0, 0);
+            }
+          }}
+        >
           <Image
             src="/logo-mark.png"
             alt="BULLCOM design ロゴ"
