@@ -45,6 +45,10 @@
     sns-post.yml のXステップはコメントのまま残す — 復活させないこと
   - 画像は `public/blog-thumbnails/{記事ID}.jpg`（コミット必須）。microCMSのeyecatchは0バイト事故の実績があるので使わない
   - 起動は microCMS Webhook → `repository_dispatch(microcms-publish)`（`sns-auto-post`、設定済み・有効）
+  - **日次監視あり**: 毎朝10:30 JST に `bullcomoffice/blog-checker`（共通リポジトリ）が
+    「今日ブログが公開されたか」「sns-post.yml が成功したか」を見て **Slack #general** へ通知する。
+    このリポジトリ側に監視用の設定は無い。異常時のみLINEにも飛ぶ。
+    他サイトへ広げる手順は [scripts/blog-checker-prompt.md](scripts/blog-checker-prompt.md)
   - **microCMSのAPIキーに「下書きコンテンツの全取得」を付けないこと**。付けるとサイトに未公開記事が出るうえ、
     SNSスクリプトが未公開記事を投稿する（PROGRESS.md 2026-08-26 参照）
   - 記事を一括公開するときや publishedAt を直すときは、先に `gh secret set SNS_POST_MAX_MINUTES --body 0` で
