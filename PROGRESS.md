@@ -25,6 +25,25 @@
 
 ## セッション記録
 
+### 2026-09-03 (2): ヘッダーロゴのクリックでトップのヒーローへ戻るように
+
+- **事象**: トップ滞在中（例: #blog までスクロール後）にロゴを押しても動かない。
+  Next.js の `Link href="/"` は同一URLへの遷移になり位置が変わらず、ハッシュも残るため
+- **対処**: `components/layout/Header.tsx` のロゴ Link の onClick で、`pathname === "/"` のときだけ
+  `preventDefault` → `history.replaceState(null, "", "/")` でハッシュを消し → `window.scrollTo(0, 0)`。
+  他ページからのクリックは従来どおり `/` へ遷移
+- **`behavior: "smooth"` を使わなかった理由**: Chrome MCP のタブでは smooth 指定のスクロールが
+  無効（no-op）で、CSS の `html { scroll-behavior: smooth }` も同様に効かなかった。
+  実ブラウザでは動くはずだが、確実に戻ることを優先して即時スクロールにした
+- 検証: ローカル（out/ を http.server で配信）で #blog まで下げてロゴをクリック →
+  scrollY=0・URL `/`・ヒーロー先頭を確認。本番デプロイ後、配信JSに `scrollTo(0,0)` が含まれることを確認
+
+**検証時のハマり**: テスト用の「#blog までスクロール」自体が効かず、しばらく原因を誤認した。
+このタブでは `scroll-behavior: smooth` が有効な間はプログラムスクロールが一切動かない。
+**検証前に `document.documentElement.style.scrollBehavior='auto'` を入れる**こと。
+また `out/` を http.server で配信したまま `npm run build` すると `EBUSY: rmdir out` で落ちる。
+ビルド前にサーバーを止める。
+
 ### 2026-09-03: トップに新着ブログ3本＋一覧導線を追加
 
 - **配置**: 「選ばれる理由」と CTA帯の間に `id="blog"` セクション（見出し「BLOG / 制作の現場から」）。
