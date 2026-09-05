@@ -69,7 +69,7 @@
   13:00 は他サイト（net 9:00 / jp 11:00 / boatkaitori 12:00）と重ねないため
 - 外形チェック: `npm run seo:check`（表示のみ）/ `npm run seo:log`（`_seo/health-log.md` に追記）
 - **正規形は末尾スラッシュ無し**。姉妹サイト bullcom.net は末尾スラッシュ有りなので実装を流用するとき注意
-- 2026-08-30 の初回チェックは 7/17 PASS。未対応は `_seo/action-log.md` の A-1〜A-7
+- 2026-08-30 の初回チェックは 7/17 PASS → 同日 18/18 PASS。対策台帳は `_seo/action-log.md`（A-1〜A-10。2026-09-06 時点の未完は A-9 sitemap再送信 / A-10 GBPカテゴリ、いずれも要承認）
 
 ## 開発メモ
 
