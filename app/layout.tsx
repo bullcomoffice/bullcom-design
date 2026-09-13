@@ -125,17 +125,25 @@ export default function RootLayout({
     <html lang="ja" className={`${notoSansJP.variable} ${zenKaku.variable} ${inter.variable}`}>
       <head>
         {/* GA4（プロパティ: BULLCOM design bullcom.website / 2026-08-30 設置）。
-            フォームCVは送信後に /contact?sent=1 へ302で戻る作りなので page_view で拾える */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-ET4GPWNTYJ"
-          strategy="afterInteractive"
-        />
+            フォームCVは ContactForm.tsx の明示イベント contact_form_sent（キーイベント）で送る。
+            対策台帳 A-11（2026-09-13）: Facebook のリンククローラ（Meta のデータセンター発、JS実行あり）が
+            Organic Social として計上されていたため、クローラ系 UA では gtag を読み込まない。
+            GA4 側の IP 除外は Meta の IP レンジが広すぎて現実的でないのでクライアント側で判定する */}
         <Script id="google-analytics" strategy="afterInteractive">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-ET4GPWNTYJ');
+            (function(){
+              var ua = navigator.userAgent || '';
+              if (/facebookexternalhit|meta-externalagent|Facebot|bot|crawler|spider|headless|lighthouse/i.test(ua)) return;
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              gtag('js', new Date());
+              gtag('config', 'G-ET4GPWNTYJ');
+              var s = document.createElement('script');
+              s.async = true;
+              s.src = 'https://www.googletagmanager.com/gtag/js?id=G-ET4GPWNTYJ';
+              document.head.appendChild(s);
+            })();
           `}
         </Script>
       </head>
