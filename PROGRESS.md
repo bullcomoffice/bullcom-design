@@ -25,6 +25,18 @@
 
 ## セッション記録
 
+### 2026-09-27: SEO/GEO 月次レビュー 第1回（対象 8/30〜9/26・週報兼ねる）
+
+- 提出用 `_seo/reports/2026-09-monthly.md` → `bullcom.website_2026-09-monthly.pdf`。記録は monthly-review.md「記録」・weekly-log.md
+- **登録済み 0 → 20 ページ**。A-13 の7本は全部 9/21 登録（日次の割り当ては 8件で確定）。記事に初の検索表示、初の非指名クエリ「ホームページ制作 3万円」
+- 承認済み手順で `0q17ybkcytm`（A-13 残り）と 9/23 記事 `twql0y5xl3`（A-12）を索引リクエスト
+- GEO: 一般質問 0/12。ブランド質問は ChatGPT・Perplexity が bullcom.website を読んで正確に回答 → A-4 完了
+- リッチリザルトテスト全件有効 → A-5 完了。Cloudflare の AI ボット設定は許可のまま（UI 移動を README に記録）
+- 未登録の `/price` `/services/web` `/services/graphic` `/contact` を発見。提案（要承認）: A-14 索引リクエスト / A-15 sitemap 別URL送信 /
+  A-16 GA4 webdriver 除外 / A-17 priceRange・image 追加
+- `scripts/md2pdf.py` に chart フェンス（棒グラフ）を追加。月報の推移グラフ用
+- 翌月以降の記事テーマ5本（2027/1/6〜の枠）を月報 §9 に記録
+
 ### 2026-09-21: SEO/GEO 週次レポート 第4回（9/20 分・対象 9/13〜9/19）
 
 - 外形 18/18 PASS。提出用 `_seo/reports/2026-09-20.md` → Dropbox PDF

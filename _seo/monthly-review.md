@@ -74,3 +74,17 @@ https://search.google.com/test/rich-results で確認
 ## 記録
 
 <!-- 最新を上に追記。例: 2026-09 クリック◯/表示◯/順位◯、登録済み◯ページ、リライト候補◯本、翌月テーマ◯本 -->
+
+### 2026-09（第1回・9/27 実施 / 対象 8/30〜9/26）
+
+レポート: [`reports/2026-09-monthly.md`](./reports/2026-09-monthly.md) → `bullcom.website_2026-09-monthly.pdf`
+
+- **過去28日**: クリック 1 / 表示 36 / CTR 2.8% / 平均順位 6.7（PC 表示14 / モバイル 22）
+- **登録済み 0 → 20 ページ**（sitemap 26 URL 中）。未登録は /price /services/web /services/graphic /contact と記事2本
+- 主軸KW: 表示なし（据え置き）。**新規クエリ「ホームページ制作 3万円」（20位）を補助KWに追加**
+- CV（contact_form_sent）: 0件。日本の実ユーザー 7
+- GEO: 一般質問 0/12。ブランド質問は ChatGPT・Perplexity が ○（サイトを読んで料金まで正確に回答）
+- 構造化データ: エラー0。地域ビジネスに任意項目 priceRange / image 不足
+- リライト候補: 1本（`d37-xsv-nlk` 費用の記事。10月データで判断）
+- 翌月以降テーマ: 5本（2027/1/6〜の枠。LP3万円の理由 / 神戸の地元制作会社 / Googleマップとサイトの役割分担 / 原稿おまかせ / リニューアル判断）
+- 提案: A-14 料金・サービスページの索引リクエスト / A-15 sitemap 別URL送信 / A-16 GA4 webdriver 除外 / A-17 priceRange・image 追加

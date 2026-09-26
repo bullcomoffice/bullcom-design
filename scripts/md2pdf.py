@@ -29,6 +29,9 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.graphics.charts.legends import Legend
+from reportlab.graphics.shapes import Drawing, String
 from reportlab.platypus import (
     BaseDocTemplate, Frame, HRFlowable, KeepTogether, PageTemplate,
     Paragraph, Spacer, Table, TableStyle,
@@ -113,6 +116,18 @@ def parse(md: str):
     i = 0
     while i < len(lines):
         ln = lines[i]
+
+        # グラフ（```chart フェンス。Markdown 上はデータのまま読める）
+        if ln.strip().startswith("```chart"):
+            buf = []
+            i += 1
+            while i < len(lines) and not lines[i].strip().startswith("```"):
+                buf.append(lines[i])
+                i += 1
+            i += 1
+            out.append(build_chart(buf))
+            out.append(Spacer(1, 8))
+            continue
 
         # コードフェンス
         if ln.strip().startswith("```"):
@@ -215,6 +230,74 @@ def parse(md: str):
         out.append(Paragraph(inline(" ".join(buf)), S["p"]))
 
     return out
+
+
+SERIES_COLORS = [PRIMARY_DEEP, colors.HexColor("#8846ff"), colors.HexColor("#1366ff"), colors.HexColor("#077c95")]
+
+
+def build_chart(lines):
+    """```chart の中身から棒グラフを作る。
+
+    書式（1行1項目。「キー: 値, 値, ...」）:
+        title: 週次の推移
+        labels: 8/23週, 8/30週, 9/6週
+        表示回数: 0, 3, 6
+        登録済みページ: 0, 1, 4
+    title / labels 以外の行が系列になる（最大4系列）。
+    """
+    title, labels, series = "", [], []
+    for ln in lines:
+        if ":" not in ln:
+            continue
+        k, v = ln.split(":", 1)
+        k, v = k.strip(), v.strip()
+        if k == "title":
+            title = v
+        elif k == "labels":
+            labels = [x.strip() for x in v.split(",")]
+        else:
+            series.append((k, [float(x) for x in v.split(",")]))
+    if not labels or not series:
+        return Spacer(1, 0)
+
+    w, h = 165 * mm, 62 * mm
+    d = Drawing(w, h)
+    d.add(String(0, h - 10, demoji(title), fontName="UDB", fontSize=10, fillColor=PRIMARY_DEEP))
+
+    bc = VerticalBarChart()
+    bc.x, bc.y, bc.width, bc.height = 28, 30, w - 150, h - 52
+    bc.data = [vals for _, vals in series]
+    bc.categoryAxis.categoryNames = labels
+    bc.categoryAxis.labels.fontName = "UD"
+    bc.categoryAxis.labels.fontSize = 7.5
+    bc.categoryAxis.strokeColor = BORDER
+    top = max(max(v) for _, v in series) or 1
+    bc.valueAxis.valueMin = 0
+    bc.valueAxis.valueMax = top * 1.15
+    bc.valueAxis.labels.fontName = "UD"
+    bc.valueAxis.labels.fontSize = 7
+    bc.valueAxis.strokeColor = BORDER
+    bc.valueAxis.gridStrokeColor = BORDER
+    bc.valueAxis.visibleGrid = True
+    bc.barSpacing = 1
+    bc.groupSpacing = 8
+    bc.barLabelFormat = lambda v: f"{v:g}"
+    bc.barLabels.fontName = "UD"
+    bc.barLabels.fontSize = 6.5
+    bc.barLabels.nudge = 6
+    for n in range(len(series)):
+        bc.bars[n].fillColor = SERIES_COLORS[n % len(SERIES_COLORS)]
+        bc.bars[n].strokeColor = None
+    d.add(bc)
+
+    lg = Legend()
+    lg.x, lg.y = w - 110, h - 26
+    lg.fontName, lg.fontSize = "UD", 8
+    lg.alignment = "right"
+    lg.columnMaximum = 4
+    lg.colorNamePairs = [(SERIES_COLORS[n % len(SERIES_COLORS)], name) for n, (name, _) in enumerate(series)]
+    d.add(lg)
+    return d
 
 
 def build_table(rows):
