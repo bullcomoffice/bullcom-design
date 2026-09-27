@@ -87,4 +87,4 @@ https://search.google.com/test/rich-results で確認
 - 構造化データ: エラー0。地域ビジネスに任意項目 priceRange / image 不足
 - リライト候補: 1本（`d37-xsv-nlk` 費用の記事。10月データで判断）
 - 翌月以降テーマ: 5本（2027/1/6〜の枠。LP3万円の理由 / 神戸の地元制作会社 / Googleマップとサイトの役割分担 / 原稿おまかせ / リニューアル判断）
-- 提案: A-14 料金・サービスページの索引リクエスト / A-15 sitemap 別URL送信 / A-16 GA4 webdriver 除外 / A-17 priceRange・image 追加
+- 対策（承認後に当日実施）: A-14 料金・サービスページの索引リクエスト / A-15 sitemap 別URL送信 / A-16 GA4 webdriver 除外 / A-17 priceRange・image 追加（リッチリザルトの警告解消を確認済み）

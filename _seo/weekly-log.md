@@ -44,7 +44,7 @@ GBP: クチコミ 0件
 GEO: 一般質問 ChatGPT × Claude × Perplexity × / LP質問 ChatGPT × Perplexity × / ブランド質問 ChatGPT ○ Perplexity ○（Claude は URL 直接取得の許可を求めたため -）
 
 ### 3. 問題点 / 4. 対策
-月報の §10・§11 を参照（A-14〜A-17 を提案）。
+月報の §10・§11 を参照。A-14〜A-17 は承認後に当日実施（A-17 は効果確認まで完了）。
 
 
 ## 2026-09-20（第4回 / 対象: 9/13〜9/19・実施 9/21）

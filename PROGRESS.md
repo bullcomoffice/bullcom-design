@@ -32,8 +32,9 @@
 - 承認済み手順で `0q17ybkcytm`（A-13 残り）と 9/23 記事 `twql0y5xl3`（A-12）を索引リクエスト
 - GEO: 一般質問 0/12。ブランド質問は ChatGPT・Perplexity が bullcom.website を読んで正確に回答 → A-4 完了
 - リッチリザルトテスト全件有効 → A-5 完了。Cloudflare の AI ボット設定は許可のまま（UI 移動を README に記録）
-- 未登録の `/price` `/services/web` `/services/graphic` `/contact` を発見。提案（要承認）: A-14 索引リクエスト / A-15 sitemap 別URL送信 /
-  A-16 GA4 webdriver 除外 / A-17 priceRange・image 追加
+- 未登録の `/price` `/services/web` `/services/graphic` `/contact` を発見。承認後に当日実施:
+  A-14 4ページの索引リクエスト / A-15 `sitemap.xml?v=2` を追加送信 /
+  A-16 GA4 を `navigator.webdriver` でも除外 / A-17 ProfessionalService に priceRange・image（ec3d00c、リッチリザルトの警告解消を確認）
 - `scripts/md2pdf.py` に chart フェンス（棒グラフ）を追加。月報の推移グラフ用
 - 翌月以降の記事テーマ5本（2027/1/6〜の枠）を月報 §9 に記録
 
