@@ -85,6 +85,10 @@ const organizationJsonLd = {
   description:
     "ホームページ制作・デザイン制作・ブランディング・保守運用を行うデザインスタジオ。全国対応。",
   url: SITE_URL,
+  // 対策台帳 A-17（2026-09-27）: リッチリザルトテストの任意項目警告（priceRange / image 不足）を解消。
+  // 価格帯は LP 制作の下限（makesOffer と一致させる）。「安く頼める」の手がかりを機械可読で渡す
+  image: `${SITE_URL}/og-image.png`,
+  priceRange: "¥30,000〜",
   telephone: PHONE,
   faxNumber: COMPANY.fax,
   email: COMPANY.email,
@@ -128,11 +132,14 @@ export default function RootLayout({
             フォームCVは ContactForm.tsx の明示イベント contact_form_sent（キーイベント）で送る。
             対策台帳 A-11（2026-09-13）: Facebook のリンククローラ（Meta のデータセンター発、JS実行あり）が
             Organic Social として計上されていたため、クローラ系 UA では gtag を読み込まない。
-            GA4 側の IP 除外は Meta の IP レンジが広すぎて現実的でないのでクライアント側で判定する */}
+            GA4 側の IP 除外は Meta の IP レンジが広すぎて現実的でないのでクライアント側で判定する。
+            A-16（2026-09-27）: 通常のブラウザ UA を名乗る Meta のレンダラがすり抜けたため、
+            自動操作ブラウザの標準の目印 navigator.webdriver も見る（実ユーザーのブラウザでは false） */}
         <Script id="google-analytics" strategy="afterInteractive">
           {`
             (function(){
               var ua = navigator.userAgent || '';
+              if (navigator.webdriver) return;
               if (/facebookexternalhit|meta-externalagent|Facebot|bot|crawler|spider|headless|lighthouse/i.test(ua)) return;
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
