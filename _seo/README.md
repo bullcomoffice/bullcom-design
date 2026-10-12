@@ -126,6 +126,14 @@ https://search.google.com/search-console/performance/search-analytics
 URL を入れて Enter。「公開 URL をテスト」（ライブテスト）は実 Googlebot の取得結果なので、
 サイトマップレポートが「取得できませんでした」でも**ライブテストが 200 なら サイト側は正常**（2026-09-06 に確認）。
 
+### URL検査に入力できないとき（2026-10-12）
+
+上部の検査ボックスをクリックして `type` しても文字が入らない（フォーカスが BODY のまま）ことがある。
+その場合は `find` で combobox「bullcom.website 内のすべての URL を検査」の ref を取り、
+**`form_input` で URL を設定 → `key Return`** で確実に検査画面へ進める。
+リクエストボタンは検査結果ごとに増えるので、`find` で最後に出た ref を押す。
+索引リクエストの日次枠は**全サイト共通で使う日がある**（カレンダー管理セッションの指示に従う。日本時間16:00リセット）
+
 ### GBP の編集画面は Chrome MCP と相性が悪い
 
 ビジネスプロフィールの「プロフィールを編集」は Google 検索ページ上の iframe で開き、
