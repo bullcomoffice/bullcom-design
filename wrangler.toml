@@ -12,10 +12,32 @@ workers_dev = true
 [assets]
 directory = "./out"
 binding = "ASSETS"
-# 既定ではアセットに一致するパスは Worker を通らずに配信される。それだと
-# worker.js の URL正規化（対策台帳 A-1）が呼ばれず、末尾スラッシュはアセット層の
-# 307 のまま、http/www も素通しになる。全リクエストを先に Worker へ渡す。
-run_worker_first = true
+# Worker を先に通すのは、ページ（HTML）とフォーム送信だけにする（bullcom.jp と同じ方式、2026-10-14）。
+# - "/*" は残す。HTML のパスは今までどおり Worker を通るので、URL正規化（301/308）は維持される。
+#   （true をやめて ["/api/*"] だけにすると、アセットに一致するページが Worker を通らず正規化が効かなくなる）
+# - フォント・JS・CSS・先読み用の .txt・画像は Worker を通さず直接返す。
+#   Worker を通したリクエストは無料枠（アカウント全体で1日10万件）に数えられ、上限を超えると429になる。
+# - 存在しない .php や /wp-* を探すスキャンも、Worker を通さず404を返す。
+# パターンの「*」は深い階層までマッチし、「!」付きが優先される。新しい種類のファイルを置いたら「!/*.拡張子」を足す。
+run_worker_first = [
+  "/*",
+  "!/_next/*",
+  "!/*.txt",
+  "!/*.xml",
+  "!/*.woff2",
+  "!/*.css",
+  "!/*.js",
+  "!/*.png",
+  "!/*.jpg",
+  "!/*.jpeg",
+  "!/*.webp",
+  "!/*.svg",
+  "!/*.ico",
+  "!/*.gif",
+  "!/blog-thumbnails/*",
+  "!/*.php",
+  "!/wp-*",
+]
 
 # 本番ドメイン（bullcom.website / www）は Cloudflare ダッシュボードの
 # Workers ルート → カスタムドメイン で登録している。
