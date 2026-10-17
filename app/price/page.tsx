@@ -64,6 +64,11 @@ export default function PricePage() {
               </div>
             ))}
           </div>
+          <div className="mt-8 text-center">
+            <Link href="/services/web" className="btn btn-ghost px-6 py-3 text-sm">
+              ホームページ制作の内容を見る
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -194,8 +199,8 @@ export default function PricePage() {
             ※表示価格は税別です。内容・ボリュームにより変動します。まずはお気軽にご相談ください。
           </p>
           <div className="mt-8 text-center">
-            <Link href="/services" className="btn btn-ghost px-6 py-3 text-sm">
-              サービス内容の詳細を見る
+            <Link href="/services/graphic" className="btn btn-ghost px-6 py-3 text-sm">
+              ロゴ・印刷物のデザインの内容を見る
             </Link>
           </div>
         </div>

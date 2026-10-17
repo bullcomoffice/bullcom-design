@@ -162,7 +162,6 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        {/* TODO: BULLCOM design 専用LINEができたらURL差し替え（現在は既存BULLCOMのLINE） */}
         <FloatingCta />
       </body>
     </html>
