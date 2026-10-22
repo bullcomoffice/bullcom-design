@@ -38,6 +38,7 @@ TITLES = {
   "25": ["色は3色までに", "まとめると失敗しない"],
   "26": ["ドメインとサーバー", "費用の中身"],
   "27": ["サイトが重い原因は", "画像にある"],
+  "28": ["PHPに重大な脆弱性", "WordPressは要確認"],
 }
 
 logo_src = Image.open(LOGO).convert("RGBA")
@@ -110,7 +111,8 @@ def compose(n):
     return out, os.path.getsize(out) / 1024
 
 total = 0
-for n in sorted(TITLES):
+import sys
+for n in (sys.argv[1:] or sorted(TITLES)):
     out, kb = compose(n)
     total += kb
     print(f"{os.path.basename(out)}  {kb:.0f}KB")
