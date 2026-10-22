@@ -25,6 +25,18 @@
 
 ## セッション記録
 
+### 2026-10-22: 時事記事「PHPに重大な脆弱性」を臨時公開（28本目・ID fakywpinyu）
+
+- 10/21 の PHP 重大脆弱性（CVE-2026-109618 / 109619、CVSS 9.2）を題材に、WordPress は PHP 本体の更新が必要・
+  Next.js の当社サイトは影響なし・今のデザインのまま作り替え可能、の流れで原稿 `blog-drafts/28-php-zeijakusei.md`（本文968字）
+- サムネ: gpt-image-2 で背景生成 → `compose-thumbs.py 28`（引数で1本だけ合成できるようにした）→ microCMS メディア＋ `public/blog-thumbnails/fakywpinyu.jpg`
+- 手順: 下書き作成（content API `?status=draft`）→ サムネと `sns-post-texts.json` を push・デプロイ → **管理APIの予約（5分後）で公開**。
+  **content API の PATCH では下書きは公開されなかった**ので、臨時公開も予約経由にすること（予約公開なら Webhook が飛ぶ）
+- 9:27 公開 → Webhook で IG・FB・GBP とも投稿成功、デプロイ成功。X は @BULLCOM_co に即時投稿（9:33・画像付き）
+- **X の投稿欄の注意**: ホーム画面の投稿欄に execCommand で入れると、ハッシュタグの入力補完で本文が重複・消失した。
+  `x.com/compose/post` のモーダルで、**画像を先に添付 → ClipboardEvent の paste で本文を入れる**と崩れずに入った
+- 登録リクエスト管理セッションへ URL を送付（優先度 高・期限 10/23）。10/22 夕方の枠で申請予定
+
 ### 2026-10-17: SEO/GEO 週次レポート 第8回（10/18 分・対象 10/11〜10/17）
 
 - カレンダー管理セッションからの依頼。GSC は 10/16 分まで、比較は確定4日どうし。提出用 `_seo/reports/2026-10-18.md`
