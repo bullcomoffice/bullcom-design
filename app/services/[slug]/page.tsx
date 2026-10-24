@@ -4,9 +4,21 @@ import { notFound } from "next/navigation";
 import PageHero from "@/components/ui/PageHero";
 import CtaBand from "@/components/ui/CtaBand";
 import SectionHead from "@/components/ui/SectionHead";
-import { SERVICES } from "@/lib/site-data";
+import { SERVICES, SITE_URL } from "@/lib/site-data";
 
 type Props = { params: Promise<{ slug: string }> };
+
+// "20万円〜（〜10ページ）" → 200000、"月5,000円〜" → 5000（月額）。"お見積り" は null
+function parseMinPrice(label: string): { value: number; monthly: boolean } | null {
+  const man = label.match(/([\d,]+)万円/);
+  const yen = label.match(/([\d,]+)円/);
+  const value = man
+    ? Number(man[1].replace(/,/g, "")) * 10000
+    : yen
+      ? Number(yen[1].replace(/,/g, ""))
+      : NaN;
+  return Number.isFinite(value) ? { value, monthly: label.startsWith("月") } : null;
+}
 
 export function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }));
@@ -29,9 +41,62 @@ export default async function ServiceDetailPage({ params }: Props) {
   if (!service) notFound();
 
   const others = SERVICES.filter((s) => s.slug !== service.slug);
+  const pageUrl = `${SITE_URL}/services/${service.slug}`;
+
+  // 対策台帳 A-18。サービス単位の構造化データ（提供元はレイアウトの #organization を参照）
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${pageUrl}#service`,
+    name: service.pageTitle,
+    description: service.metaDescription,
+    url: pageUrl,
+    provider: { "@id": `${SITE_URL}/#organization` },
+    areaServed: [
+      { "@type": "City", name: "神戸市" },
+      { "@type": "Country", name: "日本" },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: service.pageTitle,
+      itemListElement: service.details.map((detail) => {
+        const minPrice = detail.price ? parseMinPrice(detail.price) : null;
+        return {
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: detail.name, description: detail.summary },
+          ...(minPrice && {
+            priceSpecification: {
+              "@type": minPrice.monthly ? "UnitPriceSpecification" : "PriceSpecification",
+              minPrice: minPrice.value,
+              priceCurrency: "JPY",
+              valueAddedTaxIncluded: false,
+              ...(minPrice.monthly && { unitText: "月" }),
+            },
+          }),
+        };
+      }),
+    },
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ホーム", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "サービス", item: `${SITE_URL}/services` },
+      { "@type": "ListItem", position: 3, name: service.pageTitle, item: pageUrl },
+    ],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <PageHero
         en={service.title.replace("系", "").toUpperCase()}
         ja={service.pageTitle}
