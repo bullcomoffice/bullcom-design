@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import FloatingCta from "@/components/layout/FloatingCta";
+import VisitSourceTracker from "@/components/seo/VisitSourceTracker";
 import { COMPANY, PHONE, SITE_URL } from "@/lib/site-data";
 
 const notoSansJP = Noto_Sans_JP({
@@ -163,6 +164,8 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <FloatingCta />
+        {/* お問い合わせメールに「どのページから来た人か」を載せるための記録（lib/visit-source.ts） */}
+        <VisitSourceTracker />
       </body>
     </html>
   );

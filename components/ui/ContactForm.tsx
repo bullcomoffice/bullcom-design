@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { readVisitSource } from "@/lib/visit-source";
 
 // 送信は自前の Cloudflare Worker（/api/contact-submit）→ Resend API。
 // worker.js の handleContactSubmit と対。添付があるためネイティブ送信（AJAX不可）。
@@ -112,6 +113,27 @@ export default function ContactForm() {
       // 送信後の戻り先（現在のドメインに自動追従）
       const next = form.querySelector<HTMLInputElement>('input[name="_redirect"]');
       if (next) next.value = `${location.pathname}?sent=1`;
+
+      // 流入ページ（lib/visit-source.ts）を送信の直前に隠し項目として足す。
+      // React で描くと再描画のたびに hidden の値が初期値へ戻されるため、DOM に直接追加する。
+      // フォームの末尾に足すので、worker.js のメールの表でも最後に並ぶ。記録が無ければ何も足さない
+      form.querySelectorAll('input[data-visit-source="1"]').forEach((n) => n.remove());
+      const visit = readVisitSource();
+      if (visit) {
+        const fields: [string, string][] = [
+          ["最初に見たページ", visit.landing || "なし"],
+          ["流入元", visit.referrer || "直接・不明"],
+          ["直前に見たページ", visit.last || "なし"],
+        ];
+        for (const [name, value] of fields) {
+          const el = document.createElement("input");
+          el.type = "hidden";
+          el.name = name;
+          el.value = value;
+          el.dataset.visitSource = "1";
+          form.appendChild(el);
+        }
+      }
 
       // 再送信対策: 前回展開した余剰 input を掃除
       form.querySelectorAll('input[data-extra-photo="1"]').forEach((n) => n.remove());
