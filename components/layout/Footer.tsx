@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PHONE, PHONE_TEL } from "@/lib/site-data";
+import { PHONE, PHONE_TEL, SERVICES } from "@/lib/site-data";
 
 const FOOTER_LINKS = [
   { href: "/services", label: "サービス" },
@@ -44,7 +44,27 @@ export default function Footer() {
           </div>
         </div>
 
-        <nav className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-[var(--border)] pt-8 text-sm text-[var(--text-soft)]">
+        {/* サービス詳細ページへの全ページ共通リンク（対策台帳 A-18）。
+            ヘッダー・フッターから直リンクのある /price /contact は1回の申請で登録されたが、
+            トップと /services からしかリンクの無かった /services/web /services/graphic は
+            申請を重ねても Google が一度もクロールに来なかったため、全ページから辿れるようにする */}
+        <nav
+          aria-label="サービス一覧"
+          className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[var(--border)] pt-8 text-sm text-[var(--text-soft)]"
+        >
+          <span className="font-en text-xs font-bold tracking-widest text-[var(--text-muted)]">SERVICES</span>
+          {SERVICES.map((service) => (
+            <Link
+              key={service.slug}
+              href={`/services/${service.slug}`}
+              className="transition hover:text-[var(--text)]"
+            >
+              {service.pageTitle}
+            </Link>
+          ))}
+        </nav>
+
+        <nav className="mt-6 flex flex-wrap gap-x-7 gap-y-3 border-t border-[var(--border)] pt-6 text-sm text-[var(--text-soft)]">
           {FOOTER_LINKS.map((link) => (
             <Link
               key={link.href}

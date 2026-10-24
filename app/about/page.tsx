@@ -8,7 +8,7 @@ import { COMPANY, PHONE, PHONE_TEL, STRENGTHS } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "会社概要",
   description:
-    "BULLCOM design（ブルコムデザイン）の会社概要。「思い通りのホームページを」をコンセプトに、全国の事業者さま向けにホームページ制作・デザイン・保守運用を行っています。",
+    "BULLCOM design（ブルコムデザイン）の会社概要。神戸市西区のホームページ制作スタジオです。LP制作3万円〜・ホームページ制作20万円〜で、デザインから公開後の保守運用まで全国対応でおまかせいただけます。",
   alternates: { canonical: "/about" },
 };
 

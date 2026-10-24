@@ -49,7 +49,7 @@ export default async function Home() {
               ホームページを。
             </h1>
             <p className="anim-fade-up delay-2 mt-6 max-w-xl leading-relaxed text-[var(--text-soft)]">
-              デザインから開発、公開後の運用まで。BULLCOM designは、Next.jsで
+              デザインから開発、公開後の運用まで、まるごとおまかせ。BULLCOM designは、Next.jsで
               「速くて、強くて、育てられる」ホームページをつくる制作スタジオです。
               古くなったサイトの作り替えも、はじめての1ページも、思い通りに。
             </p>

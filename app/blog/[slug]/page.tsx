@@ -176,6 +176,16 @@ export default async function BlogPostPage({ params }: Props) {
               お問い合わせへ
             </Link>
           </div>
+          {/* 記事からサービス詳細・料金へ文脈リンクを渡す（対策台帳 A-18） */}
+          <p className="mt-5 text-xs text-[var(--text-muted)]">
+            <Link href="/services/web" className="underline underline-offset-4 transition hover:text-[var(--text)]">
+              ホームページ制作の内容を見る
+            </Link>
+            <span className="mx-2">／</span>
+            <Link href="/price" className="underline underline-offset-4 transition hover:text-[var(--text)]">
+              料金プラン（LP 3万円〜）
+            </Link>
+          </p>
         </div>
 
         <div className="mt-10 text-center">
