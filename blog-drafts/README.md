@@ -163,6 +163,19 @@ PC・スマホ単体の脆弱性や海外限定の話題は design では出さ�
 - ネタ元: 実際のお客様の質問・相談 ＞ GSCで表示が出ているクエリ ＞ 一般的なFAQ
 - 既存27本と重複しないこと（一覧は本フォルダのファイル名参照）
 
+### 急ぎのネタ（LINE「デザインブログネタ」）
+
+ユーザーは**急ぎのネタだけ**を LINE グループ「デザインブログネタ」に送る（2026-10-30 開始）。記事づくりを始めるときに新着を見る。
+```bash
+PYTHONIOENCODING=utf-8 python scripts/line-topics.py
+```
+- 新着がなければ何も言わずにいつもの流れへ。新着があれば「急ぎのネタが届いています（内容を一言）。先に割り込ませますか？」とだけ聞く
+- 割り込む場合は中身を裏取りし、**いちばん近い公開日に入れる案**（予定の記事は後ろへずらす）を出して承認を得てから進める（臨時公開の手順は上の「時事記事を臨時で出すとき」）
+- 記事にしたら `python scripts/line-topics.py --mark` で既読を記録し、`scripts/line-topics-state.json` をコミットする
+- 仕組み: 公式LINE「BULLCOM Design」（@529xcjts）の Webhook → bullcom-ai の `workers/line-topics`（site=`design`）にたまる。
+  読み出しの設定は `.env.local` の LINE_TOPICS_URL / LINE_TOPICS_READ_TOKEN（値はチャットに出さない）。仕組みの不具合は bullcom-ai 側で直す。
+  **グループ名を変えると保存されなくなる**（Worker の SITES と一致が必要）
+
 ### 決まっている今後のテーマ
 
 - **2027年1月（5本）**: `_seo/reports/2026-09-monthly.md` 9章のとおり（3万円の理由・神戸の制作会社・Googleマップ・原稿・リニューアル判断）

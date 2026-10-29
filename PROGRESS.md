@@ -1079,3 +1079,10 @@ Webもメールも名前解決できない状態になった。
 
 - `public/work-pc-repair.png`、`public/work-truck.png`、`public/work-boat.png` を人物なしの画像へ差し替え。PC修理の作業環境、トラック、ボートを主役にし、既存のカラフルなトーンとデバイス・分析グラフィックを維持。
 - 検証: TOPの制作実績セクションをヘッドレスChrome 1440px・390pxで確認し、人物が残っていないこと、`scrollWidth === clientWidth` を確認。`npm run lint` / `npm run build` 成功。
+
+## 2026-10-30 LINE のネタ帳に Design を追加
+
+- 公式LINE「BULLCOM Design」（@529xcjts）の Messaging API を有効化し、Webhook を bullcom-ai の `workers/line-topics`（`/webhook/design`）へ。
+  応答は手動チャットのまま（bot/info で chat / manual を確認）
+- グループ名は「デザインブログネタ」（カタカナ。最初 Worker 側を「Designブログネタ」にしていて1件取りこぼした → 合わせて再デプロイ）
+- `scripts/line-topics.py` を追加（SITE=design）。テスト投稿「テスト2」の受信を確認し、`--mark` で既読化
